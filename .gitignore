@@ -7,7 +7,6 @@
 *.dll
 *.so
 *.dylib
-*_templ.go
 
 # Test binary, built with `go test -c`
 *.test
@@ -27,4 +26,5 @@ go.work.sum
 .env
 
 # Templ 
+*_templ.go
 *_templ.txt
