@@ -1,0 +1,9 @@
+package components
+
+templ ListingPage(initialCards []ItemCartData, nextPage int) {
+	@layout("Anime") {
+        <div id="card-container" class="card-grid">
+            @ListItem(initialCards, nextPage)
+        </div>
+	}
+}

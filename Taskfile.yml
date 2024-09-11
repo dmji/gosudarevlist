@@ -1,0 +1,13 @@
+version: '3'
+
+tasks:
+  dev:
+    deps: [templ, air]
+  
+  templ:
+    cmds:
+      - templ generate --watch --proxy="http://localhost:8080"  --proxybind="0.0.0.0" --proxyport="54321" --open-browser=false
+  
+  air:
+    cmds:
+      - air

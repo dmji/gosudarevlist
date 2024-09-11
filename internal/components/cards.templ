@@ -1,0 +1,37 @@
+package components
+
+import "strconv"
+
+type ItemCartData struct {
+	ID             int
+	Title          string
+	Image          string
+	Description    string
+	AnimeLayerRef  string
+	MyAnimeListRef string
+}
+
+templ ListItem(cards []ItemCartData, nextPage int) {
+	for _, card := range cards {
+		<div class="card">
+			<div class="card-content">
+				<h3>{ card.Title }</h3>
+			</div>
+			<img src={ card.Image } alt={ card.Title }/>
+			<div class="card-description">
+				{ card.Description }
+			</div>
+			<div class="card-buttons">
+				<a href={ templ.SafeURL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer">AnimeLayer</a>
+				<a href={ templ.SafeURL(card.MyAnimeListRef) } target="_blank" rel="noopener noreferrer">MyAnimeList</a>
+			</div>
+		</div>
+	}
+	if len(cards) > 0 {
+		<div
+			hx-get={ "/api/cards?page=" + strconv.Itoa(nextPage) }
+			hx-trigger="revealed"
+			hx-swap="outerHTML"
+		></div>
+	}
+}
