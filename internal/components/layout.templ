@@ -13,7 +13,9 @@ templ layout(title string) {
 		</head>
 		<body>
 			@navTemplate()
-			{ children... }
+			<main class="pt-16">
+				{ children... }
+		    </main>
 		</body>
 	</html>
 }
