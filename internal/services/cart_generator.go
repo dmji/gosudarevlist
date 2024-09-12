@@ -33,7 +33,7 @@ func (s *services) GenerateCards(ctx context.Context, page int) []components.Ite
 		return nil
 	}
 
-	endID := len(items)
+	endID := startID + len(items)
 
 	cards := make([]components.ItemCartData, 0, perPage)
 	for id := startID; id < endID; id++ {
