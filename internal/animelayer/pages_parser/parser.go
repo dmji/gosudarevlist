@@ -1,4 +1,4 @@
-package animelayer_parser
+package animelayer_pages_parser
 
 import (
 	"collector/pkg/model"

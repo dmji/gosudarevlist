@@ -1,4 +1,4 @@
-package animelayer_parser
+package animelayer_pages_parser
 
 import (
 	"collector/pkg/model"
@@ -40,7 +40,7 @@ func getFirstChildTextData(n *html.Node) (string, bool) {
 	return "", false
 }
 
-func parseNodeWithTitle(ctx context.Context, n *html.Node) *model.AnimeLayerItem {
+func parseNodeWithTitle(_ context.Context, n *html.Node) *model.AnimeLayerItem {
 
 	guid, bOk := parseGuidFromStyleAttr(n.Attr)
 	if !bOk {

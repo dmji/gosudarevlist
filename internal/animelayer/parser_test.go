@@ -1,7 +1,7 @@
 package animelayer_test
 
 import (
-	animelayer_parser "collector/internal/animelayer/parser"
+	animelayer_pages_parser "collector/internal/animelayer/pages_parser"
 	"collector/pkg/model"
 	"context"
 	"encoding/json"
@@ -47,7 +47,7 @@ func TestMainTest(t *testing.T) {
 						default:
 							log.Printf("Reading %d page started", i+1)
 
-							pageItems := animelayer_parser.CollectBaseItemsFromAddress(ctx, BASE_ADDRESS_URI, "anime", i+1)
+							pageItems := animelayer_pages_parser.CollectBaseItemsFromAddress(ctx, BASE_ADDRESS_URI, "anime", i+1)
 							if len(pageItems) == 0 {
 								log.Printf("Reading %d page finished with error", i+1)
 								return errors.New("End of context")
