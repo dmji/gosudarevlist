@@ -27,4 +27,5 @@ func New() *repository {
 
 type AnimeLayerRepositoryDriver interface {
 	GetItems(ctx context.Context, count int, offset int) ([]model.AnimeLayerItem, error)
+	SearchTitle(ctx context.Context, title string) ([]model.AnimeLayerItem, error)
 }
