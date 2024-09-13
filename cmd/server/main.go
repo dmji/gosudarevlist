@@ -19,14 +19,25 @@ func main() {
 	r := handlers.New(s)
 
 	mux := http.NewServeMux()
+
+	// pages
 	mux.HandleFunc("/", r.HomePageHandler)
+	mux.HandleFunc("/profile", r.ProfilePageHandler)
 	mux.HandleFunc("/anime", r.ShelfPageHandler)
-	mux.HandleFunc("/api/cards", r.ApiCards)
+
+	// parsers
 	mux.HandleFunc("/parser/animelayer", func(w http.ResponseWriter, r *http.Request) {
 		component := components.Page([]components.ScanResult{})
 		component.Render(context.Background(), w)
 	})
+
+	// api
+	mux.HandleFunc("/api/cards", r.ApiCards)
+
+	// static assets
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+
+	// starting
 	log.Println("Server starting on :8080")
 
 	srv := &http.Server{
