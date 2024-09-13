@@ -5,6 +5,7 @@ type Entity struct {
 }
 
 type AnimeLayerItem struct {
-	GUID string
-	Name string
+	GUID      string
+	Name      string
+	Completed bool
 }
