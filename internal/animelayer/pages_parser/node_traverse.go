@@ -3,6 +3,7 @@ package animelayer_pages_parser
 import (
 	"collector/pkg/model"
 	"context"
+	"log"
 
 	"golang.org/x/net/html"
 )
@@ -28,8 +29,11 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node) []model.AnimeLayerItem
 			item := parseNodeWithTitle(ctx, n)
 			if item != nil {
 				items = append(items, *item)
+			} else {
+				log.Print("Warning: Got nil item")
+				_ = parseNodeWithTitle(ctx, n)
 			}
-
+			return items
 		}
 
 	}

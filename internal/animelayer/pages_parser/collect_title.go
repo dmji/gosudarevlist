@@ -2,6 +2,7 @@ package animelayer_pages_parser
 
 import (
 	"collector/pkg/model"
+	"collector/pkg/parser"
 	"context"
 	"strings"
 
@@ -17,29 +18,6 @@ func parseGuidFromStyleAttr(attr []html.Attribute) (string, bool) {
 	return "", false
 }
 
-func getFirstChildHrefNode(n *html.Node) *html.Node {
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.ElementNode && c.Data == "a" {
-			return c
-		}
-	}
-	return nil
-}
-
-func getFirstChildTextData(n *html.Node) (string, bool) {
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.TextNode {
-			return c.Data, true
-		}
-
-		text, ok := getFirstChildTextData(c)
-		if ok {
-			return text, true
-		}
-	}
-	return "", false
-}
-
 func parseNodeWithTitle(_ context.Context, n *html.Node) *model.AnimeLayerItem {
 
 	guid, bOk := parseGuidFromStyleAttr(n.Attr)
@@ -47,12 +25,12 @@ func parseNodeWithTitle(_ context.Context, n *html.Node) *model.AnimeLayerItem {
 		return nil
 	}
 
-	ref := getFirstChildHrefNode(n)
+	ref := parser.GetFirstChildHrefNode(n)
 	if ref == nil {
 		return nil
 	}
 
-	name, bOk := getFirstChildTextData(ref)
+	name, bOk := parser.GetFirstChildTextData(ref)
 	if !bOk {
 		return nil
 	}
