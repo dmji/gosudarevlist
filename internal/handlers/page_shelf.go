@@ -2,15 +2,14 @@ package handlers
 
 import (
 	"collector/internal/components"
-	"log"
+	requestutils "collector/pkg/request_utils"
 	"net/http"
 )
 
 func (router *router) ShelfPageHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	log.Print("indexHandler")
-
+	requestutils.LogQuery(r, "ShelfPageHandler")
 	initialCards := router.s.GenerateCards(ctx, 1)
 
 	err := components.ListingPage(initialCards, 2).Render(r.Context(), w)

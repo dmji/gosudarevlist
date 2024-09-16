@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"collector/internal/components"
+	requestutils "collector/pkg/request_utils"
 	"log"
 	"net/http"
 	"strconv"
@@ -18,7 +19,8 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cards := router.s.GenerateCards(ctx, page)
-	log.Printf("Page: %d (len: %d)", page, len(cards))
+	log.Printf("Handler | ApiCards: page='%d' (len: %d)", page, len(cards))
+	requestutils.LogQuery(r, "ApiCards")
 
 	if len(cards) == 0 {
 		w.WriteHeader(http.StatusNoContent)
