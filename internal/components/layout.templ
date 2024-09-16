@@ -11,11 +11,26 @@ templ layout(title string) {
 			<script src="https://cdn.tailwindcss.com"></script>
 			@styles()
 		</head>
-		<body>
+		<body class="bg-[#f0f0f0] m-0 p-0;  font-family: Arial, sans-serif;">
 			@navTemplate()
 			<main class="pt-16">
 				{ children... }
 		    </main>
 		</body>
+
+		<script>
+		
+			htmx.defineExtension('push-url-w-params', {
+				onEvent : function(name, e) {
+					if (name === "htmx:configRequest") {
+						const params = new URLSearchParams(e.detail.parameters)
+						paramsActials = new URLSearchParams(window.location.search)
+						params.forEach((value, key) => { value.length === 0 ? paramsActials.delete(key) : paramsActials.set(key, value) });
+						window.history.pushState({}, '', window.location.pathname + "?" + paramsActials.toString());
+					}
+				}
+			})
+		
+		</script>
 	</html>
 }
