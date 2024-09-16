@@ -33,6 +33,8 @@ func main() {
 
 	// api
 	mux.HandleFunc("/api/cards", r.ApiCards)
+	mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
+	mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
 
 	// static assets
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
