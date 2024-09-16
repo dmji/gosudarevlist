@@ -12,7 +12,7 @@ type NavbarData struct {
 }
 
 var data = NavbarData{
-        CompanyName: "Gosudarev List",
+        CompanyName: "ReCollection",
         NavItems: []NavItem{
             {Name: "Home", URL: "/"},
             {Name: "List", URL: "/anime"},
@@ -97,14 +97,11 @@ templ navTemplate() {
             </div>
         </div>
     </nav>
+    
 	<script>
         // Dropdown functionality
         const scannersDropdownButton = document.getElementById('scannersDropdownButton');
         const scannersDropdownMenu = document.getElementById('scannersDropdownMenu');
-        const mobileMenuButton = document.getElementById('mobileMenuButton');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileScannersButton = document.getElementById('mobileScannersButton');
-        const mobileScannersMenu = document.getElementById('mobileScannersMenu');
 
         scannersDropdownButton.addEventListener('click', () => {
             scannersDropdownMenu.classList.toggle('hidden');
@@ -116,9 +113,15 @@ templ navTemplate() {
             }
         });
 
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+
+        const mobileScannersButton = document.getElementById('mobileScannersButton');
+        const mobileScannersMenu = document.getElementById('mobileScannersMenu');
 
         mobileScannersButton.addEventListener('click', () => {
             mobileScannersMenu.classList.toggle('hidden');

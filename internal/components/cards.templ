@@ -8,30 +8,36 @@ type ItemCartData struct {
 	Image          string
 	Description    string
 	AnimeLayerRef  string
-	MyAnimeListRef string
 }
 
+// Recursive template
+// Child of templ:  storage.templ
+// Render from Api: /api/cards
 templ ListItem(cards []ItemCartData, nextPage int) {
+	
 	for _, card := range cards {
-		<div class="card">
-			<div class="card-content">
-				<h3>{ card.Title }</h3>
+ 		<a href={ templ.URL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer" class="block no-underline">
+		
+			<div class="card transition duration-300 ease-in-out transform hover:scale-105">
+					
+					<div class="card-content">
+						<h3>{ card.Title }</h3>
+					</div>
+					
+					<img src={ card.Image } alt={ card.Title }/>
+					
+					<div class="p-4">
+						{ card.Description }
+					</div>
+					
 			</div>
-			<img src={ card.Image } alt={ card.Title }/>
-			<div class="card-description">
-				{ card.Description }
-			</div>
-			<div class="card-buttons">
-				<a href={ templ.SafeURL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer">AnimeLayer</a>
-				<a href={ templ.SafeURL(card.MyAnimeListRef) } target="_blank" rel="noopener noreferrer">MyAnimeList</a>
-			</div>
-		</div>
+		</a>
 	}
 	if len(cards) > 0 {
 		<div
 			hx-get={ "/api/cards?page=" + strconv.Itoa(nextPage) }
 			hx-trigger="revealed"
 			hx-swap="outerHTML"
-		></div>
+		/>
 	}
 }
