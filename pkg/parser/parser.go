@@ -41,6 +41,15 @@ func GetFirstChildHrefNode(n *html.Node) *html.Node {
 	return nil
 }
 
+func GetFirstChildImgNode(n *html.Node) *html.Node {
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.ElementNode && c.Data == "img" {
+			return c
+		}
+	}
+	return nil
+}
+
 func GetFirstChildTextData(n *html.Node) (string, bool) {
 	if n.Type == html.TextNode {
 		return n.Data, true

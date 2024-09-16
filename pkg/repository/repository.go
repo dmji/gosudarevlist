@@ -10,8 +10,12 @@ import (
 //go:embed db/test.json
 var content []byte
 
+//go:embed db/descriptions.json
+var descriptions []byte
+
 type repository struct {
-	db []model.AnimeLayerItem
+	db           []model.AnimeLayerItem
+	descriptions []model.AnimeLayerItemDescription
 }
 
 func New() *repository {
@@ -22,10 +26,16 @@ func New() *repository {
 		panic(err)
 	}
 
+	err = json.Unmarshal(descriptions, &res.descriptions)
+	if err != nil {
+		panic(err)
+	}
+
 	return res
 }
 
 type AnimeLayerRepositoryDriver interface {
 	GetItems(ctx context.Context, count int, offset int) ([]model.AnimeLayerItem, error)
 	SearchTitle(ctx context.Context, title string) ([]model.AnimeLayerItem, error)
+	GetDescription(ctx context.Context, guid string) (model.AnimeLayerItemDescription, error)
 }

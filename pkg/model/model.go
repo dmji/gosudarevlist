@@ -19,7 +19,9 @@ type AnimeLayerItemDescription struct {
 	GUID string
 
 	TorrentFilesSize string
-	RefImagePreview  string
+
+	RefImagePreview string
+	RefImageCover   string
 
 	UpdatedDate string
 	CreatedDate string
