@@ -103,7 +103,24 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 
 	}
 
-	// cart title
+	// cart cover image
+	if n.Type == html.ElementNode && n.Data == "div" {
+
+		if isExistAttrWithTargetKeyValue(n.Attr, "class", "cover") {
+
+			ref := parser.GetFirstChildImgNode(n)
+			for _, a := range ref.Attr {
+				if a.Key == "src" {
+					item.RefImageCover = a.Val
+					return nil
+				}
+			}
+
+		}
+
+	}
+
+	// cart additional image
 	if n.Type == html.ElementNode && n.Data == "div" {
 
 		if isExistAttrWithTargetKeyValue(n.Attr, "class", "panel widget pd20") {

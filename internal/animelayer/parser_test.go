@@ -114,3 +114,16 @@ func TestParseAnimeItem(t *testing.T) {
 	_ = os.WriteFile("~output.json", rankingsJson, 0644)
 
 }
+
+func TestParseAnimeItemList(t *testing.T) {
+
+	ctx := context.Background()
+
+	items := make([]model.AnimeLayerItemDescription, 0)
+	items = append(items, *animelayer_item_parser.CollectItemFromAddress(ctx, BASE_ADDRESS_URI, "667d9afb4524647cc76cb2b2"))
+	items = append(items, *animelayer_item_parser.CollectItemFromAddress(ctx, BASE_ADDRESS_URI, "668d5fa7530bc92230023b58"))
+
+	rankingsJson, _ := json.Marshal(items)
+	_ = os.WriteFile("~output_descriptions.json", rankingsJson, 0644)
+
+}
