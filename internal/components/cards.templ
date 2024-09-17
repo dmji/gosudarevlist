@@ -1,7 +1,5 @@
 package components
 
-import "strconv"
-
 type ItemCartData struct {
 	ID             int
 	Title          string
@@ -10,10 +8,19 @@ type ItemCartData struct {
 	AnimeLayerRef  string
 }
 
+templ ListItemRenderTrigger(nextPageParams string) {
+	<div
+		hx-get={ "/api/cards?" + nextPageParams }
+		hx-trigger="revealed"
+		hx-swap="outerHTML"
+		class="pt-96"
+	></div>
+}
+
 // Recursive template
 // Child of templ:  storage.templ
 // Render from Api: /api/cards
-templ ListItem(cards []ItemCartData, nextPage int) {
+templ ListItem(cards []ItemCartData, nextPageParams string) {
 	
 	for _, card := range cards {
  		<a href={ templ.URL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer" class="block no-underline">
@@ -34,11 +41,6 @@ templ ListItem(cards []ItemCartData, nextPage int) {
 		</a>
 	}
 	if len(cards) > 0 {
-		<div
-			hx-get={ "/api/cards?page=" + strconv.Itoa(nextPage) }
-			hx-trigger="revealed"
-			hx-swap="outerHTML"
-			class="pt-96"
-		/>
+		@ListItemRenderTrigger(nextPageParams)
 	}
 }

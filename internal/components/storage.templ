@@ -35,17 +35,17 @@ package components
     </script>
 } */
 
-templ ListingPage(initialCards []ItemCartData, nextPage int) {
+templ ListingPage(nextPageParams string) {
 	@layout("Anime") {
         <div class="pt-3">
             @searchBar()
             
             <div id="filterPanel" class="w-auto px-4 py-4">
-                @filters()
-            </div>
-
+                    @filters()
+                </div>
+                
             <div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 p-4">
-                @ListItem(initialCards, nextPage)
+                @ListItemRenderTrigger(nextPageParams)
             </div>
         </div>
 	}

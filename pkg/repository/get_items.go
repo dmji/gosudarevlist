@@ -4,20 +4,12 @@ import (
 	"collector/pkg/model"
 	"context"
 	"log"
+
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]model.AnimeLayerItem, error) {
 	log.Printf("In-Memory repo | GetItems count: %d, offset: %d, db items: %d", opt.Count, opt.Offset, len(r.db))
-
-	if rest := len(r.db) - opt.Offset; rest < opt.Count {
-		opt.Count = rest
-	}
-
-	res := r.db[opt.Offset : opt.Offset+opt.Count]
-	log.Printf("In-Memory repo | GetItems result items: %d", len(res))
-	return res, nil
-
-	/* log.Printf("In-Memory repo | GetItems count: %d, offset: %d, db items: %d", opt.Count, opt.Offset, len(r.db))
 
 	if opt.Count == 0 {
 		return nil, nil
@@ -30,15 +22,12 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 		item := r.db[i]
 
 		if len(opt.SearchQuery) > 0 {
-
-			if dist := fuzzy.RankMatch(opt.SearchQuery, item.Name); dist == -1 || dist < int(len(opt.SearchQuery)*75/100) {
+			if !fuzzy.MatchNormalizedFold(opt.SearchQuery, item.Name) {
 				continue
 			}
-
 		}
 
 		if currentOffset < opt.Offset {
-			log.Printf("In-Memory repo | GetItems offset shift from '%d' to '%d'", currentOffset, opt.Offset)
 			currentOffset++
 			continue
 		}
@@ -51,5 +40,5 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	}
 
 	log.Printf("In-Memory repo | GetItems result items: %d", len(res))
-	return res, nil */
+	return res, nil
 }
