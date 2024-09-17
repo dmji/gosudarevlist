@@ -1,13 +1,31 @@
-version: '3'
+version: "3"
 
 tasks:
   dev:
-    deps: [templ, air]
-  
+    deps: [tailwind-cli-dev, templ, air]
+
   templ:
     cmds:
       - templ generate --watch --proxy="http://localhost:8080"  --proxybind="0.0.0.0" --proxyport="54321" --open-browser=false
-  
+
   air:
     cmds:
       - air
+
+  tailwind-cli-dev:
+    cmds:
+      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --watch
+    deps: [tailwind-cli-download]
+
+  tailwind-cli-prod:
+    cmds:
+      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --minify
+    deps: [tailwind-cli-download]
+
+  tailwind-cli-download:
+    cmds:
+      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.12/tailwindcss-linux-x64
+      - chmod +x tailwindcss-linux-x64
+      - mv tailwindcss-linux-x64 ~tailwindcss
+    status:
+      - ./~tailwindcss

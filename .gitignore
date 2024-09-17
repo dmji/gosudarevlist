@@ -18,13 +18,15 @@
 # Dependency directories (remove the comment below to include it)
 vendor/
 tmp/
-
 # Go workspace file
 go.work
 go.work.sum
 
 # env file
 .env
+
+# tailwind build
+assets/css/tailwind.css
 
 # Templ 
 *_templ.go
