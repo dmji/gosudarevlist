@@ -1,40 +1,5 @@
 package components
 
-/* templ ListingPage2(initialCards []ItemCartData, nextPage int) {
-	@layout("Anime") {
-        <div class="pt-3">
-            @searchBar()
-            
-            <div class="flex flex-col lg:flex-row mt-8">
-
-                <div id="filterPanel" class="hidden w-auto min-w-80 lg:max-w-xl order-1 lg:order-1 px-4 py-1">
-                    @filters()
-                </div>
-                
-                <div id="card-container" class="grid grid-cols-auto gap-4 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
-                    @ListItem(initialCards, nextPage)
-                </div>
-
-            </div>
-        </div>
-	}
-
-    <script>
-        const filterButton = document.getElementById('filterButton');
-        const filterPanel = document.getElementById('filterPanel');
-
-        filterButton.addEventListener('click', () => {
-            filterPanel.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!filterButton.contains(event.target) && !filterPanel.contains(event.target)) {
-                filterPanel.classList.add('hidden');
-            }
-        });
-    </script>
-} */
-
 templ ListingPage(nextPageParams string) {
 	@layout("Anime") {
         <div class="pt-3">
@@ -54,12 +19,6 @@ templ ListingPage(nextPageParams string) {
 templ searchBar() {
 	<div class="flex items-center gap-1  mx-auto px-4 ">
 
-/* 		<button id="filterButton" class="bg-blue-700 hover:bg-blue-500 text-white p-3 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md flex items-center justify-center w-12 h-12" aria-label="Filters">
-            <svg class="h-4 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16M4 12h16M4 6h16" />
-            </svg>
-        </button> */
-
 		<div class="relative flex-grow">
             <input 
                 id="searchBar"
@@ -67,6 +26,7 @@ templ searchBar() {
                 hx-boost="true"
                 hx-ext="push-url-w-params"
                 hx-get="/api/cards" 
+                hx-patch="/ENDPOINT"
                 hx-target="#card-container"
                 hx-trigger="keyup changed delay:1s"
                 type="text"
@@ -92,7 +52,7 @@ templ searchBar() {
 }
 
 templ filters() {
-	<div id="filters" class="bg-white rounded-lg shadow-md p-6">
+	<form id="filters" class="bg-white rounded-lg shadow-md p-6" hx-boost="true" hx-get="/api/cards" hx-target="#card-container" hx-ext="push-url-w-params">
 
 		<h2 class="text-2xl font-bold mb-4">Filters</h2>
 
@@ -105,65 +65,21 @@ templ filters() {
                     <div class="space-y-2">
                         for _, category := range []string{"Electronics", "Clothing", "Home & Garden", "Sports"} {
                             <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox text-primary rounded mr-2"/>
+                                <input type="checkbox" name="pet" value={ templ.EscapeString(category) } class="form-checkbox text-primary rounded mr-2"/>
+                                <input type="hidden" name="pet" value=""/>
                                 <span>{ category }</span>
                             </label>
                         }
                     </div>
                 </div>
                 
-                <div>
-                    <h3 class="font-semibold mb-2">Categories</h3>
-                    <div class="space-y-2">
-                        for _, category := range []string{"Electronics", "Clothing", "Home & Garden", "Sports"} {
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox text-primary rounded mr-2"/>
-                                <span>{ category }</span>
-                            </label>
-                        }
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-semibold mb-2">Categories</h3>
-                    <div class="space-y-2">
-                        for _, category := range []string{"Electronics", "Clothing", "Home & Garden", "Sports"} {
-                            <label class="flex items-center">
-                                <input type="checkbox" value="1" class="form-checkbox text-primary rounded mr-2"/>
-                                <span>{ category }</span>
-                            </label>
-                        }
-                    </div>
-                </div>
-
-                <form hx-boost="true" hx-push-url="false" action="/results" method="post">
-                    <h3 class="font-semibold mb-2">Categories</h3>
-                    <div class="space-y-2">
-                        for _, category := range []string{"Electronics", "Clothing", "Home & Garden", "Sports"} {
-                            <label class="flex items-center">
-                                <input id={ category } type="checkbox" class="form-checkbox text-primary rounded mr-2" nane={ category }/>
-                                <span>{ category }</span>
-                            </label>
-                        }
-                    </div>
-                </form>
-
             </div>
-
-
-
-            <form hx-boost="true" hx-get="/api/cards" hx-target="#card-container">
-                <input type="checkbox" name="page" value="3"/>
-                <input type="checkbox" name="page" value="2"/>
-                <input type="checkbox" name="page" value="1"/>
-                <button type="submit">SUBMIT</button>
-            </form>
 
             <div class="py-4">
-			<button type="submit" hx-post="/api/cards?page=1" hx-target="#card-container" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out">
-				Apply Filters
-			</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    Apply Filters
+                </button>
             </div>
 		</div>
-	</div>
+	</form>
 }

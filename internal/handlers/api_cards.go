@@ -17,9 +17,10 @@ type ApiCardsParams struct {
 }
 
 func NewParams(r *http.Request, defaultPage int) ApiCardsParams {
-	searchQueryStr := r.URL.Query().Get("query")
 
+	searchQueryStr := r.URL.Query().Get("query")
 	pageStr := r.URL.Query().Get("page")
+
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
 		page = defaultPage
