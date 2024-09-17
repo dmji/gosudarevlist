@@ -29,10 +29,15 @@ func queryPosterFromItem(description *model.AnimeLayerItemDescription) string {
 	return "/assets/no_image.jpg"
 }
 
-func (s *services) GenerateCards(ctx context.Context, page int) []components.ItemCartData {
-	startID := (page - 1) * perPage
+func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) []components.ItemCartData {
+	startID := (opt.Page - 1) * perPage
 
-	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, perPage, startID)
+	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
+		Count:       perPage,
+		Offset:      startID,
+		SearchQuery: opt.SearchQuery,
+	})
+
 	if err != nil {
 		return nil
 	}

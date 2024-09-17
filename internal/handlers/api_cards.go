@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"collector/internal/components"
+	"collector/internal/services"
 	requestutils "collector/pkg/request_utils"
 	"log"
 	"net/http"
@@ -18,7 +19,13 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 		log.Print("Page argumen not passed")
 	}
 
-	cards := router.s.GenerateCards(ctx, page)
+	cards := router.s.GenerateCards(ctx,
+		services.GenerateCardsOptions{
+			Page:        page,
+			SearchQuery: "",
+		},
+	)
+
 	log.Printf("Handler | ApiCards: page='%d' (len: %d)", page, len(cards))
 	requestutils.LogQuery(r, "ApiCards")
 
