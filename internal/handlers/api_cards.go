@@ -61,11 +61,6 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 	requestutils.LogQuery(r, "ApiCards")
 	log.Printf("Handler | ApiCards params: %s", params.ToString())
 
-	if len(cards) == 0 {
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
 	err := components.ListItem(cards, params.ToString()).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
