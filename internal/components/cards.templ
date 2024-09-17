@@ -38,6 +38,7 @@ templ ListItem(cards []ItemCartData, nextPage int) {
 			hx-get={ "/api/cards?page=" + strconv.Itoa(nextPage) }
 			hx-trigger="revealed"
 			hx-swap="outerHTML"
+			class="pt-96"
 		/>
 	}
 }
