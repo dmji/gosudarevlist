@@ -1,7 +1,7 @@
 package services
 
 import (
-	"collector/internal/components"
+	"collector/components/cards"
 	"collector/pkg/repository"
 	"context"
 )
@@ -16,7 +16,7 @@ type GenerateCardsOptions struct {
 }
 
 type Service interface {
-	GenerateCards(ctx context.Context, opt GenerateCardsOptions) []components.ItemCartData
+	GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver) *services {

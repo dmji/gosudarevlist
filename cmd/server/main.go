@@ -1,7 +1,7 @@
 package main
 
 import (
-	"collector/internal/components"
+	"collector/components/pages"
 	"collector/internal/handlers"
 	"collector/internal/services"
 	"collector/pkg/repository"
@@ -27,7 +27,7 @@ func main() {
 
 	// parsers
 	mux.HandleFunc("/parser/animelayer", func(w http.ResponseWriter, r *http.Request) {
-		component := components.Page([]components.ScanResult{})
+		component := pages.Scanner([]pages.ScanResult{})
 		component.Render(context.Background(), w)
 	})
 

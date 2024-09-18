@@ -1,6 +1,9 @@
 package pages
 
-import "fmt"
+import (
+	"collector/components"
+	"fmt"
+)
 
 type ScanResult struct {
 	ID       int
@@ -32,7 +35,7 @@ templ Results(results []ScanResult) {
 }
 
 templ Scanner(results []ScanResult) {
-	@layout("AnimeLayer Scan") {
+	@components.Layout("AnimeLayer Scan") {
 		<div class="container mx-auto w-4/5 max-w-4xl">
 			<h1 class="text-3xl font-bold mb-6 text-center">AnimeLayer Scanner</h1>
 			<div class="bg-gray-200 rounded-full mb-6">

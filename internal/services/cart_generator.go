@@ -1,7 +1,7 @@
 package services
 
 import (
-	"collector/internal/components"
+	"collector/components/cards"
 	"collector/pkg/model"
 	"context"
 	"fmt"
@@ -29,7 +29,7 @@ func queryPosterFromItem(description *model.AnimeLayerItemDescription) string {
 	return "/assets/no_image.jpg"
 }
 
-func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) []components.ItemCartData {
+func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData {
 	startID := (opt.Page - 1) * perPage
 
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
@@ -44,7 +44,7 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 
 	endID := startID + len(items)
 
-	cards := make([]components.ItemCartData, 0, perPage)
+	cardItems := make([]cards.ItemCartData, 0, perPage)
 	for id := startID; id < endID; id++ {
 		item := &items[id-startID]
 
@@ -58,7 +58,7 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 			}
 		}
 
-		cards = append(cards, components.ItemCartData{
+		cardItems = append(cardItems, cards.ItemCartData{
 			ID:            id + 1,
 			Title:         item.Name,
 			Image:         queryPosterFromItem(&description),
@@ -66,5 +66,5 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.GUID),
 		})
 	}
-	return cards
+	return cardItems
 }

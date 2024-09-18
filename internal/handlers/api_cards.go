@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"collector/internal/components"
+	"collector/components/cards"
 	"collector/internal/services"
 	requestutils "collector/pkg/request_utils"
 	"log"
@@ -51,17 +51,17 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 
 	params := NewParams(r, 1)
 
-	cards := router.s.GenerateCards(ctx,
+	cardItems := router.s.GenerateCards(ctx,
 		services.GenerateCardsOptions{
 			Page:        params.Page,
 			SearchQuery: params.SearchQuery,
 		})
 
-	log.Printf("Handler | ApiCards: page='%d' (len: %d)", params.Page, len(cards))
+	log.Printf("Handler | ApiCards: page='%d' (len: %d)", params.Page, len(cardItems))
 	requestutils.LogQuery(r, "ApiCards")
 	log.Printf("Handler | ApiCards params: %s", params.ToString())
 
-	err := components.ListItem(cards, params.ToString()).Render(r.Context(), w)
+	err := cards.ListItem(cardItems, params.ToString()).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
