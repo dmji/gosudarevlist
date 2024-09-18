@@ -1,6 +1,8 @@
-package components
+package pages 
 
-templ ListingPage(nextPageParams string) {
+import "collector/components/cards"
+
+templ Listing(nextPageParams string) {
 	@layout("Anime") {
 		<div class="pt-3">
 			@searchBar()
@@ -8,7 +10,7 @@ templ ListingPage(nextPageParams string) {
 				@filters()
 			</div>
 			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 p-4">
-				@ListItemRenderTrigger(nextPageParams)
+				@cards.ListItemRenderTrigger(nextPageParams)
 			</div>
 		</div>
 	}
@@ -23,7 +25,6 @@ templ searchBar() {
 				hx-boost="true"
 				hx-ext="push-url-w-params"
 				hx-get="/api/cards"
-				hx-patch="/ENDPOINT"
 				hx-target="#card-container"
 				hx-trigger="keyup changed delay:1s"
 				type="text"

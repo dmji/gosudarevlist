@@ -1,4 +1,4 @@
-package components
+package navigation
 
 type NavItem struct {
 	Name string
@@ -30,7 +30,7 @@ templ navDropDownIcon(classTailwind string) {
 	</svg>
 }
 
-templ navTemplate() {
+templ Navbar() {
 	<nav class="flex-no-wrap fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex justify-between h-16">
@@ -70,50 +70,56 @@ templ navTemplate() {
 				</div>
 			</div>
 		</div>
-		<div class="sm:hidden hidden" id="mobile-menu">
-			<div class="pt-2 pb-3 space-y-1">
-				for _, item := range data.NavItems {
-					<a href={ templ.SafeURL(item.URL) } class="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">{ item.Name }</a>
+		@navbarMobile()
+	</nav>
+	@navbarDropdowns()
+}
+
+templ navbarMobile() {
+	<div class="sm:hidden hidden" id="mobile-menu">
+		<div class="pt-2 pb-3 space-y-1">
+			for _, item := range data.NavItems {
+				<a href={ templ.SafeURL(item.URL) } class="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">{ item.Name }</a>
+			}
+			<button id="mobileScannersButton" class="flex w-full items-center justify-between px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+				Scanners
+				@navDropDownIcon("h-5 w-5")
+			</button>
+			<div id="mobileScannersMenu" class="hidden pl-4">
+				for _, scanner := range data.Scanners {
+					<a href={ templ.SafeURL(scanner.URL) } class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
 				}
-				<button id="mobileScannersButton" class="flex w-full items-center justify-between px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
-					Scanners
-					@navDropDownIcon("h-5 w-5")
-				</button>
-				<div id="mobileScannersMenu" class="hidden pl-4">
-					for _, scanner := range data.Scanners {
-						<a href={ templ.SafeURL(scanner.URL) } class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
-					}
-				</div>
 			</div>
 		</div>
-	</nav>
-	<script>
-        // Dropdown functionality
-        const scannersDropdownButton = document.getElementById('scannersDropdownButton');
-        const scannersDropdownMenu = document.getElementById('scannersDropdownMenu');
+	</div>
+}
 
-        scannersDropdownButton.addEventListener('click', () => {
-            scannersDropdownMenu.classList.toggle('hidden');
-        });
+script navbarDropdowns() {
+	// Dropdown functionality
+		const scannersDropdownButton = document.getElementById('scannersDropdownButton');
+	const scannersDropdownMenu = document.getElementById('scannersDropdownMenu');
 
-        document.addEventListener('click', (event) => {
-            if (!scannersDropdownButton.contains(event.target) && !scannersDropdownMenu.contains(event.target)) {
-                scannersDropdownMenu.classList.add('hidden');
-            }
-        });
+	scannersDropdownButton.addEventListener('click', () => {
+		scannersDropdownMenu.classList.toggle('hidden');
+	});
 
-        const mobileMenuButton = document.getElementById('mobileMenuButton');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+	document.addEventListener('click', (event) => {
+		if (!scannersDropdownButton.contains(event.target) && !scannersDropdownMenu.contains(event.target)) {
+			scannersDropdownMenu.classList.add('hidden');
+		}
+	});
 
-        const mobileScannersButton = document.getElementById('mobileScannersButton');
-        const mobileScannersMenu = document.getElementById('mobileScannersMenu');
+	const mobileMenuButton = document.getElementById('mobileMenuButton');
+	const mobileMenu = document.getElementById('mobile-menu');
+	
+	mobileMenuButton.addEventListener('click', () => {
+		mobileMenu.classList.toggle('hidden');
+	});
 
-        mobileScannersButton.addEventListener('click', () => {
-            mobileScannersMenu.classList.toggle('hidden');
-        });
-    </script>
+	const mobileScannersButton = document.getElementById('mobileScannersButton');
+	const mobileScannersMenu = document.getElementById('mobileScannersMenu');
+
+	mobileScannersButton.addEventListener('click', () => {
+		mobileScannersMenu.classList.toggle('hidden');
+	});
 }

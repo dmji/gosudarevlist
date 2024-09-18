@@ -1,4 +1,4 @@
-package components
+package pages
 
 import "fmt"
 
@@ -31,7 +31,7 @@ templ Results(results []ScanResult) {
 	}
 }
 
-templ Page(results []ScanResult) {
+templ Scanner(results []ScanResult) {
 	@layout("AnimeLayer Scan") {
 		<div class="container mx-auto w-4/5 max-w-4xl">
 			<h1 class="text-3xl font-bold mb-6 text-center">AnimeLayer Scanner</h1>

@@ -1,4 +1,6 @@
-package components
+package pages
+
+import "collector/components/navigation"
 
 templ layout(title string) {
 	<!DOCTYPE html>
@@ -7,12 +9,12 @@ templ layout(title string) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{ title }</title>
-			<script src="https://unpkg.com/htmx.org@1.9.2"></script>
-			<script src="https://cdn.tailwindcss.com"></script>
-			@styles()
+			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
+			//<script href="/assets/htmx/htmx.js"></script>
 		</head>
 		<body class="bg-[#f0f0f0] m-0 p-0;  font-family: Arial, sans-serif;">
-			@navTemplate()
+			@navigation.Navbar()
 			<main class="pt-16">
 				{ children... }
 			</main>
@@ -25,6 +27,7 @@ script htmxDefineExtension() {
 	htmx.defineExtension('push-url-w-params', {
 		onEvent : function(name, e) {
 			if (name === "htmx:configRequest") {
+				/* 				
 				const params = new URLSearchParams(e.detail.parameters)
 				paramsActials = new URLSearchParams(window.location.search)
 
@@ -39,6 +42,50 @@ script htmxDefineExtension() {
 				} else {
 					window.history.pushState({}, '', window.location.pathname);
 				}
+				*/
+
+				const params = new URLSearchParams(e.detail.parameters)
+				paramsActuals = new URLSearchParams(window.location.search)
+				const pathBefore = paramsActuals.size > 0 
+					? window.location.pathname + "?" + paramsActuals.toString()
+					: window.location.pathname;
+
+				params.forEach((value, key) => { 
+					value = value.replace(/[,]+/g, '-').trim().replace(/^-+|-+$/g, '')
+					value.length === 0 ? paramsActuals.delete(key) : paramsActuals.set(key, value)
+				});
+
+				const historyUpdatePath = paramsActuals.size > 0
+					? window.location.origin + window.location.pathname + "?" + paramsActuals.toString()
+					: window.location.origin + window.location.pathname;
+/* 				{
+					//window.history.pushState({}, '', window.location.pathname + "?" + paramsActuals.toString());
+					//window.history.v({}, '', window.location.pathname + "?" + paramsActuals.toString());
+					//paramsActuals.forEach((value, key) => { e.detail.parameters[key]=value });
+				} else {
+					window.history.replaceState(pathBefore, 'Change Url', window.location.pathname);
+					//window.history.pushState({}, '', window.location.pathname);
+				} */
+				function mergeObjects(obj1, obj2) {
+				for (const key in obj2) {
+					if (obj2.hasOwnProperty(key)) {
+					// @ts-ignore tsc doesn't seem to properly handle types merging
+					obj1[key] = obj2[key]
+					}
+				}
+				// @ts-ignore tsc doesn't seem to properly handle types merging
+				return obj1
+				}
+
+				const historyUpdate = {
+					type: 'replace',
+					path: historyUpdatePath
+				}
+
+              	htmx.trigger(document.body, 'htmx:beforeHistoryUpdate', mergeObjects({ history: historyUpdate }, e))
+				console.log(historyUpdatePath)
+				window.history.replaceState({ htmx: true }, '', historyUpdatePath);
+				htmx.trigger(document.body, 'htmx:replacedInHistory', { path: historyUpdate.Path })
 			}
 		}
 	})

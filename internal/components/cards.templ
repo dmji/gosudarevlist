@@ -1,4 +1,4 @@
-package components
+package cards
 
 type ItemCartData struct {
 	ID            int
@@ -23,11 +23,11 @@ templ ListItemRenderTrigger(nextPageParams string) {
 templ ListItem(cards []ItemCartData, nextPageParams string) {
 	for _, card := range cards {
 		<a href={ templ.URL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer" class="block no-underline">
-			<div class="card transition duration-300 ease-in-out transform hover:scale-105">
-				<div class="card-content">
+			<div class="flex flex-col border overflow-hidden bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]; transition duration-300 ease-in-out transform hover:scale-105">
+				<div class="p-4 h-1/4">
 					<h3>{ card.Title }</h3>
 				</div>
-				<img src={ card.Image } alt={ card.Title }/>
+				<img src={ card.Image } alt={ card.Title } class="w-full h-[250px] object-scale-down"/>
 				<div class="p-4">
 					{ card.Description }
 				</div>
