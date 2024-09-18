@@ -1,11 +1,11 @@
 package components
 
 type ItemCartData struct {
-	ID             int
-	Title          string
-	Image          string
-	Description    string
-	AnimeLayerRef  string
+	ID            int
+	Title         string
+	Image         string
+	Description   string
+	AnimeLayerRef string
 }
 
 templ ListItemRenderTrigger(nextPageParams string) {
@@ -21,22 +21,16 @@ templ ListItemRenderTrigger(nextPageParams string) {
 // Child of templ:  storage.templ
 // Render from Api: /api/cards
 templ ListItem(cards []ItemCartData, nextPageParams string) {
-	
 	for _, card := range cards {
- 		<a href={ templ.URL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer" class="block no-underline">
-		
+		<a href={ templ.URL(card.AnimeLayerRef) } target="_blank" rel="noopener noreferrer" class="block no-underline">
 			<div class="card transition duration-300 ease-in-out transform hover:scale-105">
-					
-					<div class="card-content">
-						<h3>{ card.Title }</h3>
-					</div>
-					
-					<img src={ card.Image } alt={ card.Title }/>
-					
-					<div class="p-4">
-						{ card.Description }
-					</div>
-					
+				<div class="card-content">
+					<h3>{ card.Title }</h3>
+				</div>
+				<img src={ card.Image } alt={ card.Title }/>
+				<div class="p-4">
+					{ card.Description }
+				</div>
 			</div>
 		</a>
 	}
