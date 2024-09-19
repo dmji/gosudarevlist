@@ -2,24 +2,13 @@ package animelayer_item_parser
 
 import (
 	"collector/pkg/model"
-	"collector/pkg/parser"
 	"context"
-	"fmt"
 	"time"
+
+	"golang.org/x/net/html"
 )
 
-func formatItemUrl(baseUrl, guid string) string {
-	return baseUrl + "/torrent/" + guid
-}
-
-func CollectItemFromAddress(ctx context.Context, baseAddressUri string, guid string) *model.AnimeLayerItemDescription {
-
-	url := formatItemUrl(baseAddressUri, guid)
-
-	doc, err := parser.LoadHtmlDocument(url)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
+func Parse(ctx context.Context, doc *html.Node) *model.AnimeLayerItemDescription {
 
 	item := &model.AnimeLayerItemDescription{}
 	traverseHtmlNodes(ctx, doc, item)

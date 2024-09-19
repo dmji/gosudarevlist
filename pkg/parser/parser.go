@@ -16,9 +16,10 @@ func CleanStringFromHtmlSymbols(t string) string {
 	return t
 }
 
-func LoadHtmlDocument(url string) (*html.Node, error) {
+func LoadHtmlDocument(client *http.Client, urlString string) (*html.Node, error) {
 
-	resp, err := http.Get(url)
+	resp, err := client.Get(urlString)
+
 	if err != nil {
 		return nil, err
 	}

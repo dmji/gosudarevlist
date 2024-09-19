@@ -2,24 +2,46 @@ package animelayer_pages_parser
 
 import (
 	"collector/pkg/model"
-	"collector/pkg/parser"
 	"context"
-	"fmt"
-	"strconv"
+	"log"
+
+	"golang.org/x/net/html"
 )
 
-func formatPageUrl(baseUrl, category string, iPage int) string {
-	return baseUrl + category + "/?page=" + strconv.FormatInt(int64(iPage), 10)
-}
-
-func CollectBaseItemsFromAddress(ctx context.Context, baseAddressUri string, category string, iPage int) []model.AnimeLayerItem {
-
-	url := formatPageUrl(baseAddressUri, category, iPage)
-
-	doc, err := parser.LoadHtmlDocument(url)
-	if err != nil {
-		fmt.Println("Error:", err)
+func isExistAttrWithTargetKeyValue(attr []html.Attribute, key, value string) bool {
+	for _, a := range attr {
+		if a.Key == key && a.Val == value {
+			return true
+		}
 	}
 
-	return traverseHtmlNodes(ctx, doc)
+	return false
+}
+
+func Parse(ctx context.Context, n *html.Node) []model.AnimeLayerItem {
+	items := make([]model.AnimeLayerItem, 0, 40)
+
+	// cart title
+	if n.Type == html.ElementNode && n.Data == "h3" {
+
+		if isExistAttrWithTargetKeyValue(n.Attr, "class", "h2 m0") {
+
+			item := parseNodeWithTitle(ctx, n)
+			if item != nil {
+				items = append(items, *item)
+			} else {
+				log.Print("Warning: Got nil item")
+				_ = parseNodeWithTitle(ctx, n)
+			}
+			return items
+		}
+
+	}
+
+	// traverses the HTML of the webpage from the first child node
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		items = append(items, Parse(ctx, c)...)
+	}
+
+	return items
 }
