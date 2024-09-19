@@ -4,6 +4,7 @@ import (
 	"collector/components/pages"
 	"collector/internal/handlers"
 	"collector/internal/services"
+	"collector/pkg/middleware"
 	repository_inmemory "collector/pkg/repository/inmemory"
 	"context"
 	"fmt"
@@ -32,7 +33,9 @@ func main() {
 	// pages
 	mux.HandleFunc("/", r.HomePageHandler)
 	mux.HandleFunc("/profile", r.ProfilePageHandler)
-	mux.HandleFunc("/anime", r.ShelfPageHandler)
+	mux.HandleFunc("/anime",
+		middleware.HxPushUrlMiddleware(r.ShelfPageHandler),
+	)
 
 	// parsers
 	mux.HandleFunc("/parser/animelayer", func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +44,10 @@ func main() {
 	})
 
 	// api
-	mux.HandleFunc("/api/cards", r.ApiCards)
+	mux.HandleFunc("/api/cards",
+		middleware.HxPushUrlMiddleware(r.ApiCards),
+	)
+
 	mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
 	mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
 

@@ -3,7 +3,6 @@ package handlers
 import (
 	"collector/components/cards"
 	"collector/internal/services"
-	requestutils "collector/pkg/request_utils"
 	"log"
 	"net/http"
 	"strconv"
@@ -24,7 +23,7 @@ func NewParams(r *http.Request, defaultPage int) ApiCardsParams {
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
 		page = defaultPage
-		log.Print("Page argumen not passed")
+		log.Print("Params ApiCards | Page argumen not passed")
 	}
 
 	return ApiCardsParams{
@@ -58,12 +57,11 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 		})
 
 	log.Printf("Handler | ApiCards: page='%d' (len: %d)", params.Page, len(cardItems))
-	requestutils.LogQuery(r, "ApiCards")
-	log.Printf("Handler | ApiCards params: %s", params.ToString())
 
 	err := cards.ListItem(cardItems, params.ToString()).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 }

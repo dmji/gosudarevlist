@@ -26,9 +26,9 @@ templ searchBar() {
 				id="searchBar"
 				name="query"
 				hx-boost="true"
-				hx-ext="push-url-w-params"
 				hx-get="/api/cards"
 				hx-target="#card-container"
+				hx-include="[type='checkbox']"
 				hx-trigger="keyup changed delay:1s"
 				type="text"
 				placeholder="Search..."
@@ -51,7 +51,14 @@ templ searchBar() {
 }
 
 templ filters() {
-	<form id="filters" class="bg-white rounded-lg shadow-md p-6" hx-boost="true" hx-get="/api/cards" hx-target="#card-container" hx-ext="push-url-w-params">
+	<form
+		id="filters"
+		class="bg-white rounded-lg shadow-md p-6"
+		hx-boost="true"
+		hx-get="/api/cards"
+		hx-target="#card-container"
+		hx-include="[id='searchBar']"
+	>
 		<h2 class="text-2xl font-bold mb-4">Filters</h2>
 		<div class="space-y-4">
 			<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
