@@ -4,7 +4,7 @@ import (
 	"collector/components/pages"
 	"collector/internal/handlers"
 	"collector/internal/services"
-	"collector/pkg/repository"
+	repository_inmemory "collector/pkg/repository/inmemory"
 	"context"
 	"fmt"
 	"log"
@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	repo := repository.New()
+	repo := repository_inmemory.New()
 	s := services.New(repo)
 	r := handlers.New(s)
 
