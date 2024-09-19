@@ -1,4 +1,4 @@
-package repository
+package repository_inmemory
 
 import (
 	"collector/pkg/model"

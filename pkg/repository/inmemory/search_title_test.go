@@ -1,7 +1,7 @@
-package repository_test
+package repository_inmemory_test
 
 import (
-	"collector/pkg/repository"
+	repository "collector/pkg/repository/inmemory"
 	"context"
 	"fmt"
 	"testing"
