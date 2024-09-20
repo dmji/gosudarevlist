@@ -1,58 +1,14 @@
 package middleware
 
 import (
+	"collector/pkg/custom_url"
 	"log"
 	"net/http"
 	"net/url"
 )
 
-func queryCustomParse(r *http.Request) url.Values {
-	query := r.URL.Query()
-	qStr := ""
-	for key, vals := range query {
-
-		sValues := ""
-		for i, v := range vals {
-			if i != 0 && len(v) > 0 {
-				sValues += "-"
-			}
-			sValues += v
-		}
-
-		if len(sValues) == 0 {
-			continue
-		}
-
-		if len(qStr) == 0 {
-		} else {
-			qStr += "&"
-		}
-		qStr += key + "=" + sValues
-	}
-
-	q, _ := url.ParseQuery(qStr)
-
-	return q
-}
-
-func queryValuesToString(q *url.Values) string {
-
-	q.Del("page")
-
-	s := q.Encode()
-
-	if len(s) == 0 {
-		return ""
-	}
-
-	return "?" + s
-}
-
 func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		queryValues := queryCustomParse(r)
-		//log.Printf("Handler | %s: %s", name, qStr)
 
 		currentUri := r.Header.Get("HX-Current-URL")
 		currentUrl, err := url.Parse(currentUri)
@@ -60,11 +16,18 @@ func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) h
 			log.Panic(err)
 		}
 
-		newUri := currentUrl.Path + queryValuesToString(&queryValues)
+		mergedQuery := custom_url.QueryCustomParse(r.URL.Query())
+
+		// remove page, TODO: found a better way
+		mergedQuery.Del("page")
+
+		log.Printf("Middleware Hx-Push-Url | Query URI: %v", mergedQuery.Encode())
+		newUri := currentUrl.Path + custom_url.QueryValuesToString(&mergedQuery)
 
 		w.Header().Set("Access-Control-Expose-Headers", "Hx-Push-Url")
 		w.Header().Set("Hx-Push-Url", newUri)
 
+		log.Printf("Middleware Hx-Push-Url | Prev URI: %s", currentUri)
 		log.Printf("Middleware Hx-Push-Url | New URI: %s", newUri)
 
 		handler(w, r)

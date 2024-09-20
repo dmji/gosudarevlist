@@ -43,6 +43,7 @@ templ Scanner(results []ScanResult) {
 			</div>
 			<button
 				class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6"
+				hx-boost="true"
 				hx-post="/api/animelayer/scan"
 				hx-target="#results"
 				hx-trigger="click"

@@ -16,10 +16,17 @@ import (
 )
 
 func init() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic(err)
+	path := ".env"
+	for i := range 10 {
+		if i != 0 {
+			path = "../" + path
+		}
+		err := godotenv.Load(path)
+		if err == nil {
+			return
+		}
 	}
+	panic(".env not found")
 }
 
 func main() {
@@ -44,8 +51,15 @@ func main() {
 	})
 
 	// api
+	mux.HandleFunc("GET /api/push_url",
+		middleware.HxPushUrlMiddleware(func(w http.ResponseWriter, r *http.Request) { log.Print("Changed!") }),
+	)
 	mux.HandleFunc("/api/cards",
-		middleware.HxPushUrlMiddleware(r.ApiCards),
+		//middleware.PushQueryToRequestMiddleware(
+		middleware.HxPushUrlMiddleware(
+			r.ApiCards,
+		),
+		//),
 	)
 
 	mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)

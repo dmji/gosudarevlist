@@ -5,15 +5,12 @@ import (
 	"collector/components/cards"
 )
 
-templ Listing(nextPageParams string) {
+templ Gallery(params cards.FilterParameters, nextPageEndpint, nextPageParams string) {
 	@components.Layout("Anime") {
 		<div class="pt-3">
-			@cards.SearchBar()
-			<div id="filterPanel" class="w-auto px-4 py-4">
-				@cards.Filters()
-			</div>
+			@cards.Filters(nextPageEndpint, "#card-container", params)
 			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 p-4">
-				@cards.ListItemRenderTrigger(nextPageParams)
+				@cards.ListItemRenderTrigger(nextPageEndpint, nextPageParams)
 			</div>
 		</div>
 	}

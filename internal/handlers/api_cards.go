@@ -3,8 +3,10 @@ package handlers
 import (
 	"collector/components/cards"
 	"collector/internal/services"
+	"collector/pkg/custom_url"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -15,10 +17,10 @@ type ApiCardsParams struct {
 	NextPage int
 }
 
-func NewParams(r *http.Request, defaultPage int) ApiCardsParams {
+func NewParams(q url.Values, defaultPage int) ApiCardsParams {
 
-	searchQueryStr := r.URL.Query().Get("query")
-	pageStr := r.URL.Query().Get("page")
+	searchQueryStr := q.Get("query")
+	pageStr := q.Get("page")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -34,21 +36,20 @@ func NewParams(r *http.Request, defaultPage int) ApiCardsParams {
 	}
 }
 
-func (p *ApiCardsParams) ToString() string {
-	res := ""
+func (p *ApiCardsParams) ApplyToQuery(query *url.Values) {
 
-	res += "page=" + strconv.Itoa(p.NextPage)
+	query.Set("page", strconv.Itoa(p.NextPage))
+
 	if p.SearchQuery != "" {
-		res += "&query=" + p.SearchQuery
+		query.Set("query", p.SearchQuery)
 	}
-
-	return res
 }
 
 func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	params := NewParams(r, 1)
+	query := custom_url.QueryCustomParse(r.URL.Query())
+	params := NewParams(query, 1)
 
 	cardItems := router.s.GenerateCards(ctx,
 		services.GenerateCardsOptions{
@@ -57,11 +58,13 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 		})
 
 	log.Printf("Handler | ApiCards: page='%d' (len: %d)", params.Page, len(cardItems))
+	params.ApplyToQuery(&query)
+	nextPageParams := custom_url.QueryValuesToString(&query)
+	log.Printf("Handler | ApiCards: nextQuery='%s'", nextPageParams)
 
-	err := cards.ListItem(cardItems, params.ToString()).Render(r.Context(), w)
+	err := cards.ListItem(cardItems, r.URL.Path, nextPageParams).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 }
