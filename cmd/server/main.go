@@ -1,12 +1,10 @@
 package main
 
 import (
-	"collector/components/pages"
 	"collector/internal/handlers"
 	"collector/internal/services"
 	"collector/pkg/middleware"
 	repository_inmemory "collector/pkg/repository/inmemory"
-	"context"
 	"fmt"
 	"log"
 	"net"
@@ -45,10 +43,7 @@ func main() {
 	)
 
 	// parsers
-	mux.HandleFunc("/parser/animelayer", func(w http.ResponseWriter, r *http.Request) {
-		component := pages.Scanner([]pages.ScanResult{})
-		component.Render(context.Background(), w)
-	})
+	mux.HandleFunc("/parser/animelayer", r.ScannerPageHandler)
 
 	// api
 	mux.HandleFunc("GET /api/push_url",
