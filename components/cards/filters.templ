@@ -31,9 +31,16 @@ templ Filters(nextPageEndpint, cardsTarget string, params FilterParameters) {
 			<div class="w-auto px-4 py-4 bg-white rounded-lg shadow-md p-6">
 				@FilterFlags(params.Categories)
 				<div class="flex items-center justify-between gap-2 pt-8">
-					<button type="submit" class="grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out">Submit</button>
-					<span class="w-2 h-full bg-gray-200"></span>
-					<button type="button" onclick={ resetFilters(templ.JSExpression("event")) } class="grow-0 w-1/4 hover:grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out">Reset</button>
+					<button
+						type="submit"
+						class="grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out"
+					>Submit</button>
+					<span class="w-1 h-full bg-gray-200"></span>
+					<button
+						type="button"
+						onclick={ resetFilters(templ.JSExpression("event")) }
+						class="grow-0 w-1/4 hover:grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out"
+					>Reset</button>
 				</div>
 			</div>
 		</div>
@@ -41,14 +48,11 @@ templ Filters(nextPageEndpint, cardsTarget string, params FilterParameters) {
 }
 
 script resetFilters(event templ.JSExpression) {
-	var inputs = event.target.form.querySelectorAll('input');
-            
-            // Проходим по каждому найденному инпуту
-            inputs.forEach(function(input) {
-                if (input.type === 'checkbox') {
-                    input.checked = false;
-                }
-            });
+	event.target.form.querySelectorAll('input').forEach(function(input) {
+		if (input.type === 'checkbox') {
+			input.checked = false;
+		}
+	});
 }
 
 templ FilterFlags(filterData []FilterCategory) {
@@ -59,19 +63,21 @@ templ FilterFlags(filterData []FilterCategory) {
 				<div>
 					<h3 class="font-semibold mb-2">{ category.DisplayTitle }</h3>
 					<div class="space-y-2">
+						<input
+							type="hidden"
+							name={ category.ParameterTitle }
+							value=""
+						/>
 						for _, value := range category.Values {
 							<label class="flex items-center">
 								<input
 									type="checkbox"
+									onclick={ checkBoxCustomClick(templ.JSExpression("this")) }
 									name={ category.ParameterTitle }
 									value={ templ.EscapeString(value.ParameterName) }
-									class="form-checkbox text-primary rounded mr-2"
+									value_indeterminate={ `^` + templ.EscapeString(value.ParameterName) }
+									class="form-checkbox text-primary rounded mr-2 w-4 h-4"
 									checked?={ value.Checked }
-								/>
-								<input
-									type="hidden"
-									name={ category.ParameterTitle }
-									value=""
 								/>
 								<span>{ value.DisplayName }</span>
 							</label>
@@ -81,6 +87,20 @@ templ FilterFlags(filterData []FilterCategory) {
 			}
 		</div>
 	</div>
+}
+
+script checkBoxCustomClick(cb templ.JSExpression) {
+	const character = '~'
+	if (cb.readOnly) {
+		cb.checked=cb.readOnly=false;
+		if(cb.value.at(0) == character) {
+			cb.value = cb.value.substring(1)
+		}
+	}
+  	else if (!cb.checked) {
+		cb.checked=cb.readOnly=cb.indeterminate=true;
+		cb.value = character + cb.value
+	}
 }
 
 templ SearchBar(value string) {
