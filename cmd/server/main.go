@@ -1,7 +1,7 @@
 package main
 
 import (
-	"collector/internal/handlers"
+	"collector/handlers"
 	"collector/internal/services"
 	"collector/pkg/middleware"
 	repository_inmemory "collector/pkg/repository/inmemory"

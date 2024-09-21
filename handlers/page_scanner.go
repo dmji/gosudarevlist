@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"collector/components/pages"
 	"collector/internal/animelayer"
 	animelayer_pages_parser "collector/internal/animelayer/pages_parser"
 	"collector/pkg/model"
@@ -11,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"slices"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -105,24 +103,24 @@ func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Handler Scanner | Items %d", len(items))
 
 	//
-	repoItems, _ := s.s.Repo().GetItems(ctx, model.OptionsGetItems{Count: 10000, Offset: 0})
-	result := make([]pages.ScanResult, 0, len(items))
-	for i, item := range items {
-		status := ""
-		if item.Completed {
-			status = "Completed"
-		} else {
-			status = "In Progress"
-		}
+	/* 	repoItems, _ := s.s.Repo().GetItems(ctx, model.OptionsGetItems{Count: 10000, Offset: 0})
+	   	result := make([]pages.ScanResult, 0, len(items))
+	   	for i, item := range items {
+	   		status := ""
+	   		if item.Completed {
+	   			status = "Completed"
+	   		} else {
+	   			status = "In Progress"
+	   		}
 
-		repoIndex := slices.IndexFunc(repoItems, func(ri model.AnimeLayerItem) bool { return ri.GUID == item.GUID })
-		log.Printf("Handler Scanner | Items with guid='%s' found in repo '%d'", item.GUID, repoIndex)
-		if repoIndex == -1 {
-			log.Printf("Handler Scanner | Items with guid='%s' skipped", item.GUID)
-			continue
-		}
-		if /* repoIndex != -1 &&  */ repoItems[repoIndex].Name == item.Name && repoItems[repoIndex].Completed == item.Completed {
-			log.Printf("Handler Scanner | Items with guid='%s' skipped", item.GUID)
+	   		repoIndex := slices.IndexFunc(repoItems, func(ri model.AnimeLayerItem) bool { return ri.GUID == item.GUID })
+	   		log.Printf("Handler Scanner | Items with guid='%s' found in repo '%d'", item.GUID, repoIndex)
+	   		if repoIndex == -1 {
+	   			log.Printf("Handler Scanner | Items with guid='%s' skipped", item.GUID)
+	   			continue
+	   		}
+	   		if /* repoIndex != -1 &&  */ /* repoItems[repoIndex].Name == item.Name && repoItems[repoIndex].Completed == item.Completed { */
+	/* 	log.Printf("Handler Scanner | Items with guid='%s' skipped", item.GUID)
 			continue
 		}
 		result = append(result, pages.ScanResult{
@@ -132,12 +130,12 @@ func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 			Title:  item.Name,
 		})
 	}
-	log.Printf("Handler Scanner | Items updated %d", len(result))
+	log.Printf("Handler Scanner | Items updated %d", len(result)) */
 
-	err := pages.Scanner(result).Render(r.Context(), w)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	/* 	err := pages.Scanner(result).Render(r.Context(), w)
+	   	if err != nil {
+	   		http.Error(w, err.Error(), http.StatusInternalServerError)
+	   		return
+	   	} */
 
 }
