@@ -2,7 +2,7 @@ package services
 
 import (
 	"collector/components/cards"
-	"collector/pkg/repository"
+	"collector/pkg/recollection/repository"
 	"context"
 )
 

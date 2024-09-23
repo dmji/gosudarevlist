@@ -1,21 +1,22 @@
 package repository_inmemory
 
 import (
-	"collector/pkg/model"
+	animelayer_model "collector/pkg/animelayer/model"
+	"collector/pkg/recollection/model"
 	"context"
 	"log"
 
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
-func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]model.AnimeLayerItem, error) {
+func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer_model.Item, error) {
 	log.Printf("In-Memory repo | GetItems count: %d, offset: %d, db items: %d", opt.Count, opt.Offset, len(r.db))
 
 	if opt.Count == 0 {
 		return nil, nil
 	}
 
-	res := make([]model.AnimeLayerItem, 0, opt.Count)
+	res := make([]animelayer_model.Item, 0, opt.Count)
 	currentOffset := 0
 	for i := 0; i < len(r.db); i++ {
 

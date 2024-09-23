@@ -1,15 +1,15 @@
 package repository_inmemory
 
 import (
-	"collector/pkg/model"
+	animelayer_model "collector/pkg/animelayer/model"
 	"context"
 
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
-func (r *repository) SearchTitle(ctx context.Context, title string) ([]model.AnimeLayerItem, error) {
+func (r *repository) SearchTitle(ctx context.Context, title string) ([]animelayer_model.Item, error) {
 
-	res := make([]model.AnimeLayerItem, 0, 10)
+	res := make([]animelayer_model.Item, 0, 10)
 
 	for _, t := range r.db {
 

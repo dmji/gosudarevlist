@@ -2,7 +2,8 @@ package services
 
 import (
 	"collector/components/cards"
-	"collector/pkg/model"
+	animelayer_model "collector/pkg/animelayer/model"
+	"collector/pkg/recollection/model"
 	"context"
 	"fmt"
 	"net/url"
@@ -20,7 +21,7 @@ func queryEncodeForMyAnimeList(name string) string {
 	return params.Encode()
 }
 
-func queryPosterFromItem(description *model.AnimeLayerItemDescription) string {
+func queryPosterFromItem(description *animelayer_model.ItemDescription) string {
 
 	if img := description.RefImageCover; len(img) > 0 {
 		return img

@@ -1,29 +1,20 @@
-package animelayer_item_parser
+package animelayer_parser
 
 import (
-	"collector/pkg/model"
+	animelayer_model "collector/pkg/animelayer/model"
 	"collector/pkg/parser"
 	"context"
+	"time"
 
 	"golang.org/x/net/html"
 )
 
-func isExistAttrWithTargetKeyValue(attr []html.Attribute, key, value string) bool {
-	for _, a := range attr {
-		if a.Key == key && a.Val == value {
-			return true
-		}
-	}
-
-	return false
-}
-
-func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayerItemDescription) error {
+func traverseHtmlItemNodes(ctx context.Context, n *html.Node, item *animelayer_model.ItemDescription) error {
 
 	// cart status
-	if n.Type == html.ElementNode && n.Data == "div" {
+	if parser.IsElementNodeData(n, "div") {
 
-		if isExistAttrWithTargetKeyValue(n.Attr, "class", "info pd20") {
+		if parser.IsExistAttrWithTargetKeyValue(n, "class", "info pd20") {
 
 			text := make([]string, 0)
 			for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -55,9 +46,9 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 	}
 
 	// cart status date
-	if n.Type == html.ElementNode && n.Data == "div" {
+	if parser.IsElementNodeData(n, "div") {
 
-		if isExistAttrWithTargetKeyValue(n.Attr, "class", "info pd20 b0") {
+		if parser.IsExistAttrWithTargetKeyValue(n, "class", "info pd20 b0") {
 
 			text := make([]string, 0)
 			for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -88,9 +79,9 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 	}
 
 	// cart description
-	if n.Type == html.ElementNode && n.Data == "div" {
+	if parser.IsElementNodeData(n, "div") {
 
-		if isExistAttrWithTargetKeyValue(n.Attr, "class", "description pd20 panel widget") {
+		if parser.IsExistAttrWithTargetKeyValue(n, "class", "description pd20 panel widget") {
 
 			for c := n.FirstChild; c != nil; c = c.NextSibling {
 
@@ -104,9 +95,9 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 	}
 
 	// cart cover image
-	if n.Type == html.ElementNode && n.Data == "div" {
+	if parser.IsElementNodeData(n, "div") {
 
-		if isExistAttrWithTargetKeyValue(n.Attr, "class", "cover") {
+		if parser.IsExistAttrWithTargetKeyValue(n, "class", "cover") {
 
 			ref := parser.GetFirstChildImgNode(n)
 			for _, a := range ref.Attr {
@@ -121,9 +112,9 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 	}
 
 	// cart additional image
-	if n.Type == html.ElementNode && n.Data == "div" {
+	if parser.IsElementNodeData(n, "div") {
 
-		if isExistAttrWithTargetKeyValue(n.Attr, "class", "panel widget pd20") {
+		if parser.IsExistAttrWithTargetKeyValue(n, "class", "panel widget pd20") {
 
 			ref := parser.GetFirstChildHrefNode(n)
 			for _, a := range ref.Attr {
@@ -139,8 +130,16 @@ func traverseHtmlNodes(ctx context.Context, n *html.Node, item *model.AnimeLayer
 
 	// traverses the HTML of the webpage from the first child node
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		traverseHtmlNodes(ctx, c, item)
+		traverseHtmlItemNodes(ctx, c, item)
 	}
 
 	return nil
+}
+
+func ParseItem(ctx context.Context, doc *html.Node) *animelayer_model.ItemDescription {
+
+	item := &animelayer_model.ItemDescription{}
+	traverseHtmlItemNodes(ctx, doc, item)
+	item.LastCheckedDate = time.Now().Format("2006-01-02 15:04")
+	return item
 }

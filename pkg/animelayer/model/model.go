@@ -1,10 +1,6 @@
-package model
+package animelayer_model
 
-type Entity struct {
-	Name string
-}
-
-type AnimeLayerItem struct {
+type Item struct {
 	GUID      string
 	Name      string
 	Completed bool
@@ -15,7 +11,7 @@ type DescriptionPoint struct {
 	Value string
 }
 
-type AnimeLayerItemDescription struct {
+type ItemDescription struct {
 	GUID string
 
 	TorrentFilesSize string
@@ -29,11 +25,4 @@ type AnimeLayerItemDescription struct {
 	LastCheckedDate string
 
 	Descriptions []DescriptionPoint
-}
-
-type OptionsGetItems struct {
-	Count  int
-	Offset int
-
-	SearchQuery string
 }

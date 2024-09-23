@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"collector/components/pages"
-	"collector/internal/animelayer"
-	animelayer_item_parser "collector/internal/animelayer/item_parser"
+	"collector/internal/animelayer_parser"
+	animelayer_service "collector/pkg/animelayer/service"
 	"collector/pkg/custom_url"
 	"collector/pkg/parser"
 	"fmt"
@@ -25,10 +25,10 @@ func (router *router) ApiMyAnimeListParsePage(w http.ResponseWriter, r *http.Req
 	})
 	*/
 
-	url := animelayer.FormatUrlToItem(guid)
+	url := animelayer_service.FormatUrlToItem(guid)
 
 	client, err := parser.HttpClientWithAuth(
-		animelayer.BaseUrl,
+		animelayer_service.BaseUrl,
 		getTestCreadentials(),
 	)
 
@@ -42,7 +42,7 @@ func (router *router) ApiMyAnimeListParsePage(w http.ResponseWriter, r *http.Req
 	}
 
 	// Recursive parsing
-	item := animelayer_item_parser.Parse(ctx, doc)
+	item := animelayer_parser.ParseItem(ctx, doc)
 
 	info := pages.ScanResultDescription{
 		GUID: item.GUID,

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"collector/internal/animelayer"
-	animelayer_pages_parser "collector/internal/animelayer/pages_parser"
-	"collector/pkg/model"
+	"collector/internal/animelayer_parser"
+	animelayer_model "collector/pkg/animelayer/model"
+	animelayer_service "collector/pkg/animelayer/service"
 	"collector/pkg/parser"
 	"errors"
 	"fmt"
@@ -39,7 +39,7 @@ func getTestCreadentials() parser.Credentials {
 func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 	//
 	log.Print("Handler Scanner | Reached")
-	items := make([]model.AnimeLayerItem, 0, 2000)
+	items := make([]animelayer_model.Item, 0, 2000)
 
 	mx := sync.Mutex{}
 
@@ -64,11 +64,11 @@ func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 							log.Printf("Reading %d page started", i+1)
 
 							// load Html Document
-							url := animelayer.FormatUrlToItemsPage("/torrents/anime", i+1)
+							url := animelayer_service.FormatUrlToItemsPage("/torrents/anime", i+1)
 							log.Print(url)
 
 							client, err := parser.HttpClientWithAuth(
-								animelayer.BaseUrl,
+								animelayer_service.BaseUrl,
 								getTestCreadentials(),
 							)
 
@@ -80,9 +80,8 @@ func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 							if err != nil {
 								fmt.Println("Error:", err)
 							}
-
 							// Recursive parsing
-							pageItems := animelayer_pages_parser.Parse(ctx, doc)
+							pageItems := animelayer_parser.ParseCategory(ctx, doc)
 							if len(pageItems) == 0 {
 								log.Printf("Reading %d page finished with error", i+1)
 								return errors.New("end of context")
@@ -113,7 +112,7 @@ func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 	   			status = "In Progress"
 	   		}
 
-	   		repoIndex := slices.IndexFunc(repoItems, func(ri model.AnimeLayerItem) bool { return ri.GUID == item.GUID })
+	   		repoIndex := slices.IndexFunc(repoItems, func(ri animelayer_model.Item) bool { return ri.GUID == item.GUID })
 	   		log.Printf("Handler Scanner | Items with guid='%s' found in repo '%d'", item.GUID, repoIndex)
 	   		if repoIndex == -1 {
 	   			log.Printf("Handler Scanner | Items with guid='%s' skipped", item.GUID)

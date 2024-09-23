@@ -1,23 +1,24 @@
 package repository_inmemory
 
 import (
-	"collector/pkg/model"
+	animelayer_model "collector/pkg/animelayer/model"
 	_ "embed"
 	"encoding/json"
 )
 
-//go:embed db/test.json
+//go:embed db/items.json
 var content []byte
 
 //go:embed db/descriptions.json
 var descriptions []byte
 
 type repository struct {
-	db           []model.AnimeLayerItem
-	descriptions []model.AnimeLayerItemDescription
+	db           []animelayer_model.Item
+	descriptions []animelayer_model.ItemDescription
 }
 
 func New() *repository {
+
 	res := &repository{}
 	err := json.Unmarshal(content, &res.db)
 

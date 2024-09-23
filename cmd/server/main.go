@@ -3,8 +3,11 @@ package main
 import (
 	"collector/handlers"
 	"collector/internal/services"
+	"collector/pkg/logger"
 	"collector/pkg/middleware"
-	repository_inmemory "collector/pkg/repository/inmemory"
+	repository_inmemory "collector/pkg/recollection/repository/inmemory"
+	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -13,7 +16,19 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type cliParameters struct {
+	ListenPortTcp int64
+}
+
+var parameter = cliParameters{
+	ListenPortTcp: 8080,
+}
+
 func init() {
+
+	flag.Int64Var(&parameter.ListenPortTcp, "port", 8080, "Port for tcp connection")
+	flag.Parse()
+
 	path := ".env"
 	for i := range 10 {
 		if i != 0 {
@@ -29,10 +44,26 @@ func init() {
 
 func main() {
 
+	//
+	// Init logger
+	//
+	sugaredLogger, err := logger.New()
+	if err != nil {
+		panic(err)
+	}
+
+	ctx := logger.ToContext(context.Background(), sugaredLogger)
+
+	//
+	// Init Service
+	//
 	repo := repository_inmemory.New()
 	s := services.New(repo)
 	r := handlers.New(s)
 
+	//
+	// Init Router
+	//
 	mux := http.NewServeMux()
 
 	// pages
@@ -63,13 +94,22 @@ func main() {
 	// static assets
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
+	//
+	//
 	// starting
-	log.Println("Server starting on :8080")
+	//
+	//
+	logger.Infow(ctx, "Server starting", "port", parameter.ListenPortTcp)
 
-	srv := &http.Server{
-		Handler: mux,
+	conn, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", parameter.ListenPortTcp))
+	if err != nil {
+		logger.Fatalw(ctx, "announces listen", "error", err)
 	}
-	conn, _ := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", 8080))
-
-	log.Fatal(srv.Serve(conn))
+	srv := &http.Server{
+		Handler:     mux,
+		BaseContext: func(l net.Listener) context.Context { return ctx },
+	}
+	if err := srv.Serve(conn); err != nil {
+		logger.Fatalw(ctx, "serve", "error", err)
+	}
 }

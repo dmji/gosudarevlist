@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"bytes"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -30,12 +32,23 @@ func LoadHtmlDocument(client *http.Client, urlString string) (*html.Node, error)
 		return nil, err
 	}
 
+	fc := doc.FirstChild
+	if fc == nil {
+		var b bytes.Buffer
+		_ = html.Render(&b, fc)
+		return nil, fmt.Errorf("unexpected first child: %s", b.String())
+	}
+
+	if fc.NextSibling == nil {
+		return nil, fmt.Errorf("empty document")
+	}
+
 	return doc, nil
 }
 
 func GetFirstChildHrefNode(n *html.Node) *html.Node {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.ElementNode && c.Data == "a" {
+		if IsElementNodeData(c, "a") {
 			return c
 		}
 	}
@@ -44,7 +57,7 @@ func GetFirstChildHrefNode(n *html.Node) *html.Node {
 
 func GetFirstChildImgNode(n *html.Node) *html.Node {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.Type == html.ElementNode && c.Data == "img" {
+		if IsElementNodeData(c, "img") {
 			return c
 		}
 	}
@@ -64,4 +77,18 @@ func GetFirstChildTextData(n *html.Node) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func IsExistAttrWithTargetKeyValue(n *html.Node, key, value string) bool {
+	for _, a := range n.Attr {
+		if a.Key == key && a.Val == value {
+			return true
+		}
+	}
+
+	return false
+}
+
+func IsElementNodeData(n *html.Node, data string) bool {
+	return n.Type == html.ElementNode && n.Data == data
 }
