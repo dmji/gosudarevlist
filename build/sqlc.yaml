@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries: "../pkg/animelayer/repository/db_query.sql"
+    schema: "../pkg/animelayer/repository/db_schema.sql"
+    gen:
+      go:
+        package: "animelayer_repository"
+        out: "../pkg/animelayer/repository/sqlc"
+        output_files_suffix: "sql.go"
