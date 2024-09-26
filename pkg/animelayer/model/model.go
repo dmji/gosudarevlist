@@ -26,3 +26,9 @@ type ItemDescription struct {
 
 	Descriptions []DescriptionPoint
 }
+
+type Difference struct {
+	Name     string
+	OldValue string
+	NewValue string
+}
