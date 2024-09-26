@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-~*
+*~*
 
 # Test binary, built with `go test -c`
 *.test
@@ -31,3 +31,6 @@ assets/css/tailwind.css
 # Templ 
 *_templ.go
 *_templ.txt
+
+# sqlc
+*.sqlc_gen.go

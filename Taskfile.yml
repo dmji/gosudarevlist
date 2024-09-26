@@ -1,5 +1,10 @@
 version: "3"
 
+env:
+  ENV: ./
+
+dotenv: ['.env', '{{.ENV}}/.env.', '{{.HOME}}/.env']
+
 tasks:
   dev:
     deps: [tailwind-cli-dev, templ, air]
@@ -11,6 +16,12 @@ tasks:
   air:
     cmds:
       - air
+      
+  air-rebuild-cmd:
+    cmds:
+      - sqlc generate -f ./build/sqlc.yaml
+      - go build -o ./tmp/main ./cmd/server/
+      - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
 
   tailwind-cli-dev:
     cmds:
@@ -29,3 +40,21 @@ tasks:
       - mv tailwindcss-linux-x64 ~tailwindcss
     status:
       - ./~tailwindcss
+
+  update-apps:
+    cmds:
+      - go install github.com/air-verse/air@latest
+      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+      - go install github.com/pressly/goose/v3/cmd/goose@latest
+
+  goose-up:
+    cmds:
+      - goose -dir ./migrations up-by-one
+
+  goose-down:
+    cmds:
+      - goose -dir ./migrations down
+
+  goose-create:
+    cmds:
+      - goose -dir ./migrations create {{.CLI_ARGS}} sql
