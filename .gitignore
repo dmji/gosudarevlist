@@ -25,6 +25,8 @@ go.work.sum
 # env file
 .env
 
+.vscode/
+
 # tailwind build
 assets/css/tailwind.css
 
