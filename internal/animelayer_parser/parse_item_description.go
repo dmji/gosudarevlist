@@ -20,14 +20,14 @@ func parseGuidFromStyleAttr(n *html.Node, prefix string) (string, bool) {
 	return "", false
 }
 
-func parseDescriptionNode(ctx context.Context, n *html.Node, item *animelayer_model.ItemDescription) {
+func parseDescriptionNode(ctx context.Context, n *html.Node, item *animelayer_model.Description) {
 
 	guid, bFound := parseGuidFromStyleAttr(n, "description")
 	if !bFound {
 		return
 	}
 
-	item.GUID = guid
+	item.Identifier = guid
 
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		t, bOk := parser.GetFirstChildTextData(c)
@@ -44,24 +44,24 @@ func parseDescriptionNode(ctx context.Context, n *html.Node, item *animelayer_mo
 		case "u":
 		case "strong":
 			t, _ = strings.CutSuffix(t, ":")
-			item.Descriptions = append(item.Descriptions, animelayer_model.DescriptionPoint{Key: t})
+			item.Notes = append(item.Notes, animelayer_model.DescriptionNote{Name: t})
 		default:
-			n := len(item.Descriptions) - 1
+			n := len(item.Notes) - 1
 			if n < 0 {
 				logger.Panicw(ctx, "ParseDescriptionNode", "error", "description bold part not found")
 			}
 
-			if len(item.Descriptions[n].Key) == 0 {
+			if len(item.Notes[n].Name) == 0 {
 				logger.Panicw(ctx, "ParseDescriptionNode", "error", "description bold part not found")
 			}
 
-			value := item.Descriptions[n].Value
+			value := item.Notes[n].Text
 			if len(value) > 0 {
 				value += "\n"
 			}
 			value += t
 
-			item.Descriptions[n].Value = value
+			item.Notes[n].Text = value
 		}
 	}
 }

@@ -37,41 +37,41 @@ type fieldComparer[T any] struct {
 var (
 	items_fields = []fieldComparer[animelayer_model.Item]{
 		{
-			GetValue: func(e *animelayer_model.Item) string { return e.GUID },
+			GetValue: func(e *animelayer_model.Item) string { return e.Identifier },
 			Name:     "Title",
 		},
 		{
-			GetValue: func(e *animelayer_model.Item) string { return isCompletedToString(e.Completed) },
+			GetValue: func(e *animelayer_model.Item) string { return isCompletedToString(e.IsCompleted) },
 			Name:     "IsCompleted",
 		},
 	}
-	description_fields = []fieldComparer[animelayer_model.ItemDescription]{
+	description_fields = []fieldComparer[animelayer_model.Description]{
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.GUID },
+			GetValue: func(e *animelayer_model.Description) string { return e.Identifier },
 			Name:     "Title",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.TorrentFilesSize },
+			GetValue: func(e *animelayer_model.Description) string { return e.TorrentFilesSize },
 			Name:     "TorrentFilesSize",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.RefImagePreview },
+			GetValue: func(e *animelayer_model.Description) string { return e.RefImagePreview },
 			Name:     "RefImagePreview",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.RefImageCover },
+			GetValue: func(e *animelayer_model.Description) string { return e.RefImageCover },
 			Name:     "RefImageCover",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.UpdatedDate },
+			GetValue: func(e *animelayer_model.Description) string { return e.UpdatedDate },
 			Name:     "UpdatedDate",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.CreatedDate },
+			GetValue: func(e *animelayer_model.Description) string { return e.CreatedDate },
 			Name:     "CreatedDate",
 		},
 		{
-			GetValue: func(e *animelayer_model.ItemDescription) string { return e.LastCheckedDate },
+			GetValue: func(e *animelayer_model.Description) string { return e.LastCheckedDate },
 			Name:     "LastCheckedDate",
 		},
 	}
@@ -93,7 +93,7 @@ func CompareItems(newItem, oldItem *animelayer_model.Item) []animelayer_model.Di
 	return diff
 }
 
-func CompareDescriptions(newItem, oldItem *animelayer_model.ItemDescription) []animelayer_model.Difference {
+func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []animelayer_model.Difference {
 
 	diff := make([]animelayer_model.Difference, 0, 2)
 
@@ -106,20 +106,20 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.ItemDescription) []a
 
 	}
 
-	oldNotesIndexes := make([]int, len(oldItem.Descriptions))
+	oldNotesIndexes := make([]int, len(oldItem.Notes))
 	for i := range oldNotesIndexes {
 		oldNotesIndexes[i] = i
 	}
 
-	for _, field := range newItem.Descriptions {
+	for _, field := range newItem.Notes {
 
-		key := field.Key
-		newValue := field.Value
+		key := field.Name
+		newValue := field.Text
 
 		oldIndex := slices.IndexFunc(
-			oldItem.Descriptions,
-			func(p animelayer_model.DescriptionPoint) bool {
-				return p.Key == key
+			oldItem.Notes,
+			func(p animelayer_model.DescriptionNote) bool {
+				return p.Name == key
 			},
 		)
 
@@ -136,7 +136,7 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.ItemDescription) []a
 
 		oldNotesIndexes = slices.DeleteFunc(oldNotesIndexes, func(e int) bool { return e == oldIndex })
 
-		oldValue := oldItem.Descriptions[oldIndex].Value
+		oldValue := oldItem.Notes[oldIndex].Text
 		if oldValue != newValue {
 			diff = append(diff,
 				animelayer_model.Difference{
@@ -151,8 +151,8 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.ItemDescription) []a
 	for _, i := range oldNotesIndexes {
 		diff = append(diff,
 			animelayer_model.Difference{
-				Name:     oldItem.Descriptions[i].Key,
-				OldValue: oldItem.Descriptions[i].Value,
+				Name:     oldItem.Notes[i].Name,
+				OldValue: oldItem.Notes[i].Text,
 				NewValue: "",
 			},
 		)

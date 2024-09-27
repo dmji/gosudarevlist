@@ -31,9 +31,9 @@ func parseNodeWithTitle(_ context.Context, n *html.Node) *animelayer_model.Item 
 	nameCuted, bFound := strings.CutSuffix(name, " Complete")
 
 	return &animelayer_model.Item{
-		GUID:      guid,
-		Name:      nameCuted,
-		Completed: bFound,
+		Identifier:  guid,
+		Title:       nameCuted,
+		IsCompleted: bFound,
 	}
 }
 

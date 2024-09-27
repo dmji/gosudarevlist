@@ -21,7 +21,7 @@ func queryEncodeForMyAnimeList(name string) string {
 	return params.Encode()
 }
 
-func queryPosterFromItem(description *animelayer_model.ItemDescription) string {
+func queryPosterFromItem(description *animelayer_model.Description) string {
 
 	if img := description.RefImageCover; len(img) > 0 {
 		return img
@@ -49,22 +49,22 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 	for id := startID; id < endID; id++ {
 		item := &items[id-startID]
 
-		description, _ := s.AnimeLayerRepositoryDriver.GetDescription(ctx, item.GUID)
+		description, _ := s.AnimeLayerRepositoryDriver.GetDescription(ctx, item.Identifier)
 
 		descStr := ""
-		for _, v := range description.Descriptions {
-			switch v.Key {
+		for _, v := range description.Notes {
+			switch v.Name {
 			case "Разрешение", "Жанр":
-				descStr = descStr + v.Key + ": " + v.Value
+				descStr = descStr + v.Name + ": " + v.Text
 			}
 		}
 
 		cardItems = append(cardItems, cards.ItemCartData{
 			ID:            id + 1,
-			Title:         item.Name,
+			Title:         item.Title,
 			Image:         queryPosterFromItem(&description),
 			Description:   descStr,
-			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.GUID),
+			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 		})
 	}
 	return cardItems

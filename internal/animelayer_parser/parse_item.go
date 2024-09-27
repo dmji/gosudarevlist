@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func traverseHtmlItemNodes(ctx context.Context, n *html.Node, item *animelayer_model.ItemDescription) error {
+func traverseHtmlItemNodes(ctx context.Context, n *html.Node, item *animelayer_model.Description) error {
 
 	// cart status
 	if parser.IsElementNodeData(n, "div") {
@@ -136,9 +136,9 @@ func traverseHtmlItemNodes(ctx context.Context, n *html.Node, item *animelayer_m
 	return nil
 }
 
-func ParseItem(ctx context.Context, doc *html.Node) *animelayer_model.ItemDescription {
+func ParseItem(ctx context.Context, doc *html.Node) *animelayer_model.Description {
 
-	item := &animelayer_model.ItemDescription{}
+	item := &animelayer_model.Description{}
 	traverseHtmlItemNodes(ctx, doc, item)
 	item.LastCheckedDate = time.Now().Format("2006-01-02 15:04")
 	return item

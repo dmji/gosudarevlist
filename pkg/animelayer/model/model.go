@@ -1,18 +1,18 @@
 package animelayer_model
 
 type Item struct {
-	GUID      string
-	Name      string
-	Completed bool
+	Identifier  string
+	Title       string
+	IsCompleted bool
 }
 
-type DescriptionPoint struct {
-	Key   string
-	Value string
+type DescriptionNote struct {
+	Name string
+	Text string
 }
 
-type ItemDescription struct {
-	GUID string
+type Description struct {
+	Identifier string
 
 	TorrentFilesSize string
 
@@ -24,7 +24,7 @@ type ItemDescription struct {
 
 	LastCheckedDate string
 
-	Descriptions []DescriptionPoint
+	Notes []DescriptionNote
 }
 
 type Difference struct {

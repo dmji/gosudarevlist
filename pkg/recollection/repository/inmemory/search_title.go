@@ -13,7 +13,7 @@ func (r *repository) SearchTitle(ctx context.Context, title string) ([]animelaye
 
 	for _, t := range r.db {
 
-		if fuzzy.Match(title, t.Name) {
+		if fuzzy.Match(title, t.Title) {
 			res = append(res, t)
 		}
 

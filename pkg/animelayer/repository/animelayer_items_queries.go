@@ -14,9 +14,9 @@ func (r repository) GetItemByIdentifier(ctx context.Context, identifier string) 
 	}
 
 	res := &animelayer_model.Item{
-		GUID:      item.Identifier,
-		Name:      item.Title,
-		Completed: item.IsCompleted,
+		Identifier:  item.Identifier,
+		Title:       item.Title,
+		IsCompleted: item.IsCompleted,
 	}
 
 	return res, nil
@@ -26,9 +26,9 @@ func (r repository) InsertItem(ctx context.Context, item *animelayer_model.Item)
 
 	return r.query.InsertNewItem(ctx,
 		sqlc.InsertNewItemParams{
-			Identifier:  item.GUID,
-			Title:       item.Name,
-			IsCompleted: item.Completed,
+			Identifier:  item.Identifier,
+			Title:       item.Title,
+			IsCompleted: item.IsCompleted,
 		},
 	)
 
@@ -38,9 +38,9 @@ func (r repository) UpdateItem(ctx context.Context, item *animelayer_model.Item)
 
 	return r.query.UpdateItem(ctx,
 		sqlc.UpdateItemParams{
-			Identifier:  item.GUID,
-			Title:       item.Name,
-			IsCompleted: item.Completed,
+			Identifier:  item.Identifier,
+			Title:       item.Title,
+			IsCompleted: item.IsCompleted,
 		},
 	)
 

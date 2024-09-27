@@ -23,7 +23,7 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 		item := r.db[i]
 
 		if len(opt.SearchQuery) > 0 {
-			if !fuzzy.MatchNormalizedFold(opt.SearchQuery, item.Name) {
+			if !fuzzy.MatchNormalizedFold(opt.SearchQuery, item.Title) {
 				continue
 			}
 		}

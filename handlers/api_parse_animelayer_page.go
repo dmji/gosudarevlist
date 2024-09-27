@@ -45,7 +45,7 @@ func (router *router) ApiMyAnimeListParsePage(w http.ResponseWriter, r *http.Req
 	item := animelayer_parser.ParseItem(ctx, doc)
 
 	info := pages.ScanResultDescription{
-		GUID: item.GUID,
+		GUID: item.Identifier,
 	}
 	info.Descriptions = append(info.Descriptions, "CreatedDate: "+item.CreatedDate)
 	info.Descriptions = append(info.Descriptions, "UpdatedDate: "+item.UpdatedDate)
@@ -53,8 +53,8 @@ func (router *router) ApiMyAnimeListParsePage(w http.ResponseWriter, r *http.Req
 	info.Descriptions = append(info.Descriptions, "RefImageCover: "+item.RefImageCover)
 	info.Descriptions = append(info.Descriptions, "RefImagePreview: "+item.RefImagePreview)
 	info.Descriptions = append(info.Descriptions, "TorrentFilesSize: "+item.TorrentFilesSize)
-	for _, d := range item.Descriptions {
-		info.Descriptions = append(info.Descriptions, d.Key+": "+d.Value)
+	for _, d := range item.Notes {
+		info.Descriptions = append(info.Descriptions, d.Name+": "+d.Text)
 	}
 	log.Printf("Handler | ApiMyAnimeListParsePage: guid='%s'", guid)
 

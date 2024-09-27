@@ -14,7 +14,7 @@ var descriptions []byte
 
 type repository struct {
 	db           []animelayer_model.Item
-	descriptions []animelayer_model.ItemDescription
+	descriptions []animelayer_model.Description
 }
 
 func New() *repository {

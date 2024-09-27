@@ -65,11 +65,11 @@ type service struct {
 	client http.Client
 }
 
-func (s *service) GetItems(ctx context.Context, category string) ([]animelayer_model.ItemDescription, error) {
+func (s *service) GetItems(ctx context.Context, category string) ([]animelayer_model.Description, error) {
 	return nil, nil
 }
 
-func (s *service) GetDescription(ctx context.Context, guid string) (*animelayer_model.ItemDescription, error) {
+func (s *service) GetDescription(ctx context.Context, guid string) (*animelayer_model.Description, error) {
 
 	url := FormatUrlToItem(guid)
 
@@ -86,6 +86,6 @@ func (s *service) GetDescription(ctx context.Context, guid string) (*animelayer_
 	return item, nil
 }
 
-func (s *service) StartCategoryParsing(ctx context.Context, category string) (*animelayer_model.ItemDescription, error) {
+func (s *service) StartCategoryParsing(ctx context.Context, category string) (*animelayer_model.Description, error) {
 	return nil, nil
 }
