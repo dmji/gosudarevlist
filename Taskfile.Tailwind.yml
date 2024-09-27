@@ -1,0 +1,20 @@
+version: "3"
+
+tasks:
+  dev:
+    cmds:
+      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --watch
+    deps: [download]
+
+  prod:
+    cmds:
+      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --minify
+    deps: [download]
+
+  download:
+    cmds:
+      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.12/tailwindcss-linux-x64
+      - chmod +x tailwindcss-linux-x64
+      - mv tailwindcss-linux-x64 ~tailwindcss
+    status:
+      - ./~tailwindcss

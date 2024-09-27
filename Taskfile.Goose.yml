@@ -1,0 +1,18 @@
+version: "3"
+
+tasks:
+  do:
+    cmds:
+      - goose -dir ./migrations {{.CLI_ARGS}}
+
+  up:
+    cmds:
+      - goose -dir ./migrations up-by-one
+
+  down:
+    cmds:
+      - goose -dir ./migrations down
+
+  create:
+    cmds:
+      - goose -dir ./migrations create {{.CLI_ARGS}} sql

@@ -5,9 +5,13 @@ env:
 
 dotenv: ['.env', '{{.ENV}}/.env.', '{{.HOME}}/.env']
 
+includes:
+  goose: ./Taskfile.Goose.yml
+  tailwind: ./Taskfile.Tailwind.yml
+
 tasks:
   dev:
-    deps: [tailwind-cli-dev, templ, air]
+    deps: [tailwind:dev, templ, air]
 
   templ:
     cmds:
@@ -23,38 +27,8 @@ tasks:
       - go build -o ./tmp/main ./cmd/server/
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
 
-  tailwind-cli-dev:
-    cmds:
-      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --watch
-    deps: [tailwind-cli-download]
-
-  tailwind-cli-prod:
-    cmds:
-      - ./~tailwindcss -i build/global.css -o assets/css/tailwind.css --minify
-    deps: [tailwind-cli-download]
-
-  tailwind-cli-download:
-    cmds:
-      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.12/tailwindcss-linux-x64
-      - chmod +x tailwindcss-linux-x64
-      - mv tailwindcss-linux-x64 ~tailwindcss
-    status:
-      - ./~tailwindcss
-
   update-apps:
     cmds:
       - go install github.com/air-verse/air@latest
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
       - go install github.com/pressly/goose/v3/cmd/goose@latest
-
-  goose-up:
-    cmds:
-      - goose -dir ./migrations up-by-one
-
-  goose-down:
-    cmds:
-      - goose -dir ./migrations down
-
-  goose-create:
-    cmds:
-      - goose -dir ./migrations create {{.CLI_ARGS}} sql
