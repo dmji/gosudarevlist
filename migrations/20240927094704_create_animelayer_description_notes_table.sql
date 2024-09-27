@@ -2,16 +2,16 @@
 -- +goose StatementBegin
 CREATE TABLE animelayer_description_notes (
      note_id SERIAL NOT NULL,
-     description SERIAL NOT NULL,
-     KEY TEXT NOT NULL,
-     VALUE TEXT NOT NULL
+     description_id BIGINT NOT NULL,
+     field_name TEXT NOT NULL,
+     field_text TEXT NOT NULL
 );
 
 ALTER TABLE animelayer_description_notes
 ADD PRIMARY KEY (note_id);
 
 ALTER TABLE animelayer_description_notes
-ADD CONSTRAINT animelayer_description_notes_description_foreign FOREIGN KEY (description) REFERENCES animelayer_descriptions (description_id);
+ADD CONSTRAINT animelayer_description_notes_description_foreign FOREIGN KEY (description_id) REFERENCES animelayer_descriptions (description_id);
 
 -- +goose StatementEnd
 -- +goose Down

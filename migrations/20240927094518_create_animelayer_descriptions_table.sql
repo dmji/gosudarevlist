@@ -2,13 +2,13 @@
 -- +goose StatementBegin
 CREATE TABLE animelayer_descriptions (
      description_id SERIAL NOT NULL,
-     LastCheckedDate DATE NOT NULL,
-     FirstCheckedDate DATE NOT NULL,
-     CreatedDate TEXT NOT NULL,
-     UpdatedDate TEXT NOT NULL,
-     RefImageCover TEXT NOT NULL,
-     RefImagePreview TEXT NOT NULL,
-     TorrentFilesSize BIGINT NOT NULL
+     last_checked_date DATE NOT NULL,
+     first_checked_date DATE NOT NULL,
+     created_date TEXT NOT NULL,
+     updated_date TEXT NOT NULL,
+     ref_image_cover TEXT NOT NULL,
+     ref_image_preview TEXT NOT NULL,
+     torrent_files_size TEXT NOT NULL
 );
 
 ALTER TABLE animelayer_descriptions

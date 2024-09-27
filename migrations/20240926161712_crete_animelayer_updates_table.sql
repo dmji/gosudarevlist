@@ -3,7 +3,7 @@
 CREATE TABLE animelayer_updates (
      update_id SERIAL NOT NULL,
      item SERIAL NOT NULL,
-     DATE DATE NOT NULL,
+     update_date DATE NOT NULL,
      title TEXT NOT NULL,
      value_old TEXT NOT NULL,
      value_new TEXT NOT NULL

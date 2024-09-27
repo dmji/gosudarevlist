@@ -1,15 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE source_type (
-     type_id SERIAL NOT NULL,
-     type_name CHAR(255) NOT NULL
+     source_id SERIAL NOT NULL,
+     source_name CHAR(255) NOT NULL
 );
 
 ALTER TABLE source_type
-ADD PRIMARY KEY (type_id);
+ADD PRIMARY KEY (source_id);
 
 ALTER TABLE source_type
-ADD UNIQUE (type_name);
+ADD UNIQUE (source_name);
 
 -- +goose StatementEnd
 -- +goose Down
