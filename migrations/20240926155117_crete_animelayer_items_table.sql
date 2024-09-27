@@ -2,15 +2,14 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS animelayer_items (
      item_id SERIAL NOT NULL,
-     description BIGINT NULL,
+     description_id BIGINT NULL,
      identifier TEXT NOT NULL,
      title TEXT NOT NULL,
-     is_completed BOOLEAN NOT NULL,
-     UNIQUE (identifier)
+     is_completed BOOLEAN NOT NULL
 );
 
 ALTER TABLE animelayer_items
-ADD;
+ADD UNIQUE (identifier);
 
 -- +goose StatementEnd
 -- +goose Down
