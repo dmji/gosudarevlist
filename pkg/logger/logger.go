@@ -25,9 +25,11 @@ func New() (*loggerZap, error) {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.Level.SetLevel(zapcore.DebugLevel)
 	loggerConfig.ErrorOutputPaths = []string{"stdout"}
-	loggerConfig.EncoderConfig.MessageKey = zapcore.OmitKey
+	//loggerConfig.EncoderConfig.MessageKey = zapcore.OmitKey
 
-	logger, err := loggerConfig.Build()
+	logger, err := loggerConfig.Build(
+		zap.AddCallerSkip(1),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("loggerConfig.Build: %w", err)
 	}
