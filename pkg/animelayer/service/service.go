@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -32,19 +31,6 @@ func getTestCreadentials() parser.Credentials {
 		Login:    os.Getenv("loginAnimeLayer"),
 		Password: os.Getenv("passwordAnimeLayer"),
 	}
-}
-
-const BaseUrl = "https://animelayer.ru"
-
-func FormatUrlToItemsPage(category string, iPage int) string {
-	return BaseUrl + category + "?page=" + strconv.FormatInt(int64(iPage), 10)
-}
-
-func FormatUrlToItem(guid string) string {
-	return BaseUrl + "/torrent/" + guid
-}
-func FormatUrlToItemDownload(guid string) string {
-	return BaseUrl + "/torrent/" + guid + "/download"
 }
 
 func New() *service {
