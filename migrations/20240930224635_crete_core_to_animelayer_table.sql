@@ -11,6 +11,6 @@ ADD PRIMARY KEY (id_core, id_animelayer);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE IF EXISTS core_items CASCADE;
+DROP TABLE IF EXISTS core_to_animelayer CASCADE;
 
 -- +goose StatementEnd

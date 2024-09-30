@@ -23,9 +23,6 @@ ALTER TABLE animelayer_items
 ADD PRIMARY KEY (id);
 
 ALTER TABLE animelayer_items
-ADD UNIQUE (id);
-
-ALTER TABLE animelayer_items
 ADD UNIQUE (identifier);
 
 -- +goose StatementEnd

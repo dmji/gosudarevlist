@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE animelayer_notes (
-     note_id SERIAL NOT NULL,
+     id SERIAL NOT NULL,
      -- item that the note applies to
      item_id INT NOT NULL,
      -- field
@@ -10,7 +10,7 @@ CREATE TABLE animelayer_notes (
 );
 
 ALTER TABLE animelayer_notes
-ADD PRIMARY KEY (note_id);
+ADD PRIMARY KEY (id);
 
 ALTER TABLE animelayer_notes
 ADD CONSTRAINT animelayer_notes_item_foreign FOREIGN KEY (item_id) REFERENCES animelayer_items (id);

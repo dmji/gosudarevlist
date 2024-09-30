@@ -9,9 +9,6 @@ CREATE TABLE core_items (
 ALTER TABLE core_items
 ADD PRIMARY KEY (id);
 
-ALTER TABLE core_items
-ADD UNIQUE (id);
-
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
