@@ -25,7 +25,6 @@ templ ListItem(cards []ItemCartData, nextPageEndpint, nextPageParams string) {
 	for _, card := range cards {
 		<a
 			href={ templ.URL(card.AnimeLayerRef) }
-			target="_blank"
 			rel="noopener noreferrer"
 			class="block no-underline"
 		>
