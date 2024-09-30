@@ -36,20 +36,24 @@ type fieldComparer[T any] struct {
 
 var (
 	items_fields = []fieldComparer[animelayer_model.Item]{
-		{
-			GetValue: func(e *animelayer_model.Item) string { return e.Identifier },
-			Name:     "Title",
-		},
+		/*
+			{
+				GetValue: func(e *animelayer_model.Item) string { return e.Identifier },
+				Name:     "Title",
+			},
+		*/
 		{
 			GetValue: func(e *animelayer_model.Item) string { return isCompletedToString(e.IsCompleted) },
 			Name:     "IsCompleted",
 		},
 	}
 	description_fields = []fieldComparer[animelayer_model.Description]{
-		{
-			GetValue: func(e *animelayer_model.Description) string { return e.Identifier },
-			Name:     "Title",
-		},
+		/*
+				{
+				GetValue: func(e *animelayer_model.Description) string { return e.Identifier },
+				Name:     "Title",
+			},
+		*/
 		{
 			GetValue: func(e *animelayer_model.Description) string { return e.TorrentFilesSize },
 			Name:     "TorrentFilesSize",
@@ -93,8 +97,15 @@ func CompareItems(newItem, oldItem *animelayer_model.Item) []animelayer_model.Di
 	return diff
 }
 
-func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []animelayer_model.Difference {
+type NotesChangedIdexes struct {
+	IndexNewAdded   []int
+	IndexOldRemoved []int
+	IndexNewChanged []int
+}
 
+func CompareDescriptions(newItem, oldItem *animelayer_model.Description) ([]animelayer_model.Difference, *NotesChangedIdexes) {
+
+	notesUpdate := &NotesChangedIdexes{}
 	diff := make([]animelayer_model.Difference, 0, 2)
 
 	for _, field := range description_fields {
@@ -111,7 +122,7 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []anime
 		oldNotesIndexes[i] = i
 	}
 
-	for _, field := range newItem.Notes {
+	for i, field := range newItem.Notes {
 
 		key := field.Name
 		newValue := field.Text
@@ -124,6 +135,7 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []anime
 		)
 
 		if oldIndex == -1 {
+			notesUpdate.IndexNewAdded = append(notesUpdate.IndexNewAdded, i)
 			diff = append(diff,
 				animelayer_model.Difference{
 					Name:     key,
@@ -138,6 +150,7 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []anime
 
 		oldValue := oldItem.Notes[oldIndex].Text
 		if oldValue != newValue {
+			notesUpdate.IndexNewChanged = append(notesUpdate.IndexNewChanged, i)
 			diff = append(diff,
 				animelayer_model.Difference{
 					Name:     key,
@@ -149,6 +162,7 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []anime
 	}
 
 	for _, i := range oldNotesIndexes {
+		notesUpdate.IndexOldRemoved = append(notesUpdate.IndexOldRemoved, i)
 		diff = append(diff,
 			animelayer_model.Difference{
 				Name:     oldItem.Notes[i].Name,
@@ -159,5 +173,5 @@ func CompareDescriptions(newItem, oldItem *animelayer_model.Description) []anime
 
 	}
 
-	return diff
+	return diff, notesUpdate
 }
