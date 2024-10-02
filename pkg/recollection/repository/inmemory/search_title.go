@@ -1,15 +1,15 @@
 package repository_inmemory
 
 import (
-	animelayer_model "collector/pkg/animelayer/model"
 	"context"
 
+	"github.com/dmji/go-animelayer-parser"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
-func (r *repository) SearchTitle(ctx context.Context, title string) ([]animelayer_model.Item, error) {
+func (r *repository) SearchTitle(ctx context.Context, title string) ([]animelayer.ItemPartial, error) {
 
-	res := make([]animelayer_model.Item, 0, 10)
+	res := make([]animelayer.ItemPartial, 0, 10)
 
 	for _, t := range r.db {
 

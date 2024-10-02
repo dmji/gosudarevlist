@@ -1,7 +1,7 @@
 package animelayer_repository
 
 import (
-	sqlc "collector/pkg/animelayer/repository/sqlc"
+	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 
 	"github.com/jackc/pgx/v5"

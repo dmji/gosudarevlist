@@ -3,6 +3,8 @@ github.com/a-h/templ v0.2.778/go.mod h1:lq48JXoUvuQrU0VThrK31yFwdRjTCnIE5bcPCM9I
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/dmji/go-animelayer-parser v0.0.2 h1:yPM74YK2XEsm5NwxYeLI/gD39Z8oQVsq8Z6cgH0wbmE=
+github.com/dmji/go-animelayer-parser v0.0.2/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=

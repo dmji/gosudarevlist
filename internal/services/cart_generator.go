@@ -2,11 +2,12 @@ package services
 
 import (
 	"collector/components/cards"
-	animelayer_model "collector/pkg/animelayer/model"
 	"collector/pkg/recollection/model"
 	"context"
 	"fmt"
 	"net/url"
+
+	"github.com/dmji/go-animelayer-parser"
 )
 
 const (
@@ -21,7 +22,7 @@ func queryEncodeForMyAnimeList(name string) string {
 	return params.Encode()
 }
 
-func queryPosterFromItem(description *animelayer_model.Description) string {
+func queryPosterFromItem(description *animelayer.ItemDetailed) string {
 
 	if img := description.RefImageCover; len(img) > 0 {
 		return img

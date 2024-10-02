@@ -46,6 +46,14 @@ func ToContext(ctx context.Context, logger *loggerZap) context.Context {
 	return context.WithValue(ctx, loggerCtxValue, logger)
 }
 
+func FromContext(ctx context.Context) *loggerZap {
+	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
+		return loggerC
+	}
+
+	return globalLogger
+}
+
 func Infow(ctx context.Context, msg string, keysAndValues ...interface{}) {
 	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
 		loggerC.logger.Infow(msg, keysAndValues...)

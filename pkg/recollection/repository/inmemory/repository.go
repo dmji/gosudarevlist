@@ -1,9 +1,10 @@
 package repository_inmemory
 
 import (
-	animelayer_model "collector/pkg/animelayer/model"
 	_ "embed"
 	"encoding/json"
+
+	"github.com/dmji/go-animelayer-parser"
 )
 
 //go:embed db/items.json
@@ -13,8 +14,8 @@ var content []byte
 var descriptions []byte
 
 type repository struct {
-	db           []animelayer_model.Item
-	descriptions []animelayer_model.Description
+	db           []animelayer.ItemPartial
+	descriptions []animelayer.ItemDetailed
 }
 
 func New() *repository {

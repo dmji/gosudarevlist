@@ -1,13 +1,13 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "../pkg/animelayer/repository"
+    queries: "../pkg/recollection/repository/pgx"
     schema: "../migrations"
     gen:
       go:
         sql_package: "pgx/v5"
         package: "animelayer_repository_sqlc"
-        out: "../pkg/animelayer/repository/sqlc"
+        out: "../pkg/recollection/repository/pgx/sqlc"
         output_db_file_name: "db.sqlc_gen.go"
         output_batch_file_name: "batch.sqlc_gen.go"
         output_models_file_name: "models.sqlc_gen.go"

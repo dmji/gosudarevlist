@@ -12,7 +12,9 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
+	"github.com/dmji/go-animelayer-parser"
 	"github.com/joho/godotenv"
 )
 
@@ -55,10 +57,24 @@ func main() {
 	ctx := logger.ToContext(context.Background(), sugaredLogger)
 
 	//
+	// Init Animelayer Parser
+	//
+	animelayer_credentials := animelayer.Credentials{
+		Login:    os.Getenv("loginAnimeLayer"),
+		Password: os.Getenv("passwordAnimeLayer"),
+	}
+	animelayer_client, err := animelayer.HttpClientWithAuth(animelayer_credentials)
+	if err != nil {
+		panic(err)
+	}
+
+	animelayer_parser := animelayer.New(animelayer_client)
+
+	//
 	// Init Service
 	//
 	repo := repository_inmemory.New()
-	s := services.New(repo)
+	s := services.New(repo, animelayer_parser)
 	r := handlers.New(s)
 
 	//
@@ -88,8 +104,8 @@ func main() {
 		//),
 	)
 
-	mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
-	mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
+	//mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
+	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
 
 	// static assets
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
