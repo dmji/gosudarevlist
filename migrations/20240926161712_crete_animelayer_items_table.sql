@@ -25,6 +25,9 @@ ADD PRIMARY KEY (id);
 ALTER TABLE animelayer_items
 ADD UNIQUE (identifier);
 
+ALTER TABLE animelayer_updates
+ADD CONSTRAINT animelayer_updates_item_foreign FOREIGN KEY (item_id) REFERENCES animelayer_items (id);
+
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
