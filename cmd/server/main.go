@@ -5,7 +5,7 @@ import (
 	"collector/internal/services"
 	"collector/pkg/logger"
 	"collector/pkg/middleware"
-	repository_inmemory "collector/pkg/recollection/repository/inmemory"
+	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"context"
 	"flag"
 	"fmt"
@@ -15,6 +15,7 @@ import (
 	"os"
 
 	"github.com/dmji/go-animelayer-parser"
+	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 )
 
@@ -73,7 +74,12 @@ func main() {
 	//
 	// Init Service
 	//
-	repo := repository_inmemory.New()
+	connPgx, err := pgx.Connect(context.Background(), os.Getenv("GOOSE_DBSTRING"))
+	if err != nil {
+		panic(err)
+	}
+
+	repo := repository_pgx.New(connPgx)
 	s := services.New(repo, animelayer_parser)
 	r := handlers.New(s)
 

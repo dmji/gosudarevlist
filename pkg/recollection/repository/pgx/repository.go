@@ -1,4 +1,4 @@
-package animelayer_repository
+package repository_pgx
 
 import (
 	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
@@ -21,7 +21,7 @@ type repository struct {
 	db    sqlDriver
 }
 
-func NewRepository(db sqlDriver) *repository {
+func New(db sqlDriver) *repository {
 	return &repository{
 		db:    db,
 		query: sqlc.New(db),

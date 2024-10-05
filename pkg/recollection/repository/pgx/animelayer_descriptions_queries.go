@@ -1,4 +1,4 @@
-package animelayer_repository
+package repository_pgx
 
 /*
 import (

@@ -8,7 +8,10 @@ import (
 )
 
 type AnimeLayerRepositoryDriver interface {
-	GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer.ItemPartial, error)
-	SearchTitle(ctx context.Context, title string) ([]animelayer.ItemPartial, error)
-	GetDescription(ctx context.Context, guid string) (animelayer.ItemDetailed, error)
+	InsertItem(ctx context.Context, item *animelayer.ItemDetailed) error
+	GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer.ItemDetailed, error)
+	/*
+		 	SearchTitle(ctx context.Context, title string) ([]animelayer.ItemPartial, error)
+			GetDescription(ctx context.Context, guid string) (animelayer.ItemDetailed, error)
+	*/
 }

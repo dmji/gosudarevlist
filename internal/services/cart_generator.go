@@ -50,21 +50,11 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 	for id := startID; id < endID; id++ {
 		item := &items[id-startID]
 
-		description, _ := s.AnimeLayerRepositoryDriver.GetDescription(ctx, item.Identifier)
-
-		descStr := ""
-		for _, v := range description.Notes {
-			switch v.Name {
-			case "Разрешение", "Жанр":
-				descStr = descStr + v.Name + ": " + v.Text
-			}
-		}
-
 		cardItems = append(cardItems, cards.ItemCartData{
 			ID:            id + 1,
 			Title:         item.Title,
-			Image:         queryPosterFromItem(&description),
-			Description:   descStr,
+			Image:         queryPosterFromItem(item),
+			Description:   item.Notes,
 			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 		})
 	}

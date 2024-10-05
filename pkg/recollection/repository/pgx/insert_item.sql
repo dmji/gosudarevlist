@@ -9,23 +9,24 @@ INSERT INTO animelayer_items (
         updated_date,
         ref_image_cover,
         ref_image_preview,
-        torrent_files_size
+        blob_image_cover,
+        blob_image_preview,
+        torrent_files_size,
+        notes
     )
 VALUES (
         @identifier,
         @title,
         @is_completed,
-        @first_checked_date,
-        @first_checked_date,
+        @last_checked_date,
+        @last_checked_date,
         @created_date,
         @updated_date,
         @ref_image_cover,
         @ref_image_preview,
-        @torrent_files_size
+        @blob_image_cover,
+        @blob_image_preview,
+        @torrent_files_size,
+        @notes
     )
 RETURNING id;
-
--- name: GetItemByIdentifier :one
-SELECT *
-FROM animelayer_items
-WHERE identifier = @identifier;
