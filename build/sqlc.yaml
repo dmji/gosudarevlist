@@ -6,7 +6,7 @@ sql:
     gen:
       go:
         sql_package: "pgx/v5"
-        package: "animelayer_repository_sqlc"
+        package: "pgx_sqlc"
         out: "../pkg/recollection/repository/pgx/sqlc"
         output_db_file_name: "db.sqlc_gen.go"
         output_batch_file_name: "batch.sqlc_gen.go"
