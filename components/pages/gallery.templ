@@ -9,7 +9,7 @@ templ Gallery(params cards.FilterParameters, nextPageEndpint, nextPageParams str
 	@components.Layout("Anime") {
 		<div class="pt-3">
 			@cards.Filters(nextPageEndpint, "#card-container", params)
-			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 p-4">
+			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] gap-4 p-4 items-stretch">
 				@cards.ListItemRenderTrigger(nextPageEndpint, nextPageParams)
 			</div>
 		</div>

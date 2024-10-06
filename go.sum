@@ -3,14 +3,8 @@ github.com/a-h/templ v0.2.778/go.mod h1:lq48JXoUvuQrU0VThrK31yFwdRjTCnIE5bcPCM9I
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dmji/go-animelayer-parser v0.0.2 h1:yPM74YK2XEsm5NwxYeLI/gD39Z8oQVsq8Z6cgH0wbmE=
-github.com/dmji/go-animelayer-parser v0.0.2/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
-github.com/dmji/go-animelayer-parser v0.0.3 h1:KwAbDVHU6efYf1rwCsTYEeVMldQR+u4wotBlvuV3ywY=
-github.com/dmji/go-animelayer-parser v0.0.3/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
-github.com/dmji/go-animelayer-parser v0.0.4 h1:r4ySUKxc6ykKtMOKH2ZblbIhH/oJKvDr4Q7NWdGdwyQ=
-github.com/dmji/go-animelayer-parser v0.0.4/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
-github.com/dmji/go-animelayer-parser v0.0.5 h1:WkvoWqPGXSQL8ZHUIJGNXnWg142j3lL3T14fSsehZlY=
-github.com/dmji/go-animelayer-parser v0.0.5/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
+github.com/dmji/go-animelayer-parser v0.0.6-0.20241005225027-39d8cfe4776f h1:faw8jNLl1bMZBYF4quYS014Fg5pXpkEItxIuyRV1Dpo=
+github.com/dmji/go-animelayer-parser v0.0.6-0.20241005225027-39d8cfe4776f/go.mod h1:cSpwYfvIAbgcdOIwy7yZ8vTjILG9VxgxY0JNw+8k1oM=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
@@ -30,8 +24,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
-github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
+github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
+github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/goleak v1.3.0/go.mod h1:CoHD4mav9JJNrW/WLlf7HGZPjdw8EucARQHekz1X6bE=

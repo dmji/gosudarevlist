@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/dmji/go-animelayer-parser"
 )
@@ -31,6 +32,48 @@ func queryPosterFromItem(description *animelayer.ItemDetailed) string {
 	return "/assets/no_image.jpg"
 }
 
+func monthToRussian(month time.Month) string {
+	switch month {
+	case time.January:
+		return "Января"
+	case time.February:
+		return "Февраля"
+	case time.March:
+		return "Марта"
+	case time.April:
+		return "Апреля"
+	case time.May:
+		return "Мая"
+	case time.June:
+		return "Июня"
+	case time.July:
+		return "Июля"
+	case time.August:
+		return "Августа"
+	case time.September:
+		return "Сентября"
+	case time.October:
+		return "Октября"
+	case time.November:
+		return "Ноября"
+	case time.December:
+		return "Декабря"
+	}
+	return ""
+}
+
+func timePtrToString(t *time.Time) string {
+	if t == nil {
+		return ""
+	}
+
+	if t.Year() == time.Now().Year() {
+		return fmt.Sprintf(t.Format("02 %s в 15:04"), monthToRussian(t.Month()))
+	}
+
+	return fmt.Sprintf(t.Format("02 %s 2006 в 15:04"), monthToRussian(t.Month()))
+}
+
 func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData {
 	startID := (opt.Page - 1) * perPage
 
@@ -44,18 +87,18 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 		return nil
 	}
 
-	endID := startID + len(items)
-
 	cardItems := make([]cards.ItemCartData, 0, perPage)
-	for id := startID; id < endID; id++ {
-		item := &items[id-startID]
-
+	for id, item := range items {
 		cardItems = append(cardItems, cards.ItemCartData{
-			ID:            id + 1,
+			ID:            startID + id + 1,
 			Title:         item.Title,
-			Image:         queryPosterFromItem(item),
+			Image:         queryPosterFromItem(&item),
 			Description:   item.Notes,
+			CreatedDate:   timePtrToString(item.CreatedDate),
+			UpdatedDate:   timePtrToString(item.UpdatedDate),
+			TorrentWeight: item.TorrentFilesSize,
 			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+			IsCompleted:   item.IsCompleted,
 		})
 	}
 	return cardItems

@@ -3,9 +3,13 @@ package cards
 type ItemCartData struct {
 	ID            int
 	Title         string
+	CreatedDate   string
+	UpdatedDate   string
+	TorrentWeight string
 	Image         string
 	Description   string
 	AnimeLayerRef string
+	IsCompleted   bool
 }
 
 templ ListItemRenderTrigger(nextPageEndpint, nextPageParams string) {
@@ -26,19 +30,39 @@ templ ListItem(cards []ItemCartData, nextPageEndpint, nextPageParams string) {
 		<a
 			href={ templ.URL(card.AnimeLayerRef) }
 			rel="noopener noreferrer"
-			class="block no-underline"
 		>
-			<div class="flex flex-col border overflow-hidden bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]; transition duration-300 ease-in-out transform hover:scale-105">
-				<div class="p-4 h-1/4">
-					<h3>{ card.Title }</h3>
+			<div class="group flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]; transition duration-300 ease-out transform hover:scale-105">
+				// title
+				<div class="p-4 truncate text-xl font-semibold group-hover:text-wrap">
+					{ card.Title }
 				</div>
-				<img
-					src={ card.Image }
-					alt={ card.Title }
-					class="w-full h-[250px] object-scale-down"
-				/>
-				<div class="p-4">
-					{ card.Description }
+				// horizontal row with update datas
+				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
+					<div class="text-gray-400">Добавлен: </div>
+					<div class="px-1">{ card.CreatedDate }</div>
+					if len(card.UpdatedDate) > 0 {
+						<span class="px-1">| </span>
+						<div class="text-gray-400">Обновлен:</div>
+						<div class="px-1">{ card.UpdatedDate }</div>
+					}
+					<span class="px-1">| </span>
+					<div class="px-1">{ card.TorrentWeight }</div>
+				</div>
+				// horizontal row with image and description
+				<div class="grid grid-flow-col">
+					<div class="relative ">
+						if !card.IsCompleted {
+							<label class="animate-pulse top-4 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
+						}
+						<img
+							src={ card.Image }
+							alt={ card.Title }
+							class="w-full h-[385px] object-scale-down"
+						/>
+					</div>
+					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
+						@templ.Raw(card.Description, nil)
+					</div>
 				</div>
 			</div>
 		</a>

@@ -8,5 +8,5 @@ LIMIT @count OFFSET @offset_count;
 -- name: GetItems :many
 SELECT *
 FROM animelayer_items
-ORDER BY GREATEST(updated_date, created_date) DESC
+ORDER BY COALESCE(updated_date, created_date) DESC
 LIMIT @count OFFSET @offset_count;

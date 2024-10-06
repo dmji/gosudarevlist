@@ -56,6 +56,8 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 			UpdatedDate: timeFromPgTimestamp(item.UpdatedDate),
 			CreatedDate: timeFromPgTimestamp(item.CreatedDate),
+
+			Notes: item.Notes,
 		})
 	}
 
