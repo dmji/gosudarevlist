@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS animelayer_items (
      -- torrent meta data
      torrent_files_size TEXT NOT NULL,
      -- notes
-     notes TEXT NOT NULL
+     notes TEXT NOT NULL,
+     -- category
+     category CATEGORY_ANIMELAYER NOT NULL
 );
 
 ALTER TABLE animelayer_items
