@@ -94,9 +94,9 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 			Title:         item.Title,
 			Image:         queryPosterFromItem(&item),
 			Description:   item.Notes,
-			CreatedDate:   timePtrToString(item.CreatedDate),
-			UpdatedDate:   timePtrToString(item.UpdatedDate),
-			TorrentWeight: item.TorrentFilesSize,
+			CreatedDate:   timePtrToString(item.Updated.CreatedDate),
+			UpdatedDate:   timePtrToString(item.Updated.UpdatedDate),
+			TorrentWeight: item.Metrics.FilesSize,
 			AnimeLayerRef: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 			IsCompleted:   item.IsCompleted,
 		})

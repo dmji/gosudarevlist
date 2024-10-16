@@ -12,7 +12,8 @@ INSERT INTO animelayer_items (
         blob_image_cover,
         blob_image_preview,
         torrent_files_size,
-        notes
+        notes,
+        category
     )
 VALUES (
         @identifier,
@@ -27,6 +28,7 @@ VALUES (
         @blob_image_cover,
         @blob_image_preview,
         @torrent_files_size,
-        @notes
+        @notes,
+        @category
     )
 RETURNING id;

@@ -49,13 +49,16 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 			Title:       item.Title,
 			IsCompleted: item.IsCompleted,
 
-			TorrentFilesSize: item.TorrentFilesSize,
+			Metrics: animelayer.ItemMetrics{
+				FilesSize: item.TorrentFilesSize,
+			},
 
 			RefImagePreview: item.RefImagePreview,
 			RefImageCover:   item.RefImageCover,
-
-			UpdatedDate: timeFromPgTimestamp(item.UpdatedDate),
-			CreatedDate: timeFromPgTimestamp(item.CreatedDate),
+			Updated: animelayer.ItemUpdate{
+				UpdatedDate: timeFromPgTimestamp(item.UpdatedDate),
+				CreatedDate: timeFromPgTimestamp(item.CreatedDate),
+			},
 
 			Notes: item.Notes,
 		})
