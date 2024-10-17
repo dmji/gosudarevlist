@@ -61,15 +61,15 @@ func main() {
 	// Init Animelayer Parser
 	//
 	animelayer_credentials := animelayer.Credentials{
-		Login:    os.Getenv("loginAnimeLayer"),
-		Password: os.Getenv("passwordAnimeLayer"),
+		Login:    os.Getenv("ANIMELAYER_LOGIN"),
+		Password: os.Getenv("ANIMELAYER_PASSWORD"),
 	}
-	animelayer_client, err := animelayer.HttpClientWithAuth(animelayer_credentials)
+	animelayer_client, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
 	if err != nil {
 		panic(err)
 	}
 
-	animelayer_parser := animelayer.New(animelayer.NewHttpClientWrapper(animelayer_client))
+	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayer_client))
 
 	//
 	// Init Service
@@ -109,7 +109,7 @@ func main() {
 		),
 		//),
 	)
-	//mux.HandleFunc("/api/image", r.ApiImage)
+	mux.HandleFunc("/api/image", r.ApiImage)
 
 	//mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
 	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
