@@ -11,14 +11,14 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (r *repository) GetDescriptionById(ctx context.Context, id int32) (*animelayer.ItemDetailed, error) {
+func (r *repository) GetDescriptionById(ctx context.Context, id int32) (*animelayer.Item, error) {
 
 	description, err := r.query.GetDescriptionById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &animelayer.ItemDetailed{
+	res := &animelayer.Item{
 		//Identifier: ,
 
 		TorrentFilesSize: description.TorrentFilesSize,
@@ -49,7 +49,7 @@ func (r *repository) GetDescriptionById(ctx context.Context, id int32) (*animela
 	return res, nil
 }
 
-func (r *repository) InsertDescription(ctx context.Context, description *animelayer.ItemDetailed) error {
+func (r *repository) InsertDescription(ctx context.Context, description *animelayer.Item) error {
 
 	tx, err := r.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -124,7 +124,7 @@ func (r *repository) InsertDescription(ctx context.Context, description *animela
 	return nil
 }
 
-func (r *repository) UpdateDescription(ctx context.Context, description *animelayer.ItemDetailed) error {
+func (r *repository) UpdateDescription(ctx context.Context, description *animelayer.Item) error {
 
 	lastCheckedDate := pgtype.Date{}
 	err := lastCheckedDate.Scan(description.LastCheckedDate)
