@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE core_items (
-     id SERIAL NOT NULL,
+     id BIGSERIAL NOT NULL,
      -- optional, can't auto-search now
      mal_item_id INT NOT NULL DEFAULT -1
 );

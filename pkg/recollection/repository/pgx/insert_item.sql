@@ -1,4 +1,4 @@
--- name: InsertItem :exec
+-- name: InsertItem :one
 INSERT INTO animelayer_items (
         identifier,
         title,

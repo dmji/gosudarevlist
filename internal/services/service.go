@@ -10,7 +10,7 @@ import (
 
 type services struct {
 	repository.AnimeLayerRepositoryDriver
-	animelayerParser animelayer.Parser
+	animelayerParser animelayer.ItemProvider
 }
 
 type GenerateCardsOptions struct {
@@ -22,7 +22,7 @@ type Service interface {
 	GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData
 }
 
-func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.Parser) *services {
+func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {
 	return &services{
 		AnimeLayerRepositoryDriver: repo,
 		animelayerParser:           animelayerParser,

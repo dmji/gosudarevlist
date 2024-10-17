@@ -1,11 +1,11 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE animelayer_updates (
-     id SERIAL NOT NULL,
+     id BIGSERIAL NOT NULL,
      -- item that was updated
-     item_id INT NOT NULL,
+     item_id BIGINT NOT NULL,
      -- timestamp
-     update_date DATE NOT NULL,
+     update_date timestamp NOT NULL,
      -- updated field
      title TEXT NOT NULL,
      value_old TEXT NOT NULL,

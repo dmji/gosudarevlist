@@ -23,7 +23,7 @@ func queryEncodeForMyAnimeList(name string) string {
 	return params.Encode()
 }
 
-func queryPosterFromItem(description *animelayer.ItemDetailed) string {
+func queryPosterFromItem(description *animelayer.Item) string {
 
 	if img := description.RefImageCover; len(img) > 0 {
 		return img
@@ -79,7 +79,7 @@ func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) 
 
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
 		Count:       perPage,
-		Offset:      startID,
+		Offset:      int64(startID),
 		SearchQuery: opt.SearchQuery,
 	})
 

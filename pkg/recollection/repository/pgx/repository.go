@@ -3,8 +3,10 @@ package repository_pgx
 import (
 	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type txStarter interface {
@@ -26,4 +28,24 @@ func New(db sqlDriver) *repository {
 		db:    db,
 		query: sqlc.New(db),
 	}
+}
+
+func timeToPgTimestamp(t *time.Time) (pgtype.Timestamp, error) {
+
+	pgTime := pgtype.Timestamp{}
+
+	if t != nil {
+		if err := pgTime.Scan(*t); err != nil {
+			return pgTime, err
+		}
+	}
+
+	return pgTime, nil
+}
+
+func timeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
+	if t.Valid {
+		return &t.Time
+	}
+	return nil
 }

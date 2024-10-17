@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS animelayer_items (
-     id SERIAL NOT NULL,
+     id BIGSERIAL NOT NULL,
      -- animelater id to form urls
      identifier TEXT NOT NULL,
      -- descriptions 
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS animelayer_items (
      last_checked_date timestamp NOT NULL,
      first_checked_date timestamp NOT NULL,
      -- animelayer timestamps
-     created_date timestamp NOT NULL,
+     created_date timestamp,
      updated_date timestamp,
      -- static urls to files
      ref_image_cover TEXT NOT NULL,

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/dmji/go-animelayer-parser"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/jackc/pgx/v5"
 )
 
 func categoryToPgxCategory(cat animelayer.Category) (pgx_sqlc.CategoryAnimelayer, error) {
@@ -29,33 +29,37 @@ func categoryToPgxCategory(cat animelayer.Category) (pgx_sqlc.CategoryAnimelayer
 	return pgx_sqlc.CategoryAnimelayerAnime, errors.New("undefined category")
 }
 
-func (r *repository) InsertItem(ctx context.Context, item *animelayer.ItemDetailed, category animelayer.Category) error {
+func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, category animelayer.Category) error {
+
+	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+	r := repo.query.WithTx(tx)
 
 	categoryPgx, err := categoryToPgxCategory(category)
 	if err != nil {
 		return err
 	}
 
-	lastCheckedDate := pgtype.Timestamp{}
-	if err := lastCheckedDate.Scan(time.Now()); err != nil {
+	now := time.Now()
+	lastCheckedDate, err := timeToPgTimestamp(&now)
+	if err != nil {
 		return err
 	}
 
-	createdDate := pgtype.Timestamp{}
-	if item.Updated.CreatedDate != nil {
-		if err := createdDate.Scan(*item.Updated.CreatedDate); err != nil {
-			return err
-		}
+	createdDate, err := timeToPgTimestamp(item.Updated.CreatedDate)
+	if err != nil {
+		return err
 	}
 
-	updatedDate := pgtype.Timestamp{}
-	if item.Updated.UpdatedDate != nil {
-		if err := updatedDate.Scan(*&item.Updated.UpdatedDate); err != nil {
-			return err
-		}
+	updatedDate, err := timeToPgTimestamp(item.Updated.UpdatedDate)
+	if err != nil {
+		return err
 	}
 
-	return r.query.InsertItem(ctx,
+	itemId, err := r.InsertItem(ctx,
 		pgx_sqlc.InsertItemParams{
 			Identifier:       item.Identifier,
 			Title:            item.Title,
@@ -73,4 +77,23 @@ func (r *repository) InsertItem(ctx context.Context, item *animelayer.ItemDetail
 		},
 	)
 
+	if err != nil {
+		return err
+	}
+
+	err = r.InsertUpdateNote(ctx, pgx_sqlc.InsertUpdateNoteParams{
+		ItemID:      itemId,
+		UpdateDate:  lastCheckedDate,
+		UpdateTitle: "New",
+	})
+
+	//
+	// Commit
+	//
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

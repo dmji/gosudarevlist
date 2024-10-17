@@ -11,7 +11,7 @@ import (
 func (s *router) ScannerPageHandler(w http.ResponseWriter, r *http.Request) {
 	//
 	log.Print("Handler Scanner | Reached")
-	items := make([]animelayer.ItemPartial, 0, 2000)
+	items := make([]animelayer.Item, 0, 2000)
 
 	log.Printf("Handler Scanner | Items %d", len(items))
 

@@ -31,7 +31,7 @@ templ ListItem(cards []ItemCartData, nextPageEndpint, nextPageParams string) {
 			href={ templ.URL(card.AnimeLayerRef) }
 			rel="noopener noreferrer"
 		>
-			<div class="group flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]; transition duration-300 ease-out transform hover:scale-105">
+			<div class="group flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
 				// title
 				<div class="p-4 truncate text-xl font-semibold group-hover:text-wrap">
 					{ card.Title }
@@ -54,6 +54,11 @@ templ ListItem(cards []ItemCartData, nextPageEndpint, nextPageParams string) {
 						if !card.IsCompleted {
 							<label class="animate-pulse top-4 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
 						}
+						/* 
+						<div hx-get="/graph" hx-trigger="load">
+							<img alt="Result loading..." class="htmx-indicator" width="150" src="/img/bars.svg"/>
+						</div>
+						 */
 						<img
 							src={ card.Image }
 							alt={ card.Title }

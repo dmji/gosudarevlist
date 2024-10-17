@@ -5,20 +5,11 @@ import (
 	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"log"
-	"time"
 
 	"github.com/dmji/go-animelayer-parser"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func timeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
-	if t.Valid {
-		return &t.Time
-	}
-	return nil
-}
-
-func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer.ItemDetailed, error) {
+func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer.Item, error) {
 	log.Print("Pgx repo | GetItems")
 
 	var items []pgx_sqlc.AnimelayerItem
@@ -42,9 +33,9 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 	log.Printf("In-Memory repo | GetItems result items: %d", len(items))
 
-	res := make([]animelayer.ItemDetailed, 0, len(items))
+	res := make([]animelayer.Item, 0, len(items))
 	for _, item := range items {
-		res = append(res, animelayer.ItemDetailed{
+		res = append(res, animelayer.Item{
 			Identifier:  item.Identifier,
 			Title:       item.Title,
 			IsCompleted: item.IsCompleted,
