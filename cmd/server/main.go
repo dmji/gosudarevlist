@@ -15,7 +15,7 @@ import (
 	"os"
 
 	"github.com/dmji/go-animelayer-parser"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )
 
@@ -74,7 +74,12 @@ func main() {
 	//
 	// Init Service
 	//
-	connPgx, err := pgx.Connect(context.Background(), os.Getenv("GOOSE_DBSTRING"))
+	dbConfig, err := pgxpool.ParseConfig(os.Getenv("GOOSE_DBSTRING"))
+	if err != nil {
+		logger.Panicw(ctx, "unable to parse connString", "error", err)
+	}
+
+	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
 		panic(err)
 	}
