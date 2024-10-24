@@ -9,8 +9,8 @@ func QueryCustomParse(query url.Values) url.Values {
 	for key, vals := range query {
 
 		sValues := ""
-		for i, v := range vals {
-			if i != 0 && len(v) > 0 {
+		for _, v := range vals {
+			if len(sValues) > 0 && len(v) > 0 {
 				sValues += "-"
 			}
 			sValues += v
