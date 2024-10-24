@@ -1,7 +1,8 @@
 package services
 
 import (
-	"collector/components/cards"
+	"collector/internal/filters"
+	"collector/pkg/recollection/model"
 	"collector/pkg/recollection/repository"
 	"context"
 
@@ -13,13 +14,8 @@ type services struct {
 	animelayerParser animelayer.ItemProvider
 }
 
-type GenerateCardsOptions struct {
-	Page        int
-	SearchQuery string
-}
-
 type Service interface {
-	GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData
+	GenerateCards(ctx context.Context, opt filters.ApiCardsParams) []model.ItemCartData
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {

@@ -1,12 +1,20 @@
 package model
 
-import "time"
+import (
+	"time"
+)
+
+type OptionsGetNotes struct {
+	Count  int64
+	Offset int64
+}
 
 type OptionsGetItems struct {
 	Count  int64
 	Offset int64
 
 	SearchQuery string
+	Category    Category
 }
 
 type UpdateNote struct {
@@ -15,4 +23,15 @@ type UpdateNote struct {
 	UpdateTitle string
 	ValueOld    string
 	ValueNew    string
+}
+
+type ItemCartData struct {
+	Title         string
+	CreatedDate   string
+	UpdatedDate   string
+	TorrentWeight string
+	Image         string
+	Description   string
+	AnimeLayerRef string
+	IsCompleted   bool
 }

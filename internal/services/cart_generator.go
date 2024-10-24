@@ -1,7 +1,7 @@
 package services
 
 import (
-	"collector/components/cards"
+	"collector/internal/filters"
 	"collector/pkg/recollection/model"
 	"context"
 	"fmt"
@@ -74,23 +74,23 @@ func timePtrToString(t *time.Time) string {
 	return fmt.Sprintf(t.Format("02 %s 2006 в 15:04"), monthToRussian(t.Month()))
 }
 
-func (s *services) GenerateCards(ctx context.Context, opt GenerateCardsOptions) []cards.ItemCartData {
+func (s *services) GenerateCards(ctx context.Context, opt filters.ApiCardsParams) []model.ItemCartData {
 	startID := (opt.Page - 1) * perPage
 
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
 		Count:       perPage,
 		Offset:      int64(startID),
 		SearchQuery: opt.SearchQuery,
+		Category:    model.Categories.Anime,
 	})
 
 	if err != nil {
 		return nil
 	}
 
-	cardItems := make([]cards.ItemCartData, 0, perPage)
-	for id, item := range items {
-		cardItems = append(cardItems, cards.ItemCartData{
-			ID:            startID + id + 1,
+	cardItems := make([]model.ItemCartData, 0, perPage)
+	for _, item := range items {
+		cardItems = append(cardItems, model.ItemCartData{
 			Title:         item.Title,
 			Image:         queryPosterFromItem(&item),
 			Description:   item.Notes,

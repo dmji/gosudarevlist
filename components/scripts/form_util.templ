@@ -1,0 +1,28 @@
+package scripts 
+
+script RequestSubmitParentForm(obj templ.JSExpression) {
+	if(!obj.srcElement.attributes.hasOwnProperty("type") || obj.srcElement.attributes['type'].value != "checkbox")
+	{
+		return 
+	}
+	obj.srcElement.form.requestSubmit(null)
+}
+
+script InputTextboxLiveUpdate(target templ.JSExpression) {
+	target.form.requestSubmit(null)
+
+	/* 
+	let inputValue = this.value.trim();
+	let lastTime = performance.now();
+
+	if (timerId) {
+		clearTimeout(timerId);
+	}
+
+	timerId = setTimeout(function() {
+		if (performance.now() - lastTime > 1500 && inputValue) {
+			console.log('Send', inputValue);
+		}
+	}, 1500);
+	 */
+}

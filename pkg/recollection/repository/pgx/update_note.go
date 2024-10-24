@@ -25,11 +25,11 @@ func (r *repository) InsertUpdateNote(ctx context.Context, params model.UpdateNo
 
 }
 
-func (r *repository) GetUpdateNote(ctx context.Context, params model.OptionsGetItems) ([]model.UpdateNote, error) {
+func (r *repository) GetUpdateNote(ctx context.Context, params model.OptionsGetNotes) ([]model.UpdateNote, error) {
 
 	items, err := r.query.GetUpdateNote(ctx, pgx_sqlc.GetUpdateNoteParams{
-		OffsetCount: int64(params.Offset),
-		Count:       int64(params.Count),
+		OffsetCount: params.Offset,
+		Count:       params.Count,
 	})
 
 	if err != nil {

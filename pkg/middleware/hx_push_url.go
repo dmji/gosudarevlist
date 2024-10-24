@@ -19,7 +19,7 @@ func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) h
 		mergedQuery := custom_url.QueryCustomParse(r.URL.Query())
 
 		// remove page, TODO: found a better way
-		mergedQuery.Del("page")
+		//mergedQuery.Del("page")
 
 		log.Printf("Middleware Hx-Push-Url | Query URI: %v", mergedQuery.Encode())
 		newUri := currentUrl.Path + custom_url.QueryValuesToString(&mergedQuery)

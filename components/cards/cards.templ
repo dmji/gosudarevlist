@@ -1,16 +1,6 @@
 package cards
 
-type ItemCartData struct {
-	ID            int
-	Title         string
-	CreatedDate   string
-	UpdatedDate   string
-	TorrentWeight string
-	Image         string
-	Description   string
-	AnimeLayerRef string
-	IsCompleted   bool
-}
+import "collector/pkg/recollection/model"
 
 templ ListItemRenderTrigger(nextPageEndpint, nextPageParams string) {
 	<div
@@ -25,54 +15,56 @@ templ ListItemRenderTrigger(nextPageEndpint, nextPageParams string) {
 // Recursive template
 // Child of templ:  storage.templ
 // Render from Api: /api/cards
-templ ListItem(cards []ItemCartData, nextPageEndpint, nextPageParams string) {
+templ ListItem(cards []model.ItemCartData, nextPageEndpint, nextPageParams string, bAutoloadNextPage bool) {
 	for _, card := range cards {
-		<a
-			href={ templ.URL(card.AnimeLayerRef) }
-			rel="noopener noreferrer"
-		>
-			<div class="group flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
-				// title
-				<div class="p-4 truncate text-xl font-semibold group-hover:text-wrap">
-					{ card.Title }
-				</div>
-				// horizontal row with update datas
-				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
-					<div class="text-gray-400">Добавлен: </div>
-					<div class="px-1">{ card.CreatedDate }</div>
-					if len(card.UpdatedDate) > 0 {
-						<span class="px-1">| </span>
-						<div class="text-gray-400">Обновлен:</div>
-						<div class="px-1">{ card.UpdatedDate }</div>
-					}
-					<span class="px-1">| </span>
-					<div class="px-1">{ card.TorrentWeight }</div>
-				</div>
-				// horizontal row with image and description
-				<div class="grid grid-flow-col">
-					<div class="relative ">
-						if !card.IsCompleted {
-							<label class="animate-pulse top-4 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
+		<div>
+			<a
+				href={ templ.URL(card.AnimeLayerRef) }
+				rel="noopener noreferrer"
+			>
+				<div class="group flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
+					// title
+					<div class="p-4 truncate text-xl font-semibold group-hover:text-wrap">
+						{ card.Title }
+					</div>
+					// horizontal row with update datas
+					<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
+						<div class="text-gray-400">Добавлен: </div>
+						<div class="px-1">{ card.CreatedDate }</div>
+						if len(card.UpdatedDate) > 0 {
+							<span class="px-1">| </span>
+							<div class="text-gray-400">Обновлен:</div>
+							<div class="px-1">{ card.UpdatedDate }</div>
 						}
-						/* 
+						<span class="px-1">| </span>
+						<div class="px-1">{ card.TorrentWeight }</div>
+					</div>
+					// horizontal row with image and description
+					<div class="grid grid-flow-col">
+						<div class="relative">
+							if !card.IsCompleted {
+								<label class="animate-pulse top-5 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
+							}
+							/* 
 						<div hx-get="/graph" hx-trigger="load">
 							<img alt="Result loading..." class="htmx-indicator" width="150" src="/img/bars.svg"/>
 						</div>
 						 */
-						<img
-							src={ card.Image }
-							alt={ card.Title }
-							class="w-full h-[385px] object-scale-down"
-						/>
-					</div>
-					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
-						@templ.Raw(card.Description, nil)
+							<img
+								src={ card.Image }
+								alt={ card.Title }
+								class="w-full h-[385px] object-scale-down"
+							/>
+						</div>
+						<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
+							@templ.Raw(card.Description, nil)
+						</div>
 					</div>
 				</div>
-			</div>
-		</a>
+			</a>
+		</div>
 	}
-	if len(cards) > 0 {
+	if len(cards) > 0 && bAutoloadNextPage {
 		@ListItemRenderTrigger(nextPageEndpint, nextPageParams)
 	}
 }

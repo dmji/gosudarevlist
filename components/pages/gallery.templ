@@ -3,15 +3,37 @@ package pages
 import (
 	"collector/components"
 	"collector/components/cards"
+	"collector/components/navigation"
+	"collector/internal/filters"
 )
 
-templ Gallery(params cards.FilterParameters, nextPageEndpint, nextPageParams string) {
+var t = navigation.PaginationOpt{
+	Pages: []navigation.PageButtonOpt{
+		{
+			Text:   "1",
+			Active: true,
+		},
+		{
+			Text:   "2",
+			Active: false,
+		},
+	},
+}
+
+templ Gallery(params filters.FilterParameters, nextPageEndpint, nextPageParams string) {
 	@components.Layout("Anime") {
 		<div class="pt-3">
 			@cards.Filters(nextPageEndpint, "#card-container", params)
-			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] gap-4 p-4 items-stretch">
+			<div class="py-2">
+				//@navigation.Pagination(true, t)
+				<span></span>
+			</div>
+			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] gap-4 px-4 items-stretch">
 				@cards.ListItemRenderTrigger(nextPageEndpint, nextPageParams)
 			</div>
+			/* 			<div class="py-2">
+				@navigation.Pagination(true, t)
+			</div> */
 		</div>
 	}
 }

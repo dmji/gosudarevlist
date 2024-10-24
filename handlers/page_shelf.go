@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"collector/components/cards"
 	"collector/components/pages"
+	"collector/internal/filters"
 	"collector/pkg/custom_url"
 	"log"
 	"net/http"
@@ -17,55 +17,17 @@ func (router *router) ShelfPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	searchField := query.Get("query")
 
-	cats := strings.Split(query.Get("cat"), "-")
 	sts := strings.Split(query.Get("st"), "-")
-	filterParams := cards.FilterParameters{
+	filterParams := filters.FilterParameters{
 		SearchField: searchField,
-		Categories: []cards.FilterCategory{
+		Categories: []filters.FilterCategory{
 			{
-				DisplayTitle:   "Category",
-				ParameterTitle: "cat",
-				Values: []cards.FilterValue{
-					{
-						DisplayName:   "Action",
-						ParameterName: "action",
-						Checked:       slices.ContainsFunc(cats, func(s string) bool { return s == "action" }),
-					},
-					{
-						DisplayName:   "Fantastic",
-						ParameterName: "fantastic",
-						Checked:       slices.ContainsFunc(cats, func(s string) bool { return s == "fantastic" }),
-					},
-					{
-						DisplayName:   "Historic",
-						ParameterName: "historic",
-						Checked:       slices.ContainsFunc(cats, func(s string) bool { return s == "historic" }),
-					},
-					{
-						DisplayName:   "Isekai",
-						ParameterName: "isekai",
-						Checked:       slices.ContainsFunc(cats, func(s string) bool { return s == "isekai" }),
-					},
-				},
-			},
-			{
-				DisplayTitle:   "Status",
 				ParameterTitle: "st",
-				Values: []cards.FilterValue{
+				Values: []filters.FilterValue{
 					{
 						DisplayName:   "On Air",
 						ParameterName: "air",
 						Checked:       slices.ContainsFunc(sts, func(s string) bool { return s == "air" }),
-					},
-					{
-						DisplayName:   "Completed",
-						ParameterName: "completed",
-						Checked:       slices.ContainsFunc(sts, func(s string) bool { return s == "completed" }),
-					},
-					{
-						DisplayName:   "Not Started",
-						ParameterName: "not_started",
-						Checked:       slices.ContainsFunc(sts, func(s string) bool { return s == "not_started" }),
 					},
 				},
 			},
