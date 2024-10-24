@@ -1,12 +1,15 @@
--- name: GetItemsWithSearch :many
-SELECT *
-FROM animelayer_items
-WHERE SIMILARITY(title, @search_query) > 0.05
-ORDER BY SIMILARITY(title, @search_query) DESC
-LIMIT @count OFFSET @offset_count;
-
 -- name: GetItems :many
 SELECT *
 FROM animelayer_items
-ORDER BY COALESCE(updated_date, created_date) DESC
+WHERE category = @category::CATEGORY_ANIMELAYER
+    AND (
+        @search_query::text = ''
+        OR SIMILARITY(title, @search_query) > 0.05
+    )
+ORDER BY CASE
+        WHEN LENGTH(@search_query::text) > 0 THEN SIMILARITY(title, @search_query::text)
+    END DESC,
+    CASE
+        WHEN LENGTH(@search_query::text) = 0 THEN COALESCE(updated_date, created_date)
+    END DESC
 LIMIT @count OFFSET @offset_count;
