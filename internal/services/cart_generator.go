@@ -74,7 +74,7 @@ func timePtrToString(t *time.Time) string {
 	return fmt.Sprintf(t.Format("02 %s 2006 в 15:04"), monthToRussian(t.Month()))
 }
 
-func (s *services) GenerateCards(ctx context.Context, opt filters.ApiCardsParams) []model.ItemCartData {
+func (s *services) GenerateCards(ctx context.Context, opt *filters.ApiCardsParams) []model.ItemCartData {
 	startID := (opt.Page - 1) * perPage
 
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{

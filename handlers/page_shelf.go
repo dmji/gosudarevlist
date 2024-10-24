@@ -6,34 +6,15 @@ import (
 	"collector/pkg/custom_url"
 	"log"
 	"net/http"
-	"slices"
-	"strings"
 )
 
 func (router *router) ShelfPageHandler(w http.ResponseWriter, r *http.Request) {
-	_ = r.Context()
+	ctx := r.Context()
 
-	query := custom_url.QueryCustomParse(r.URL.Query())
+	prm := filters.ParseApiCardsParams(ctx, r.URL.Query(), 1)
+	filterParams := filters.NewFiltersState(prm)
 
-	searchField := query.Get("query")
-
-	sts := strings.Split(query.Get("st"), "-")
-	filterParams := filters.FilterParameters{
-		SearchField: searchField,
-		Categories: []filters.FilterCategory{
-			{
-				ParameterTitle: "st",
-				Values: []filters.FilterValue{
-					{
-						DisplayName:   "On Air",
-						ParameterName: "air",
-						Checked:       slices.ContainsFunc(sts, func(s string) bool { return s == "air" }),
-					},
-				},
-			},
-		},
-	}
-
+	query := prm.Values(ctx)
 	nextPageParams := custom_url.QueryValuesToString(&query)
 
 	log.Printf("Handler | ShelfPageHandler params: %s", nextPageParams)

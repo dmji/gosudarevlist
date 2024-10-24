@@ -20,7 +20,7 @@ var t = navigation.PaginationOpt{
 	},
 }
 
-templ Gallery(params filters.FilterParameters, nextPageEndpint, nextPageParams string) {
+templ Gallery(params *filters.FilterParameters, nextPageEndpint, nextPageParams string) {
 	@components.Layout("Anime") {
 		<div class="pt-3">
 			@cards.Filters(nextPageEndpint, "#card-container", params)

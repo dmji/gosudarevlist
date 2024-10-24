@@ -1,6 +1,7 @@
 package cards
 
 import (
+	"collector/components/input"
 	"collector/components/scripts"
 	"collector/internal/filters"
 )
@@ -13,7 +14,7 @@ func emptyOrStr(v bool, s string) string {
 }
 
 //
-templ Filters(nextPageEndpint, cardsTarget string, params filters.FilterParameters) {
+templ Filters(nextPageEndpint, cardsTarget string, params *filters.FilterParameters) {
 	<form
 		id="filters"
 		hx-boost="true"
@@ -57,25 +58,10 @@ templ FilterFlags(filterData []filters.FilterCategory) {
 						<h3 class="font-semibold mb-2">{ category.DisplayTitle }</h3>
 					}
 					<div class="space-y-2">
-						<input
-							type="hidden"
-							name={ category.ParameterTitle }
-							value=""
-						/>
+						<input type="hidden" name={ category.Parameter.Name } value=""/>
 						for _, value := range category.Values {
 							<label class="flex items-center">
-								<input
-									type="checkbox"
-									if category.IsCustomThirdStateEnable {
-										onclick={ scripts.CheckBoxCustomClick(templ.JSExpression("this")) }
-									}
-									name={ category.ParameterTitle }
-									value={ templ.EscapeString(value.ParameterName) }
-									value_indeterminate={ `^` + templ.EscapeString(value.ParameterName) }
-									class="form-checkbox text-primary rounded mr-2 w-4 h-4"
-									checked?={ value.Checked }
-								/>
-								<span>{ value.DisplayName }</span>
+								@input.Checkbox(&value, category.Parameter)
 							</label>
 						}
 					</div>

@@ -1,39 +1,38 @@
 package filters
 
 import (
+	"collector/internal/custom_types"
 	"collector/pkg/custom_url"
 	"collector/pkg/logger"
 	"context"
 	"net/url"
 	"reflect"
-	"strconv"
 
 	"github.com/google/go-querystring/query"
 )
 
 type ApiCardsParams struct {
-	Page        int    `url:"page"`
-	SearchQuery string `url:"query"`
+	Page        custom_types.Page        `url:"page"`
+	SearchQuery string                   `url:"query"`
+	OnAir       *custom_types.BoolExProp `url:"status"`
 }
 
-func ParseApiCardsParams(ctx context.Context, q url.Values, defaultPage int) ApiCardsParams {
-	res := ApiCardsParams{}
+func ParseApiCardsParams(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
+	res := &ApiCardsParams{
+		OnAir: &custom_types.BoolExProp{
+			Name: "status",
+		},
+	}
 
 	q = custom_url.QueryCustomParse(q)
 
-	if s := q.Get(res.getUrlTagByFieldName("Page")); len(s) > 0 {
-		page, err := strconv.ParseInt(s, 10, 64)
-		if err != nil {
-			logger.Errorw(ctx, "parsing page string to int", "error", err)
-		}
-		res.Page = int(page)
-	} else {
-		res.Page = defaultPage
+	err := res.Page.DecodeValues(q.Get(res.getUrlTagByFieldName("Page")), defaultPage)
+	if err != nil {
+		logger.Errorw(ctx, "parsing page string to int", "error", err)
 	}
 
-	if s := q.Get(res.getUrlTagByFieldName("SearchQuery")); len(s) > 0 {
-		res.SearchQuery = s
-	}
+	res.SearchQuery = q.Get(res.getUrlTagByFieldName("SearchQuery"))
+	res.OnAir.DecodeValues(q.Get(res.getUrlTagByFieldName("OnAir")))
 
 	return res
 }

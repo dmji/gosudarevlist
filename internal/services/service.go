@@ -15,7 +15,7 @@ type services struct {
 }
 
 type Service interface {
-	GenerateCards(ctx context.Context, opt filters.ApiCardsParams) []model.ItemCartData
+	GenerateCards(ctx context.Context, opt *filters.ApiCardsParams) []model.ItemCartData
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {
