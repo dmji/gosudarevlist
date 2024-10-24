@@ -1,0 +1,16 @@
+package scripts 
+
+script ResetFilters(event templ.JSExpression) {
+	event.target.form.querySelectorAll('input').forEach(function(input) {
+		switch(input.type) {
+		case 'checkbox':
+			input.checked = false;
+			break
+		case 'text':
+			input.value = ""
+			break
+		form = input.form
+		}
+	});
+	event.target.form.requestSubmit(null)
+}
