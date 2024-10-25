@@ -1,7 +1,8 @@
-package filters
+package filter_cards
 
 import (
 	"collector/internal/custom_types"
+	"collector/internal/query_cards"
 )
 
 type FilterValue struct {
@@ -27,14 +28,14 @@ type FilterParameters struct {
 	SearchField string
 }
 
-func NewFiltersState(prm *ApiCardsParams) *FilterParameters {
+func NewFiltersState(prm *query_cards.ApiCardsParams) *FilterParameters {
 	return &FilterParameters{
 		SearchField: prm.SearchQuery,
 		Categories: []FilterCategory{
 			{
 				Parameter: &FilterCategoryParams{
 					IsCustomThirdStateEnable: true,
-					Name:                     prm.getUrlTagByFieldName("IsCompleted"),
+					Name:                     prm.IsCompletedUrl(),
 				},
 				Values: []FilterValue{
 					{

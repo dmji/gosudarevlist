@@ -1,4 +1,4 @@
-package filters
+package query_cards
 
 import (
 	"collector/internal/custom_types"
@@ -17,7 +17,11 @@ type ApiCardsParams struct {
 	IsCompleted *custom_types.BoolExProp `url:"status"`
 }
 
-func ParseApiCardsParams(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
+func (p ApiCardsParams) IsCompletedUrl() string {
+	return p.getUrlTagByFieldName("IsCompleted")
+}
+
+func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	res := &ApiCardsParams{
 		IsCompleted: &custom_types.BoolExProp{
 			Name: "completed",

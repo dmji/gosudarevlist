@@ -1,8 +1,8 @@
 package input
 
-import "collector/internal/filters"
+import "collector/internal/filter_cards"
 
-templ Checkbox(value *filters.FilterValue, prm *filters.FilterCategoryParams) {
+templ Checkbox(value *filter_cards.FilterValue, prm *filter_cards.FilterCategoryParams) {
 	<input
 		type="checkbox"
 		if prm.IsCustomThirdStateEnable {

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"collector/components/cards"
-	"collector/internal/filters"
+	"collector/internal/query_cards"
 	"collector/pkg/custom_url"
 	"log"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	params := filters.ParseApiCardsParams(ctx, r.URL.Query(), 1)
+	params := query_cards.Parse(ctx, r.URL.Query(), 1)
 
 	cardItems := router.s.GenerateCards(ctx, params)
 

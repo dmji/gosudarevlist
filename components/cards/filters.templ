@@ -3,7 +3,7 @@ package cards
 import (
 	"collector/components/input"
 	"collector/components/scripts"
-	"collector/internal/filters"
+	"collector/internal/filter_cards"
 )
 
 func emptyOrStr(v bool, s string) string {
@@ -14,7 +14,7 @@ func emptyOrStr(v bool, s string) string {
 }
 
 //
-templ Filters(nextPageEndpint, cardsTarget string, params *filters.FilterParameters) {
+templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterParameters) {
 	<form
 		id="filters"
 		hx-boost="true"
@@ -48,7 +48,7 @@ templ buttonResetForm(name string, transition bool) {
 	>{ name }</button>
 }
 
-templ FilterFlags(filterData []filters.FilterCategory) {
+templ FilterFlags(filterData []filter_cards.FilterCategory) {
 	<h2 class="text-2xl font-bold mb-4">Filters</h2>
 	<div class="space-y-2">
 		<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
