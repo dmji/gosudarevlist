@@ -63,15 +63,19 @@ func categoriesToAnimelayerCategories(category model.Category) pgx_sqlc.Category
 }
 
 func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]animelayer.Item, error) {
-	log.Print("Pgx repo | GetItems")
+
+	isCompletedPgx, err := boolExToPgxBool(opt.IsCompleted)
+	if err != nil {
+		return nil, err
+	}
 
 	var items []pgx_sqlc.AnimelayerItem
-	var err error
 	items, err = r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
 		Count:       int32(opt.Count),
 		OffsetCount: int32(opt.Offset),
 		SearchQuery: opt.SearchQuery,
 		Category:    categoriesToAnimelayerCategories(opt.Category),
+		IsCompleted: isCompletedPgx,
 	})
 
 	if err != nil {

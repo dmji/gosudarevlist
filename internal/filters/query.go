@@ -14,13 +14,13 @@ import (
 type ApiCardsParams struct {
 	Page        custom_types.Page        `url:"page"`
 	SearchQuery string                   `url:"query"`
-	OnAir       *custom_types.BoolExProp `url:"status"`
+	IsCompleted *custom_types.BoolExProp `url:"status"`
 }
 
 func ParseApiCardsParams(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	res := &ApiCardsParams{
-		OnAir: &custom_types.BoolExProp{
-			Name: "status",
+		IsCompleted: &custom_types.BoolExProp{
+			Name: "completed",
 		},
 	}
 
@@ -32,7 +32,7 @@ func ParseApiCardsParams(ctx context.Context, q url.Values, defaultPage int) *Ap
 	}
 
 	res.SearchQuery = q.Get(res.getUrlTagByFieldName("SearchQuery"))
-	res.OnAir.DecodeValues(q.Get(res.getUrlTagByFieldName("OnAir")))
+	res.IsCompleted.DecodeValues(q.Get(res.getUrlTagByFieldName("IsCompleted")))
 
 	return res
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"collector/internal/custom_types"
 	"time"
 )
 
@@ -15,6 +16,7 @@ type OptionsGetItems struct {
 
 	SearchQuery string
 	Category    Category
+	IsCompleted custom_types.BoolEx
 }
 
 type UpdateNote struct {

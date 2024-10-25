@@ -32,17 +32,14 @@ func (b *BoolExProp) EncodeValues(key string, v *url.Values) error {
 	}
 }
 
-func (b *BoolExProp) DecodeValues(value string) error {
+func (b *BoolExProp) DecodeValues(value string) {
 	switch value {
 	case b.Name:
 		b.Value = BoolExTrue
-		return nil
 	case "~" + b.Name:
 		b.Value = BoolExIntermediate
-		return nil
 	default:
 		b.Value = BoolExFalse
-		return nil
 	}
 }
 

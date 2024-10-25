@@ -82,6 +82,7 @@ func (s *services) GenerateCards(ctx context.Context, opt *filters.ApiCardsParam
 		Offset:      int64(startID),
 		SearchQuery: opt.SearchQuery,
 		Category:    model.Categories.Anime,
+		IsCompleted: opt.IsCompleted.Value,
 	})
 
 	if err != nil {

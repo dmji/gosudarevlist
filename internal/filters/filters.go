@@ -34,13 +34,13 @@ func NewFiltersState(prm *ApiCardsParams) *FilterParameters {
 			{
 				Parameter: &FilterCategoryParams{
 					IsCustomThirdStateEnable: true,
-					Name:                     prm.getUrlTagByFieldName("OnAir"),
+					Name:                     prm.getUrlTagByFieldName("IsCompleted"),
 				},
 				Values: []FilterValue{
 					{
-						DisplayName:   "On Air",
-						ParameterName: "air",
-						Checked:       prm.OnAir.Value,
+						DisplayName:   "Completed",
+						ParameterName: prm.IsCompleted.Name,
+						Checked:       prm.IsCompleted.Value,
 					},
 				},
 			},
