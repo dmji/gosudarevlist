@@ -3,31 +3,11 @@ package repository_pgx
 import (
 	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
-	"errors"
 	"time"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"
 )
-
-func categoryToPgxCategory(cat animelayer.Category) (pgx_sqlc.CategoryAnimelayer, error) {
-	switch cat {
-	case animelayer.Categories.Anime():
-		return pgx_sqlc.CategoryAnimelayerAnime, nil
-	case animelayer.Categories.AnimeHentai():
-		return pgx_sqlc.CategoryAnimelayerAnimeHentai, nil
-	case animelayer.Categories.Manga():
-		return pgx_sqlc.CategoryAnimelayerManga, nil
-	case animelayer.Categories.MangaHentai():
-		return pgx_sqlc.CategoryAnimelayerMangaHentai, nil
-	case animelayer.Categories.Dorama():
-		return pgx_sqlc.CategoryAnimelayerDorama, nil
-	case animelayer.Categories.Music():
-		return pgx_sqlc.CategoryAnimelayerMusic, nil
-	}
-
-	return pgx_sqlc.CategoryAnimelayerAnime, errors.New("undefined category")
-}
 
 func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, category animelayer.Category) error {
 

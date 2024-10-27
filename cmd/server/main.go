@@ -2,10 +2,10 @@ package main
 
 import (
 	"collector/handlers"
-	"collector/internal/services"
 	"collector/pkg/logger"
 	"collector/pkg/middleware"
 	repository_pgx "collector/pkg/recollection/repository/pgx"
+	"collector/pkg/recollection/service"
 	"context"
 	"flag"
 	"fmt"
@@ -85,7 +85,7 @@ func main() {
 	}
 
 	repo := repository_pgx.New(connPgx)
-	s := services.New(repo, animelayer_parser)
+	s := service.New(repo, animelayer_parser)
 	r := handlers.New(s)
 
 	//

@@ -2,6 +2,15 @@ package cards
 
 import "collector/pkg/recollection/model"
 
+func queryPosterFromItem(description *model.ItemCartData) string {
+
+	if img := description.Image; len(img) > 0 {
+		return img
+	}
+
+	return "/assets/no_image.jpg"
+}
+
 templ ListItemRenderTrigger(nextPageEndpint, nextPageParams string) {
 	<div
 		hx-boost="true"
@@ -51,7 +60,7 @@ templ ListItem(cards []model.ItemCartData, nextPageEndpint, nextPageParams strin
 						</div>
 						 */
 							<img
-								src={ card.Image }
+								src={ queryPosterFromItem(&card) }
 								alt={ card.Title }
 								class="w-full h-[385px] object-scale-down"
 							/>

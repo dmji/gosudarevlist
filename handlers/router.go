@@ -1,14 +1,14 @@
 package handlers
 
-import "collector/internal/services"
+import "collector/pkg/recollection/service"
 
 type router struct {
-	s services.Service
+	s service.Service
 }
 
 type Pager interface {
 }
 
-func New(s services.Service) *router {
+func New(s service.Service) *router {
 	return &router{s: s}
 }

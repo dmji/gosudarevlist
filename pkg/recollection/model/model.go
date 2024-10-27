@@ -11,8 +11,8 @@ type OptionsGetNotes struct {
 }
 
 type OptionsGetItems struct {
-	Count  int64
-	Offset int64
+	PageIndex       int64
+	CountForOnePage int64
 
 	SearchQuery string
 	Category    Category
