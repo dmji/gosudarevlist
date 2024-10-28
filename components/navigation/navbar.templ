@@ -1,26 +1,29 @@
 package navigation
 
 type NavItem struct {
-	Name string
-	URL  string
+	Name   string
+	URL    string
+	Childs []NavItem
 }
 
 type NavbarData struct {
 	CompanyName string
-	NavItems    []NavItem
-	Scanners    []NavItem
+	CenterItems []NavItem
+	RightItems  []NavItem
 }
 
 var data = NavbarData{
 	CompanyName: "ReCollection",
-	NavItems: []NavItem{
+	RightItems: []NavItem{
 		{Name: "Home", URL: "/"},
 		{Name: "List", URL: "/anime"},
 		{Name: "Profile", URL: "/profile"},
-	},
-	Scanners: []NavItem{
-		{Name: "AnimeLayer", URL: "/parser/animelayer"},
-		{Name: "MyAnimeList", URL: "/parser/myanimelist"},
+		{Name: "Scanners",
+			Childs: []NavItem{
+				{Name: "AnimeLayer", URL: "/parser/animelayer"},
+				{Name: "MyAnimeList", URL: "/parser/myanimelist"},
+			},
+		},
 	},
 }
 
@@ -32,8 +35,9 @@ templ navDropDownIcon(classTailwind string) {
 
 templ Navbar() {
 	<nav class="flex-no-wrap fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="flex justify-between h-16">
+				// Desktop Title Block
 				<div class="flex-shrink-0 flex items-center">
 					<svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -42,24 +46,29 @@ templ Navbar() {
 				</div>
 				<div class="hidden sm:flex sm:items-center sm:ml-6">
 					<div class="flex space-x-4">
-						for _, item := range data.NavItems {
-							<a href={ templ.SafeURL(item.URL) } class="text-gray-500 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-								{ item.Name }
-							</a>
+						for _, item := range data.RightItems {
+							if len(item.URL) > 0 {
+								<a href={ templ.SafeURL(item.URL) } class="text-gray-500 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+									{ item.Name }
+								</a>
+							} else {
+								<div class="group relative" x-data="{ open: false }">
+									<button id="scannersDropdownButton" class="text-gray-500 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium inline-flex items-center">
+										{ item.Name }
+										@navDropDownIcon("ml-2 h-5 w-5")
+									</button>
+									<div id="scannersDropdownMenu" class="group-hover:block hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+										for _, scanner := range item.Childs {
+											<a href={ templ.SafeURL(scanner.URL) } class=" block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
+										}
+									</div>
+									@navbarDropdownTogglerDesktop("scannersDropdownButton", "scannersDropdownMenu")
+								</div>
+							}
 						}
-						<div class="relative" x-data="{ open: false }">
-							<button id="scannersDropdownButton" class="text-gray-500 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium inline-flex items-center">
-								Scanners
-								@navDropDownIcon("ml-2 h-5 w-5")
-							</button>
-							<div id="scannersDropdownMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-								for _, scanner := range data.Scanners {
-									<a href={ templ.SafeURL(scanner.URL) } class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
-								}
-							</div>
-						</div>
 					</div>
 				</div>
+				// Movile Title Block
 				<div class="sm:hidden flex items-center">
 					<button id="mobileMenuButton" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
 						<span class="sr-only">Open main menu</span>
@@ -71,55 +80,53 @@ templ Navbar() {
 			</div>
 		</div>
 		@navbarMobile()
+		@navbarDropdownTogglerMobile("mobileMenuButton", "mobile-menu")
+		@navbarDropdownTogglerMobile("mobileScannersButton", "mobileScannersMenu")
 	</nav>
-	@navbarDropdowns()
 }
 
 templ navbarMobile() {
 	<div class="sm:hidden hidden" id="mobile-menu">
 		<div class="pt-2 pb-3 space-y-1">
-			for _, item := range data.NavItems {
-				<a href={ templ.SafeURL(item.URL) } class="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">{ item.Name }</a>
-			}
-			<button id="mobileScannersButton" class="flex w-full items-center justify-between px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
-				Scanners
-				@navDropDownIcon("h-5 w-5")
-			</button>
-			<div id="mobileScannersMenu" class="hidden pl-4">
-				for _, scanner := range data.Scanners {
-					<a href={ templ.SafeURL(scanner.URL) } class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
+			for _, item := range data.RightItems {
+				if len(item.URL) > 0 {
+					<a href={ templ.SafeURL(item.URL) } class="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">{ item.Name }</a>
+				} else {
+					<button id="mobileScannersButton" class="flex w-full items-center justify-between px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+						Scanners
+						@navDropDownIcon("h-5 w-5")
+					</button>
+					<div id="mobileScannersMenu" class="hidden pl-4">
+						for _, scanner := range item.Childs {
+							<a href={ templ.SafeURL(scanner.URL) } class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100" role="menuitem">{ scanner.Name }</a>
+						}
+					</div>
 				}
-			</div>
+			}
 		</div>
 	</div>
 }
 
-script navbarDropdowns() {
-	// Dropdown functionality
-		const scannersDropdownButton = document.getElementById('scannersDropdownButton');
-	const scannersDropdownMenu = document.getElementById('scannersDropdownMenu');
+script navbarDropdownTogglerDesktop(buttonId, menuId string) {
+	const button = document.getElementById(buttonId);
+	const menu = document.getElementById(menuId);
 
-	scannersDropdownButton.addEventListener('click', () => {
-		scannersDropdownMenu.classList.toggle('hidden');
+	button.addEventListener('click', () => {
+		menu.classList.toggle('hidden');
 	});
 
 	document.addEventListener('click', (event) => {
-		if (!scannersDropdownButton.contains(event.target) && !scannersDropdownMenu.contains(event.target)) {
-			scannersDropdownMenu.classList.add('hidden');
+		if (!button.contains(event.target) && !menu.contains(event.target)) {
+			menu.classList.add('hidden');
 		}
 	});
+}
 
-	const mobileMenuButton = document.getElementById('mobileMenuButton');
-	const mobileMenu = document.getElementById('mobile-menu');
-	
-	mobileMenuButton.addEventListener('click', () => {
-		mobileMenu.classList.toggle('hidden');
-	});
+script navbarDropdownTogglerMobile(buttonId, menuId string) {
+	const button = document.getElementById(buttonId);
+	const menu = document.getElementById(menuId);
 
-	const mobileScannersButton = document.getElementById('mobileScannersButton');
-	const mobileScannersMenu = document.getElementById('mobileScannersMenu');
-
-	mobileScannersButton.addEventListener('click', () => {
-		mobileScannersMenu.classList.toggle('hidden');
+	button.addEventListener('click', () => {
+		menu.classList.toggle('hidden');
 	});
 }

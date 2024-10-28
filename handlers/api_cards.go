@@ -23,7 +23,7 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Handler | ApiCards: nextQuery='%s'", nextPageParams)
 
-	err := cards.ListItem(cardItems, r.URL.Path, nextPageParams, true).Render(r.Context(), w)
+	err := cards.ListItem(cardItems, r.URL.Path, nextPageParams, true, int(params.Page)-1).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
