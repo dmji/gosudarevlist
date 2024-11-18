@@ -13,9 +13,3 @@ VALUES (
         @value_old,
         @value_new
     );
-
--- name: GetUpdateNote :many
-SELECT *
-FROM animelayer_updates
-ORDER BY update_date DESC
-LIMIT @count::bigint OFFSET @offset_count::bigint;

@@ -95,6 +95,7 @@ func main() {
 
 	// pages
 	mux.HandleFunc("/", r.HomePageHandler)
+	mux.HandleFunc("/updates", r.UpdatesListHandler)
 	mux.HandleFunc("/profile", r.ProfilePageHandler)
 	mux.HandleFunc("/anime",
 		middleware.HxPushUrlMiddleware(r.ShelfPageHandler),

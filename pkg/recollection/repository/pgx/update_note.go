@@ -24,29 +24,3 @@ func (r *repository) InsertUpdateNote(ctx context.Context, params model.UpdateNo
 	return err
 
 }
-
-func (r *repository) GetUpdateNote(ctx context.Context, params model.OptionsGetNotes) ([]model.UpdateNote, error) {
-
-	items, err := r.query.GetUpdateNote(ctx, pgx_sqlc.GetUpdateNoteParams{
-		OffsetCount: params.Offset,
-		Count:       params.Count,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	res := make([]model.UpdateNote, 0, len(items))
-	for _, item := range items {
-		res = append(res, model.UpdateNote{
-			ItemID:      item.ItemID,
-			UpdateDate:  timeFromPgTimestamp(item.UpdateDate),
-			UpdateTitle: item.Title,
-			ValueOld:    item.ValueOld,
-			ValueNew:    item.ValueNew,
-		})
-	}
-
-	return res, nil
-
-}
