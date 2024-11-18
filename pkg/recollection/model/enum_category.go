@@ -9,6 +9,7 @@ type categories struct {
 	MangaHentai Category
 	Music       Category
 	Dorama      Category
+	All         Category
 }
 
 // Categories - object to emulate enum class
@@ -19,4 +20,5 @@ var Categories = categories{
 	MangaHentai: "manga_henai",
 	Music:       "music",
 	Dorama:      "dorama",
+	All:         "",
 }

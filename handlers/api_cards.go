@@ -13,7 +13,7 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 
 	params := query_cards.Parse(ctx, r.URL.Query(), 1)
 
-	cardItems := router.s.GenerateCards(ctx, params)
+	cardItems := router.s.GetItems(ctx, params)
 
 	log.Printf("Handler | ApiCards: page='%d' (len: %d)", params.Page, len(cardItems))
 
