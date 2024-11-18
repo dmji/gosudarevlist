@@ -28,7 +28,7 @@ templ Gallery(params *filter_cards.FilterParameters, nextPageEndpint, nextPagePa
 				//@navigation.Pagination(true, t)
 				<span></span>
 			</div>
-			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] gap-4 px-4 items-stretch">
+			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-4 px-4 items-stretch">
 				@cards.ListItemRenderTrigger(nextPageEndpint, nextPageParams)
 			</div>
 			/* 			<div class="py-2">

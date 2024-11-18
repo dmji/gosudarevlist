@@ -76,7 +76,7 @@ templ ListItem(cards []model.ItemCartData, nextPageEndpint, nextPageParams strin
 				<div class="grid grid-flow-col">
 					<div class="relative pl-2">
 						if !card.IsCompleted {
-							<label class="animate-pulse top-5 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
+							<label class="animate-pulse top-5 max-sm:top-1.5 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">ON AIR</label>
 						}
 						/* 
 						<div hx-get="/graph" hx-trigger="load">
@@ -86,7 +86,7 @@ templ ListItem(cards []model.ItemCartData, nextPageEndpint, nextPageParams strin
 						<img
 							src={ queryPosterFromItem(&card) }
 							alt={ card.Title }
-							class="w-full h-[385px] object-scale-down"
+							class="w-full h-[385px] mt-0 max-sm:h-1/2 object-scale-down"
 						/>
 					</div>
 					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
