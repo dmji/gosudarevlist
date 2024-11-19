@@ -2,6 +2,7 @@ package pages
 
 import (
 	"collector/components"
+	"collector/pkg/recollection/model"
 	"collector/pkg/time_ru_format.go"
 	"time"
 )
@@ -9,7 +10,7 @@ import (
 type Item struct {
 	Name       string
 	Identifier string
-	Status     string
+	Status     model.Status
 	Changes    []Change
 	Date       *time.Time
 }
@@ -24,94 +25,7 @@ type Change struct {
 	TextNew string
 }
 
-var items = []Item{
-	{
-		Name:       "Item 1",
-		Identifier: "ID001",
-		Status:     "Updated",
-		Changes: []Change{
-			{
-				TextOld: "Added feature X Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y ",
-				TextNew: "Removed feature Y",
-			},
-			{
-				TextOld: "Added feature X",
-				TextNew: "Removed feature Y",
-			},
-		},
-		Date: timeNow(),
-	},
-	{
-		Name:       "Item 2",
-		Identifier: "ID002",
-		Status:     "Updated",
-		Changes: []Change{
-			{
-				TextNew: "Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y Removed feature Y ",
-			},
-		},
-		Date: timeNow(),
-	},
-	{
-		Name:       "Item 3",
-		Identifier: "ID001",
-		Status:     "New",
-		Date:       timeNow(),
-	},
-	{
-		Name:       "Item 3",
-		Identifier: "ID001",
-		Status:     "Removed",
-		Date:       timeNow(),
-	},
-}
-
-const baseBadgeClass string = "text-xs font-medium py-0.5 rounded w-20 inline-flex items-center justify-center "
-
-templ statusBadgeFromText(text string, date *time.Time) {
-	if text == "New" {
-		<div
-			class="text-xs font-medium py-0.5 rounded w-20 items-center justify-center 
-            bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border border-green-400"
-		>
-			<div>
-				{  text }
-				<br/>
-			</div>
-			<div class="text-xxs">
-				{ time_ru_format.Format(date) }
-			</div>
-		</div>
-	} else if text == "Removed" {
-		<div
-			class="text-xs font-medium py-0.5 rounded w-20 justify-center text-center
-        bg-red-100 text-red-800  dark:bg-gray-700 dark:text-red-400 border border-red-400"
-		>
-			<div>
-				{  text }
-				<br/>
-			</div>
-			<div class="text-xxs">
-				{ time_ru_format.Format(date) }
-			</div>
-		</div>
-	} else if text == "Updated" {
-		<div
-			class="text-xs font-medium py-0.5 rounded w-20 items-center justify-center
-        bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
-		>
-			<div>
-				{  text }
-				<br/>
-			</div>
-			<div class="text-xxs">
-				{ time_ru_format.Format(date) }
-			</div>
-		</div>
-	}
-}
-
-templ FormList() {
+templ FormList(items []Item) {
 	@components.Layout("Updates") {
 		<div class="bg-gray-100 p-8">
 			<div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
@@ -126,34 +40,7 @@ templ FormList() {
 							if len(item.Changes) > 0 {
 								for _, change := range item.Changes {
 									<ul class="pl-8 mt-1">
-										if len(change.TextOld) > 0  && len(change.TextNew) > 0 {
-											<li class="flex overflow-hidden rounded-t-xl">
-												<div class="px-2 py-2 bg-red-300">
-													@changeStatusIconSVG(false)
-												</div>
-												<div class="text-xs  px-2 py-1 flex-grow bg-red-200 content-center">{ change.TextOld }</div>
-											</li>
-											<li class="flex overflow-hidden rounded-b-xl">
-												<div class="px-2 py-2 bg-green-400">
-													@changeStatusIconSVG(true)
-												</div>
-												<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.TextNew }</div>
-											</li>
-										} else if len(change.TextOld) > 0 {
-											<li class="flex overflow-hidden rounded-xl">
-												<div class="px-2 py-2 bg-red-300">
-													@changeStatusIconSVG(false)
-												</div>
-												<div class="text-xs px-2 py-1 flex-grow bg-red-200 content-center">{ change.TextOld }</div>
-											</li>
-										} else if len(change.TextNew) > 0 {
-											<li class="flex overflow-hidden rounded-xl">
-												<div class="px-2 py-2 bg-green-400">
-													@changeStatusIconSVG(true)
-												</div>
-												<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.TextNew }</div>
-											</li>
-										}
+										@fillItemChange(change)
 									</ul>
 								}
 							}
@@ -162,6 +49,75 @@ templ FormList() {
 				</ul>
 			</div>
 		</div>
+	}
+}
+
+func statusToText(status model.Status) string {
+	switch status {
+	case model.StatusNew:
+		return "Новое"
+	case model.StatusRemoved:
+		return "Удалено"
+	case model.StatusUpdated:
+		return "Обновлено"
+	default:
+		return ""
+	}
+}
+
+func statusToColorClasses(status model.Status) string {
+	switch status {
+	case model.StatusNew:
+		return "bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border border-green-400"
+	case model.StatusRemoved:
+		return "bg-red-100 text-red-800  dark:bg-gray-700 dark:text-red-400 border border-red-400"
+	case model.StatusUpdated:
+		return "bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
+	default:
+		return ""
+	}
+}
+
+templ statusBadgeFromText(status model.Status, date *time.Time) {
+	<div class={ "text-xs font-medium py-0.5 rounded w-20 justify-center text-center" + " " + statusToColorClasses(status) }>
+		<div>
+			{  statusToText(status) }
+			<br/>
+		</div>
+		<div class="text-xxs">
+			{ time_ru_format.Format(date) }
+		</div>
+	</div>
+}
+
+templ fillItemChange(change Change) {
+	if len(change.TextOld) > 0  && len(change.TextNew) > 0 {
+		<li class="flex overflow-hidden rounded-t-xl">
+			<div class="px-2 py-2 bg-red-300">
+				@changeStatusIconSVG(false)
+			</div>
+			<div class="text-xs  px-2 py-1 flex-grow bg-red-200 content-center ">{ change.TextOld }</div>
+		</li>
+		<li class="flex overflow-hidden rounded-b-xl">
+			<div class="px-2 py-2 bg-green-400">
+				@changeStatusIconSVG(true)
+			</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.TextNew }</div>
+		</li>
+	} else if len(change.TextOld) > 0 {
+		<li class="flex overflow-hidden rounded-xl">
+			<div class="px-2 py-2 bg-red-300">
+				@changeStatusIconSVG(false)
+			</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-red-200 content-center">{ change.TextOld }</div>
+		</li>
+	} else if len(change.TextNew) > 0 {
+		<li class="flex overflow-hidden rounded-xl">
+			<div class="px-2 py-2 bg-green-400">
+				@changeStatusIconSVG(true)
+			</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.TextNew }</div>
+		</li>
 	}
 }
 

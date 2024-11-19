@@ -1,12 +1,12 @@
 package service
 
 import (
-	"collector/internal/query_cards"
+	"collector/internal/query_updates"
 	"collector/pkg/recollection/model"
 	"context"
 )
 
-func (s *services) GetUpdates(ctx context.Context, opt *query_cards.ApiCardsParams) []model.UpdateNote {
+func (s *services) GetUpdates(ctx context.Context, opt *query_updates.ApiUpdateParams) []model.UpdateNote {
 
 	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetUpdates{
 		CountForOnePage: 20,

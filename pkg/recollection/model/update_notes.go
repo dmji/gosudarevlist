@@ -16,3 +16,11 @@ type UpdateNote struct {
 	ValueOld    string
 	ValueNew    string
 }
+
+type Status int
+
+const (
+	StatusNew = iota
+	StatusRemoved
+	StatusUpdated
+)

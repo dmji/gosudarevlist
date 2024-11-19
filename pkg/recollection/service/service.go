@@ -2,6 +2,7 @@ package service
 
 import (
 	"collector/internal/query_cards"
+	"collector/internal/query_updates"
 	"collector/pkg/recollection/model"
 	"collector/pkg/recollection/repository"
 	"context"
@@ -16,6 +17,7 @@ type services struct {
 
 type Service interface {
 	GetItems(ctx context.Context, opt *query_cards.ApiCardsParams) []model.ItemCartData
+	GetUpdates(ctx context.Context, opt *query_updates.ApiUpdateParams) []model.UpdateNote
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {
