@@ -1,6 +1,7 @@
 package main
 
 import (
+	"collector/cmd/env"
 	"collector/handlers"
 	"collector/pkg/logger"
 	"collector/pkg/middleware"
@@ -16,7 +17,6 @@ import (
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/joho/godotenv"
 )
 
 type cliParameters struct {
@@ -28,21 +28,10 @@ var parameter = cliParameters{
 }
 
 func init() {
-
 	flag.Int64Var(&parameter.ListenPortTcp, "port", 8080, "Port for tcp connection")
 	flag.Parse()
 
-	path := ".env"
-	for i := range 10 {
-		if i != 0 {
-			path = "../" + path
-		}
-		err := godotenv.Load(path)
-		if err == nil {
-			return
-		}
-	}
-	panic(".env not found")
+	env.LoadEnv(10, true)
 }
 
 func main() {

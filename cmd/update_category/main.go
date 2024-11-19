@@ -1,6 +1,7 @@
 package main
 
 import (
+	"collector/cmd/env"
 	"collector/pkg/logger"
 	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"context"
@@ -9,40 +10,10 @@ import (
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"
-	"github.com/joho/godotenv"
 )
 
 func init() {
-
-	path := ".env"
-	for i := range 10 {
-		if i != 0 {
-			path = "../" + path
-		}
-		err := godotenv.Load(path)
-		if err == nil {
-			return
-		}
-	}
-	panic(".env not found")
-}
-
-func strToCategory(str string) animelayer.Category {
-	switch str {
-	case "anime":
-		return animelayer.Categories.Anime()
-	case "anime_hentai":
-		return animelayer.Categories.AnimeHentai()
-	case "manga":
-		return animelayer.Categories.Manga()
-	case "manga_hentai":
-		return animelayer.Categories.MangaHentai()
-	case "dorama":
-		return animelayer.Categories.Dorama()
-	case "music":
-		return animelayer.Categories.Music()
-	}
-	panic("incorrect string")
+	env.LoadEnv(10, true)
 }
 
 func main() {
@@ -89,7 +60,7 @@ func main() {
 	//
 	for page := 0; ; page++ {
 
-		items, err := p.GetItemsFromCategoryPages(ctx, strToCategory(category), page)
+		items, err := p.GetItemsFromCategoryPages(ctx, env.StrToCategory(category), page)
 		if err != nil {
 			logger.Errorw(ctx, "failed category parsing", "category", category, "page", page, "error", err)
 			break
@@ -105,7 +76,7 @@ func main() {
 				continue
 			}
 
-			err = repo.InsertItem(ctx, t, strToCategory(category))
+			err = repo.InsertItem(ctx, t, env.StrToCategory(category))
 			if err != nil {
 				logger.Errorw(ctx, "failed item inserting", "identifier", identifier, "error", err)
 				continue
