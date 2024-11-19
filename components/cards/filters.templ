@@ -6,6 +6,9 @@ import (
 	"collector/internal/filter_cards"
 )
 
+const searchBarId = "searchBar"
+const filtersPanelId = "filtersPanel"
+
 func emptyOrStr(v bool, s string) string {
 	if v {
 		return s
@@ -23,18 +26,25 @@ templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterPa
 		class="group mx-auto px-4"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
-		@SearchBar(params.SearchField)
-		<div class="hidden group-hover:block transition-all duration-1000 rounded-b-lg border-x-2 border-b-2 border-gray-300">
+		<div class="flex items-center gap-1 relative">
+			@SearchBar(searchBarId, params.SearchField)
+			<div class="top-1.5 right-2 absolute place-self-center">
+				@buttonToggleFilters()
+			</div>
+		</div>
+		<div id={ filtersPanelId } class="hidden rounded-b-lg border-x-2 border-b-2 border-gray-300">
 			<div class="w-auto px-4 gap-1 bg-white rounded-b-lg shadow-md p-6">
 				@FilterFlags(params.Categories)
-				/* 				<div class="flex items-center justify-between gap-2 pt-8">
+				/* 				
+				<div class="flex items-center justify-between gap-2 pt-8">
 					<button
 						type="submit"
 						class="grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out"
 					>Submit</button>
 					<span class="w-1 h-full bg-gray-200"></span>
 					@buttonResetForm("Reset", false)
-				</div> */
+				</div>
+				*/
 			</div>
 		</div>
 	</form>
@@ -48,10 +58,10 @@ templ buttonResetForm(name string, transition bool) {
 	>{ name }</button>
 }
 
-templ buttonToggleFilters(_ string, _ bool) {
+templ buttonToggleFilters() {
 	<button
 		type="button"
-		onclick={ scripts.ResetFilters(templ.JSExpression("event")) }
+		onclick={ scripts.ToggleFilterPanel(searchBarId, filtersPanelId) }
 		class="py-2 px-3 rounded text-red fill-red font-semibold"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
@@ -86,23 +96,20 @@ templ FilterFlags(filterData []filter_cards.FilterCategory) {
 	</div>
 }
 
-templ SearchBar(value string) {
-	<div class="flex items-center gap-1 relative">
-		<div class="relative flex-grow">
-			<input
-				id="searchBar"
-				name="query"
-				type="text"
-				value={ value }
-				placeholder="Search..."
-				hx-boost="true"
-				class="w-full p-3 pl-5 pr-4 rounded-t-lg rounded-lg hover:rounded-b-none border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-				oninput={ scripts.InputTextboxLiveUpdate(templ.JSExpression("this")) }
-			/>
-			<i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-		</div>
-		<div class="top-1.5 right-2 absolute place-self-center">
-			@buttonToggleFilters("X", false)
-		</div>
+templ SearchBar(id, value string) {
+	<div class="relative flex-grow">
+		<input
+			id={ id }
+			name="query"
+			type="text"
+			value={ value }
+			placeholder="Search..."
+			hx-boost="true"
+			class="w-full p-3 pl-5 pr-4 border-gray-300 
+			rounded-t-lg rounded-lg border-2
+			focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+			oninput={ scripts.InputTextboxLiveUpdate(templ.JSExpression("this")) }
+		/>
+		<i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
 	</div>
 }

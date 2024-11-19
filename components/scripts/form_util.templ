@@ -45,3 +45,8 @@ script LazyLoadImage(target templ.JSExpression) {
 	};
 
 }
+
+script ToggleFilterPanel(searchBarId, filtersPanelId string) {
+	document.querySelector('#'+searchBarId).classList.toggle('rounded-b-none')
+	document.querySelector('#'+filtersPanelId).classList.toggle('hidden')
+}
