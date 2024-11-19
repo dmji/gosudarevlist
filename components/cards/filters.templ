@@ -9,13 +9,6 @@ import (
 const searchBarId = "searchBar"
 const filtersPanelId = "filtersPanel"
 
-func emptyOrStr(v bool, s string) string {
-	if v {
-		return s
-	}
-	return ""
-}
-
 //
 templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterParameters) {
 	<form
@@ -28,53 +21,43 @@ templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterPa
 	>
 		<div class="flex items-center gap-1 relative">
 			@SearchBar(searchBarId, params.SearchField)
-			<div class="top-1.5 right-2 absolute place-self-center">
+			<div class="top-1.5 right-2 absolute place-self-center fill-gray-500">
+				<button
+					type="button"
+					onclick={ scripts.ResetFilters(templ.JSExpression("this")) }
+					class="text-gray-500 pb-3 font-light
+					py-2 rounded"
+				>
+					<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M9 9L15 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						<path d="M15 9L9 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						<circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+					</svg>
+				</button>
 				@buttonToggleFilters()
 			</div>
 		</div>
 		<div id={ filtersPanelId } class="hidden rounded-b-lg border-x-2 border-b-2 border-gray-300">
 			<div class="w-auto px-4 gap-1 bg-white rounded-b-lg shadow-md p-6">
 				@FilterFlags(params.Categories)
-				/* 				
-				<div class="flex items-center justify-between gap-2 pt-8">
-					<button
-						type="submit"
-						class="grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300 ease-in-out"
-					>Submit</button>
-					<span class="w-1 h-full bg-gray-200"></span>
-					@buttonResetForm("Reset", false)
-				</div>
-				*/
 			</div>
 		</div>
 	</form>
-}
-
-templ buttonResetForm(name string, transition bool) {
-	<button
-		type="button"
-		onclick={ scripts.ResetFilters(templ.JSExpression("event")) }
-		class={ "hover:grow bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded " + emptyOrStr(transition, "grow-0 w-1/4 transition-all duration-300 ease-in-out") }
-	>{ name }</button>
 }
 
 templ buttonToggleFilters() {
 	<button
 		type="button"
 		onclick={ scripts.ToggleFilterPanel(searchBarId, filtersPanelId) }
-		class="py-2 px-3 rounded text-red fill-red font-semibold"
+		class="py-2 px-3 rounded"
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#6b7280" viewBox="0 0 24 24">
 			<path d="M10,10,4,2H20l-6,8V22H10Z"></path>
 		</svg>
 	</button>
 }
 
 templ FilterFlags(filterData []filter_cards.FilterCategory) {
-	<div class="flex items-center">
-		<h2 class="text-xl mb-4">Filters</h2>
-		@buttonResetForm("X", false)
-	</div>
 	<div class="space-y-2">
 		<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))] max-sm:grid-cols-1">
 			for _, category := range filterData {
@@ -105,7 +88,7 @@ templ SearchBar(id, value string) {
 			value={ value }
 			placeholder="Search..."
 			hx-boost="true"
-			class="w-full p-3 pl-5 pr-4 border-gray-300 
+			class="w-full p-3 pl-5 pr-4 border-gr	ay-300 
 			rounded-t-lg rounded-lg border-2
 			focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
 			oninput={ scripts.InputTextboxLiveUpdate(templ.JSExpression("this")) }
