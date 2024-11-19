@@ -26,3 +26,22 @@ script InputTextboxLiveUpdate(target templ.JSExpression) {
 	}, 1500);
 	 */
 }
+
+script LazyLoadImage(target templ.JSExpression) {
+
+	// Создаем новый Image объект
+	const newImage = new Image();
+	const src = target.getAttribute('original_src')
+	newImage.src = src;
+
+	// После полной загрузки нового изображения заменяем старое
+	newImage.onload = () => {
+		target.src = src;
+	};
+
+	// Если загрузка изображения завершается ошибкой, показываем сообщение об этом
+	newImage.onerror = () => {
+		console.error(`Не удалось загрузить изображение ${src}`);
+	};
+
+}

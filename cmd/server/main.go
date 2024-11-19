@@ -115,7 +115,6 @@ func main() {
 		),
 		//),
 	)
-	mux.HandleFunc("/api/image", r.ApiImage)
 
 	//mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
 	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
