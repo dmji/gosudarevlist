@@ -36,3 +36,4 @@ assets/css/tailwind.css
 
 # sqlc
 *.sqlc_gen.go
+*.session.sql
