@@ -1,0 +1,114 @@
+package navigation
+
+templ Navbar() {
+	<div class="fixed w-fit z-50 h-24 bottom-1 center-absolute">
+		<div class="grid h-full grid-cols-4 mx-auto gap-3">
+			//
+			// Home
+			//
+			<div class="w-14 relative group inline-flex flex-col items-center justify-center">
+				@textTooptip("Home")
+				<div
+					class="absolute bottom-0 pb-2 pt-4 px-5 rounded-full 
+                 bg-gray-800 group-hover:bg-gray-300
+                 dark:group-hover:bg-gray-800"
+				>
+					<button type="button">
+						@svgHomeIcon()
+						<span class="sr-only">Home</span>
+					</button>
+				</div>
+			</div>
+			//
+			// Home
+			//
+			<div class="col-span-2 grid grid-cols-2 w-28">
+				<div class="w-14 relative group">
+					@textTooptip("List")
+					<div
+						class="absolute bottom-0 pb-2 pt-4 px-5 rounded-s-full 
+                        bg-gray-800 group-hover:bg-gray-300
+                        dark:group-hover:bg-gray-800"
+					>
+						<button type="button">
+							@svgHomeIcon()
+							<span class="sr-only">Home</span>
+						</button>
+					</div>
+				</div>
+				<div class="w-14 relative group">
+					@textTooptip("Home2")
+					<div
+						class="absolute bottom-0 pb-2 pt-4 px-5 rounded-e-full 
+                        bg-gray-800 group-hover:bg-gray-300
+                        dark:group-hover:bg-gray-800"
+					>
+						<button type="button">
+							@svgHomeIcon()
+							<span class="sr-only">Home</span>
+						</button>
+					</div>
+				</div>
+			</div>
+			//
+			// Profile
+			//
+			<div class="relative group inline-flex flex-col items-center justify-center">
+				@textTooptip("Profile")
+				<div
+					class="absolute bottom-0  pb-2 pt-4 px-5 rounded-full 
+                 bg-gray-800 group-hover:bg-gray-300
+                 dark:group-hover:bg-gray-800"
+				>
+					<button type="button">
+						@svgProfileIcon()
+						<span class="sr-only">Profile</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ textTooptip(text string) {
+	<div
+		class="absolute center-absolute
+		 top-0 px-3 h-8 py-2 
+		 text-sm font-medium 
+		 rounded-lg shadow-sm
+		 transition-opacity duration-300 
+		 opacity-0 group-hover:opacity-100
+		 invisible group-hover:visible
+		 select-none
+		 text-white
+		 bg-gray-900
+		 dark:bg-gray-700"
+	>
+		{ text }
+	</div>
+	<svg
+		viewBox="0 0 18 18"
+		class="absolute center-absolute
+		top-5 w-8 h-7
+		transition-opacity duration-300 
+		opacity-0 group-hover:opacity-100
+		invisible group-hover:visible"
+		version="1.1"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="#000000"
+	>
+		<path d="M4,7 L9,13 L14,7 L4,7 L4,7 Z" id="path" fill="#000000"></path>
+	</svg>
+}
+
+templ svgHomeIcon() {
+	<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+		<path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
+	</svg>
+}
+
+templ svgProfileIcon() {
+	<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+		<path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"></path>
+	</svg>
+}
