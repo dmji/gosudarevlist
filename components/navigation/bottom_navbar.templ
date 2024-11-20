@@ -1,79 +1,99 @@
 package navigation
 
+script navbarVisibleToggler() {
+	var prevScrollpos = window.pageYOffset;
+	var scrollCapacity = 0;
+	var stateActive = true
+	var stateByDirectionPrev = true
+	window.onscroll = function() {
+		var currentScrollPos = window.pageYOffset;
+		const delta = currentScrollPos - prevScrollpos;
+		prevScrollpos = currentScrollPos;
+		scrollCapacity += Math.abs(delta);
+
+		// reset capacity if direction changed
+		const stateByDirection = delta > 0 ? false : true;
+		if (stateByDirection != stateByDirectionPrev)
+			scrollCapacity = 0;
+		stateByDirectionPrev = stateByDirection;
+
+		// do nothing if states matched
+		if (stateActive == stateByDirection)
+			return;
+
+		// do nothing if target capacity not matched
+		if (scrollCapacity <= innerHeight * (stateByDirection ? 0.2 : 1))
+			return;
+
+		// toggle visibility
+		document.getElementById("navbar").classList.toggle('translate-y-20');
+		stateActive = stateByDirection
+	}
+}
+
 templ Navbar() {
-	<div class="fixed w-fit z-50 h-24 bottom-1 center-absolute">
-		<div class="grid h-full grid-cols-4 mx-auto gap-3">
-			//
-			// Home
-			//
-			<div class="w-14 relative group inline-flex flex-col items-center justify-center">
-				@textTooptip("Home")
-				<div
-					class="absolute bottom-0 pb-2 pt-4 px-5 rounded-full 
-                 bg-gray-800 group-hover:bg-gray-300
-                 dark:group-hover:bg-gray-800"
-				>
-					<button type="button">
-						@svgHomeIcon()
-						<span class="sr-only">Home</span>
-					</button>
-				</div>
+	<div class="fixed z-50 bottom-1 center-absolute">
+		<div id="navbar" class="flex flexflex-wrap-reverse h-14 ease-in-out duration-1000">
+			@navButton("Home", "/home", navButtonSingle, svgHomeIcon())
+			@navSeparator()
+			<div class="flex rounded-full border-2">
+				@navButton("AnimeLayer", "/anime", navButtonGroupBeg, svgCollectionIcon())
+				@navButton("Updates", "/updates", navButtonGroupEnd, svgHistoryIcon())
 			</div>
-			//
-			// Home
-			//
-			<div class="col-span-2 grid grid-cols-2 w-28">
-				<div class="w-14 relative group">
-					@textTooptip("List")
-					<div
-						class="absolute bottom-0 pb-2 pt-4 px-5 rounded-s-full 
-                        bg-gray-800 group-hover:bg-gray-300
-                        dark:group-hover:bg-gray-800"
-					>
-						<button type="button">
-							@svgHomeIcon()
-							<span class="sr-only">Home</span>
-						</button>
-					</div>
+			@navSeparator()
+			@navButton("Profile", "/profile", navButtonSingle, svgProfileIcon())
+		</div>
+	</div>
+	@navbarVisibleToggler()
+}
+
+type navButtonType int
+
+const (
+	navButtonSingle navButtonType = iota
+	navButtonGroupBeg
+	navButtonGroupMiddle
+	navButtonGroupEnd
+)
+
+func navButtonStyle(t navButtonType) string {
+	switch t {
+	case navButtonSingle:
+		return " rounded-full border-2"
+	case navButtonGroupBeg:
+		return " rounded-s-full"
+	case navButtonGroupMiddle:
+		return ""
+	case navButtonGroupEnd:
+		return " rounded-e-full"
+	}
+	return ""
+}
+
+templ navButton(tooltipText string, routeTarget string, btnType navButtonType, icon templ.Component) {
+	<div class={ "relative group bn-colors" + navButtonStyle(btnType) }>
+		@textTooptip(tooltipText)
+		<a href={ templ.SafeURL(routeTarget) } class="absolute w-full h-full select-none hidden group-hover:block z-50"></a>
+		<div class="pt-4 px-4">
+			<button type="button">
+				<div class="flex">
+					@icon
+					<span class="sr-only">{ tooltipText }</span>
 				</div>
-				<div class="w-14 relative group">
-					@textTooptip("Home2")
-					<div
-						class="absolute bottom-0 pb-2 pt-4 px-5 rounded-e-full 
-                        bg-gray-800 group-hover:bg-gray-300
-                        dark:group-hover:bg-gray-800"
-					>
-						<button type="button">
-							@svgHomeIcon()
-							<span class="sr-only">Home</span>
-						</button>
-					</div>
-				</div>
-			</div>
-			//
-			// Profile
-			//
-			<div class="relative group inline-flex flex-col items-center justify-center">
-				@textTooptip("Profile")
-				<div
-					class="absolute bottom-0  pb-2 pt-4 px-5 rounded-full 
-                 bg-gray-800 group-hover:bg-gray-300
-                 dark:group-hover:bg-gray-800"
-				>
-					<button type="button">
-						@svgProfileIcon()
-						<span class="sr-only">Profile</span>
-					</button>
-				</div>
-			</div>
+			</button>
 		</div>
 	</div>
 }
 
+templ navSeparator() {
+	<div class="p-1"></div>
+}
+
 templ textTooptip(text string) {
-	<div
-		class="absolute center-absolute
-		 top-0 px-3 h-8 py-2 
+	<div class="relative -translate-y-11">
+		<div
+			class="absolute center-absolute
+		 top-0 px-3 h-8 py-1
 		 text-sm font-medium 
 		 rounded-lg shadow-sm
 		 transition-opacity duration-300 
@@ -83,32 +103,66 @@ templ textTooptip(text string) {
 		 text-white
 		 bg-gray-900
 		 dark:bg-gray-700"
-	>
-		{ text }
-	</div>
-	<svg
-		viewBox="0 0 18 18"
-		class="absolute center-absolute
+		>
+			{ text }
+		</div>
+		<svg
+			viewBox="0 0 18 18"
+			class="absolute center-absolute
 		top-5 w-8 h-7
 		transition-opacity duration-300 
 		opacity-0 group-hover:opacity-100
 		invisible group-hover:visible"
-		version="1.1"
-		xmlns="http://www.w3.org/2000/svg"
-		fill="#000000"
-	>
-		<path d="M4,7 L9,13 L14,7 L4,7 L4,7 Z" id="path" fill="#000000"></path>
-	</svg>
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="#000000"
+		>
+			<path d="M4,7 L9,13 L14,7 L4,7 L4,7 Z" id="path" fill="#000000"></path>
+		</svg>
+	</div>
 }
 
 templ svgHomeIcon() {
-	<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+	<svg
+		class="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+		aria-hidden="true"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="currentColor"
+		viewBox="0 0 20 20"
+	>
 		<path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
 	</svg>
 }
 
 templ svgProfileIcon() {
-	<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+	<svg
+		class="w-6 h-6 -translate-y-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="currentColor"
+		viewBox="0 0 20 20"
+	>
 		<path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"></path>
+	</svg>
+}
+
+templ svgHistoryIcon() {
+	<svg
+		class="w-8 h-8 -translate-y-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+		fill="currentColor"
+		viewBox="0 0 512 512"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path d="M456.836556,405.333333 L456.836556,448 L350.169889,448 L350.169889,405.333333 L456.836556,405.333333 Z M328.836556,405.333333 L328.836556,448 L286.169889,448 L286.169889,405.333333 L328.836556,405.333333 Z M456.836556,341.333333 L456.836556,384 L350.169889,384 L350.169889,341.333333 L456.836556,341.333333 Z M328.836556,341.333333 L328.836556,384 L286.169889,384 L286.169889,341.333333 L328.836556,341.333333 Z M131.660221,261.176335 C154.823665,284.339779 186.823665,298.666667 222.169889,298.666667 C237.130689,298.666667 251.492003,296.099965 264.837506,291.382887 L264.838264,335.956148 C251.200633,339.466383 236.903286,341.333333 222.169889,341.333333 C175.041086,341.333333 132.37401,322.230407 101.489339,291.345231 L131.660221,261.176335 Z M456.836556,277.333333 L456.836556,320 L350.169889,320 L350.169889,277.333333 L456.836556,277.333333 Z M328.836556,277.333333 L328.836556,320 L286.169889,320 L286.169889,277.333333 L328.836556,277.333333 Z M222.169889,7.10542736e-15 C316.426487,7.10542736e-15 392.836556,76.4100694 392.836556,170.666667 C392.836556,201.752854 384.525389,230.897864 370.003903,256.000851 L317.574603,256.00279 C337.844458,233.356846 350.169889,203.451136 350.169889,170.666667 C350.169889,99.9742187 292.862337,42.6666667 222.169889,42.6666667 C151.477441,42.6666667 94.1698893,99.9742187 94.1698893,170.666667 C94.1698893,174.692297 94.3557269,178.674522 94.7192911,182.605232 L115.503223,161.830111 L145.673112,192 L72.836556,264.836556 L4.97379915e-14,192 L30.1698893,161.830111 L51.989071,183.641815 C51.6671112,179.358922 51.5032227,175.031933 51.5032227,170.666667 C51.5032227,76.4100694 127.913292,7.10542736e-15 222.169889,7.10542736e-15 Z M243.503223,64 L243.503223,159.146667 L297.903223,195.626667 L274.436556,231.04 L200.836556,182.186667 L200.836556,64 L243.503223,64 Z" id="Combined-Shape"></path>
+	</svg>
+}
+
+templ svgCollectionIcon() {
+	<svg
+		class="w-8 h-8 -translate-y-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+		fill="currentColor"
+		viewBox="0 0 20 20"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path d="M-10,6.5v9a.5.5,0,0,1-.5.5h-7a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5V15h6V7h-1.5a.5.5,0,0,1-.5-.5.5.5,0,0,1,.5-.5h2A.5.5,0,0,1-10,6.5ZM-12.5,13a.5.5,0,0,0,.5-.5.5.5,0,0,0-.5-.5H-14V11h1.5a.5.5,0,0,0,.5-.5.5.5,0,0,0-.5-.5H-14V9h1.5a.5.5,0,0,0,.5-.5.5.5,0,0,0-.5-.5H-14V3.5a.5.5,0,0,0-.5-.5h-2a.5.5,0,0,0-.5.5.5.5,0,0,0,.5.5H-15v8h-6v-.5a.5.5,0,0,0-.5-.5.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h9Zm-6-3h-7a.5.5,0,0,1-.5-.5V.5a.5.5,0,0,1,.5-.5h7a.5.5,0,0,1,.5.5V5h1.5a.5.5,0,0,1,.5.5.5.5,0,0,1-.5.5H-18V7h1.5a.5.5,0,0,1,.5.5.5.5,0,0,1-.5.5H-18V9h1.5a.5.5,0,0,1,.5.5.5.5,0,0,1-.5.5ZM-25,9h6V1h-6Zm4.5-3h-3a.5.5,0,0,0-.5.5.5.5,0,0,0,.5.5h3a.5.5,0,0,0,.5-.5A.5.5,0,0,0-20.5,6Zm0-2h-3a.5.5,0,0,0-.5.5.5.5,0,0,0,.5.5h3a.5.5,0,0,0,.5-.5A.5.5,0,0,0-20.5,4Zm0-2h-3a.5.5,0,0,0-.5.5.5.5,0,0,0,.5.5h3a.5.5,0,0,0,.5-.5A.5.5,0,0,0-20.5,2Z" transform="translate(26)"></path>
 	</svg>
 }

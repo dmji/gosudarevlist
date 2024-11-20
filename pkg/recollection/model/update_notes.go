@@ -20,7 +20,7 @@ type UpdateNote struct {
 type Status int
 
 const (
-	StatusNew = iota
+	StatusNew Status = iota
 	StatusRemoved
 	StatusUpdated
 )

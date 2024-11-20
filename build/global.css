@@ -4,6 +4,19 @@
 
 @layer base {
     .center-absolute {
-        @apply -translate-x-1/2 left-1/2
+        @apply
+            -translate-x-1/2
+            left-1/2
+    }
+    .bn-colors {
+        @apply
+            border-gray-300
+            bg-gray-800
+            text-white
+            
+            hover:bg-gray-300
+            hover:text-gray-800
+            dark:hover:bg-gray-800
+            dark:hover:text-gray-300
     }
 }
