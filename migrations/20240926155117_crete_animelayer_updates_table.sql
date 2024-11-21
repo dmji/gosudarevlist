@@ -6,10 +6,8 @@ CREATE TABLE animelayer_updates (
      item_id BIGINT NOT NULL,
      -- timestamp
      update_date timestamp NOT NULL,
-     -- updated field
-     title TEXT NOT NULL,
-     value_old TEXT NOT NULL,
-     value_new TEXT NOT NULL
+     -- status
+     update_status UPDATE_STATUS NOT NULL
 );
 
 ALTER TABLE animelayer_updates
