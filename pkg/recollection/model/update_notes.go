@@ -9,12 +9,18 @@ type OptionsGetUpdates struct {
 	Category Category
 }
 
-type UpdateNote struct {
-	ItemID      int64
-	UpdateDate  *time.Time
-	UpdateTitle string
-	ValueOld    string
-	ValueNew    string
+type UpdateItem struct {
+	Date       *time.Time
+	Identifier string
+	Title      string
+	Status     Status
+	Notes      []UpdateItemNote
+}
+
+type UpdateItemNote struct {
+	ValueTitle string
+	ValueOld   string
+	ValueNew   string
 }
 
 type Status int
@@ -23,4 +29,5 @@ const (
 	StatusNew Status = iota
 	StatusRemoved
 	StatusUpdated
+	StatusUnknown
 )

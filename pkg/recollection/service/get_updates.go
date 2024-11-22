@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-func (s *services) GetUpdates(ctx context.Context, opt *query_updates.ApiUpdateParams) []model.UpdateNote {
+func (s *services) GetUpdates(ctx context.Context, opt *query_updates.ApiUpdateParams) []model.UpdateItem {
 
 	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetUpdates{
 		CountForOnePage: 20,

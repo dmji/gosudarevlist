@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetUpdates) ([]model.UpdateNote, error) {
+func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetUpdates) ([]model.UpdateItem, error) {
 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
@@ -26,16 +26,27 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetUpdates
 
 	log.Printf("In-Memory repo | GetUpdates result items: %d", len(items))
 
-	cardItems := make([]model.UpdateNote, 0, len(items))
+	cardItems := make([]model.UpdateItem, 0, len(items))
 	for _, item := range items {
-		cardItems = append(cardItems, model.UpdateNote{
-			ItemID:      item.ItemID,
-			UpdateDate:  timeFromPgTimestamp(item.UpdateDate),
-			UpdateTitle: item.Title,
-			ValueOld:    item.ValueOld,
-			ValueNew:    item.ValueNew,
+		cardItems = append(cardItems, model.UpdateItem{
+			Title:  item.Title,
+			Status: pgxStatusToStatus(item.UpdateStatus),
+			Date:   timeFromPgTimestamp(item.UpdateDate),
 		})
 	}
 
 	return cardItems, nil
+}
+
+func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) model.Status {
+	switch status {
+	case pgx_sqlc.UpdateStatusNew:
+		return model.StatusNew
+	case pgx_sqlc.UpdateStatusUpdate:
+		return model.StatusUpdated
+	case pgx_sqlc.UpdateStatusRemoved:
+		return model.StatusRemoved
+	default:
+		return model.StatusUnknown
+	}
 }

@@ -3,9 +3,7 @@ package handlers
 import (
 	"collector/components/pages"
 	"collector/internal/query_updates"
-	"collector/pkg/recollection/model"
 	"net/http"
-	"time"
 )
 
 func (s *router) UpdatesListHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,16 +17,16 @@ func (s *router) UpdatesListHandler(w http.ResponseWriter, r *http.Request) {
 	notes := make([]pages.Item, 0, len(items))
 	for _, item := range items {
 		notes = append(notes, pages.Item{
-			Name:       "Name",
-			Identifier: "test",
-			Status:     model.StatusNew,
-			Date:       &time.Time{},
-			Changes: []pages.Change{
+			Name:       item.Title,
+			Identifier: item.Identifier,
+			Status:     item.Status,
+			Date:       item.Date,
+			/* 			Changes: []pages.Change{
 				{
 					TextOld: item.ValueOld,
 					TextNew: item.ValueNew,
 				},
-			},
+			}, */
 		})
 	}
 

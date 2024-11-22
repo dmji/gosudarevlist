@@ -1,10 +1,8 @@
 -- name: GetUpdates :many
-SELECT animelayer_updates.item_id,
-    animelayer_updates.title,
-    animelayer_updates.update_date,
-    animelayer_updates.value_new,
-    animelayer_updates.value_old,
-    animelayer_items.identifier
+SELECT animelayer_updates.update_date,
+    animelayer_updates.update_status,
+    animelayer_items.identifier,
+    animelayer_items.title
 FROM animelayer_updates
     INNER JOIN animelayer_items ON animelayer_updates.item_id = animelayer_items.id
 WHERE @show_all_categories::bool = TRUE
