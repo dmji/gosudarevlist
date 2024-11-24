@@ -8,15 +8,22 @@ import (
 	"log"
 )
 
-func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetUpdates) ([]model.UpdateItem, error) {
+func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) ([]model.UpdateItem, error) {
 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
+	isCompletedPgx, err := boolExToPgxBool(opt.IsCompleted)
+	if err != nil {
+		return nil, err
+	}
+
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
-		Count:             int32(opt.CountForOnePage),
-		OffsetCount:       int32(startID),
-		Category:          categoriesToAnimelayerCategories(opt.Category),
-		ShowAllCategories: opt.Category == model.Categories.All,
+		Count:       int32(opt.CountForOnePage),
+		OffsetCount: int32(startID),
+
+		IsCompleted:   isCompletedPgx,
+		SearchQuery:   opt.SearchQuery,
+		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
 	})
 
 	if err != nil {

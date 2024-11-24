@@ -4,6 +4,8 @@ import (
 	"net/url"
 )
 
+const queryComma = "+"
+
 func QueryCustomParse(query url.Values) url.Values {
 	qStr := ""
 	for key, vals := range query {
@@ -11,7 +13,7 @@ func QueryCustomParse(query url.Values) url.Values {
 		sValues := ""
 		for _, v := range vals {
 			if len(sValues) > 0 && len(v) > 0 {
-				sValues += "-"
+				sValues += queryComma
 			}
 			sValues += v
 		}

@@ -10,5 +10,5 @@ import (
 type AnimeLayerRepositoryDriver interface {
 	InsertItem(ctx context.Context, item *animelayer.Item, category animelayer.Category) error
 	GetItems(ctx context.Context, opt model.OptionsGetItems) ([]model.ItemCartData, error)
-	GetUpdates(ctx context.Context, opt model.OptionsGetUpdates) ([]model.UpdateItem, error)
+	GetUpdates(ctx context.Context, opt model.OptionsGetItems) ([]model.UpdateItem, error)
 }

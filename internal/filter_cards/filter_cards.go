@@ -33,11 +33,31 @@ func NewFiltersState(prm *query_cards.ApiCardsParams) *FilterParameters {
 		SearchField: prm.SearchQuery,
 		Categories: []FilterCategory{
 			{
+				DisplayTitle: "Status",
 				Parameter: &FilterCategoryParams{
 					IsCustomThirdStateEnable: true,
 					Name:                     prm.IsCompletedUrl(),
 				},
 				Values: []FilterValue{
+					{
+						DisplayName:   "Completed",
+						ParameterName: prm.IsCompleted.Name,
+						Checked:       prm.IsCompleted.Value,
+					},
+				},
+			},
+			{
+				DisplayTitle: "Categories",
+				Parameter: &FilterCategoryParams{
+					IsCustomThirdStateEnable: false,
+					Name:                     prm.CategoriesUrl(),
+				},
+				Values: []FilterValue{
+					{
+						DisplayName:   "Completed",
+						ParameterName: prm.IsCompleted.Name,
+						Checked:       prm.IsCompleted.Value,
+					},
 					{
 						DisplayName:   "Completed",
 						ParameterName: prm.IsCompleted.Name,

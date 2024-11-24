@@ -2,13 +2,6 @@ package model
 
 import "time"
 
-type OptionsGetUpdates struct {
-	PageIndex       int64
-	CountForOnePage int64
-
-	Category Category
-}
-
 type UpdateItem struct {
 	Date       *time.Time
 	Identifier string

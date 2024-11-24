@@ -12,7 +12,7 @@ func (s *services) GetItems(ctx context.Context, opt *query_cards.ApiCardsParams
 		CountForOnePage: 20,
 		PageIndex:       int64(opt.Page),
 		SearchQuery:     opt.SearchQuery,
-		Category:        model.Categories.Anime,
+		Categories:      opt.Categories,
 		IsCompleted:     opt.IsCompleted.Value,
 	})
 

@@ -43,6 +43,7 @@ templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterPa
 			</div>
 		</div>
 	</form>
+	@scripts.InitFilterPanel(searchBarId, filtersPanelId)
 }
 
 templ buttonToggleFilters() {

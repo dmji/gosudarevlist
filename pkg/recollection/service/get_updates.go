@@ -1,17 +1,20 @@
 package service
 
 import (
-	"collector/internal/query_updates"
+	"collector/internal/query_cards"
 	"collector/pkg/recollection/model"
 	"context"
 )
 
-func (s *services) GetUpdates(ctx context.Context, opt *query_updates.ApiUpdateParams) []model.UpdateItem {
+func (s *services) GetUpdates(ctx context.Context, opt *query_cards.ApiCardsParams) []model.UpdateItem {
 
-	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetUpdates{
+	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetItems{
 		CountForOnePage: 20,
 		PageIndex:       int64(opt.Page),
-		Category:        model.Categories.All,
+
+		SearchQuery: opt.SearchQuery,
+		Categories:  opt.Categories,
+		IsCompleted: opt.IsCompleted.Value,
 	})
 
 	if err != nil {

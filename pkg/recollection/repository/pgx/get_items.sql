@@ -1,7 +1,26 @@
 -- name: GetItems :many
-SELECT *
+WITH sq AS (
+    SELECT unnest(
+            ARRAY [@category_array::CATEGORY_ANIMELAYER[]] 
+    ) as cat
+)
+SELECT id,
+ identifier,
+ title,
+ case WHEN is_completed THEN true ELSE (COALESCE(updated_date, created_date) < now() - (interval '1 year'))::boolean end as is_completed,
+ last_checked_date,
+ first_checked_date,
+ created_date,
+ updated_date,
+ ref_image_cover,
+ ref_image_preview,
+ blob_image_cover,
+ blob_image_preview,
+ torrent_files_size,
+ notes,
+ category
 FROM animelayer_items
-WHERE category = @category::CATEGORY_ANIMELAYER
+WHERE category IN (SELECT cat FROM sq)
     AND (
         @search_query::text = ''
         OR SIMILARITY(title, @search_query) > 0.05

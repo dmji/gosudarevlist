@@ -41,23 +41,23 @@ templ Navbar() {
 			@navSeparator()
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonGroupBeg) {
-					@clickableCollider("/anime")
-					@navButtonWithTooltip(svgCollectionIcon(), "AnimeLayer", "", shiftedButtonSizeStyle)
+					@clickableCollider("/animelayer")
+					@navButtonWithTooltip(svgAnimeIcon(), "AnimeLayer", "", shiftedButtonSizeStyle)
 				}
 				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/updates")
+					@clickableCollider("/animelayer/updates")
 					@navButtonWithTooltip(svgHistoryIcon(), "Updates", "", narrowButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonGroupBeg) {
-					@clickableCollider("/manga")
-					@navButtonWithTooltip(svgCollectionIcon(), "AnimeLayer", "", shiftedButtonSizeStyle)
+					@clickableCollider("/animelayer")
+					@navButtonWithTooltip(svgMangaIcon(), "AnimeLayer Manga", "", shiftedButtonSizeStyle)
 				}
 				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/updates")
-					@navButtonWithTooltip(svgHistoryIcon(), "Updates", "", narrowButtonSizeStyle)
+					@clickableCollider("/animelayer/updates")
+					@navButtonWithTooltip(svgHistoryIcon(), "Manga Updates", "", narrowButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
@@ -107,6 +107,7 @@ templ textTooptip(text string) {
 	<div class="relative -translate-y-11">
 		<div
 			class="absolute center-absolute
+			text-nowrap
 		 top-0 px-3 h-8 py-1
 		 text-sm font-medium 
 		 rounded-lg shadow-sm

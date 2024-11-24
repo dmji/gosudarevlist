@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"collector/components/pages"
-	"collector/internal/query_updates"
+	"collector/internal/query_cards"
 	"net/http"
 )
 
@@ -10,7 +10,7 @@ func (s *router) UpdatesListHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	params := query_updates.Parse(ctx, r.URL.Query(), 1)
+	params := query_cards.Parse(ctx, r.URL.Query(), 1)
 
 	items := s.s.GetUpdates(ctx, params)
 

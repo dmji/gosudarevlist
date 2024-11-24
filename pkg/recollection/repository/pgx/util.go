@@ -8,39 +8,32 @@ import (
 	"github.com/dmji/go-animelayer-parser"
 )
 
-/* func categoriesToAnimelayerCategories(categories []model.Category) pgx_sqlc.CategoryAnimelayer {
+var allCategories = []pgx_sqlc.CategoryAnimelayer{
+	pgx_sqlc.CategoryAnimelayerAnime,
+	pgx_sqlc.CategoryAnimelayerAnimeHentai,
+	pgx_sqlc.CategoryAnimelayerManga,
+	pgx_sqlc.CategoryAnimelayerMangaHentai,
+	pgx_sqlc.CategoryAnimelayerMusic,
+	pgx_sqlc.CategoryAnimelayerDorama,
+}
+
+func categoriesToAnimelayerCategories(categories []model.Category) []pgx_sqlc.CategoryAnimelayer {
 	res := make([]pgx_sqlc.CategoryAnimelayer, 0, len(categories))
 
 	for _, category := range categories {
-		switch category {
-		case model.Categories.Anime:
-			res = append(res, pgx_sqlc.CategoryAnimelayerAnime)
-		case model.Categories.AnimeHentai:
-			res = append(res, pgx_sqlc.CategoryAnimelayerAnimeHentai)
-		case model.Categories.Manga:
-			res = append(res, pgx_sqlc.CategoryAnimelayerManga)
-		case model.Categories.MangaHentai:
-			res = append(res, pgx_sqlc.CategoryAnimelayerMangaHentai)
-		case model.Categories.Music:
-			res = append(res, pgx_sqlc.CategoryAnimelayerMusic)
-		case model.Categories.Dorama:
-			res = append(res, pgx_sqlc.CategoryAnimelayerDorama)
-		}
+		res = append(res, categoriesToAnimelayerCategory(category))
 	}
 
 	if len(res) == 0 {
-		res = append(res, pgx_sqlc.CategoryAnimelayerAnime)
-		res = append(res, pgx_sqlc.CategoryAnimelayerAnimeHentai)
-		res = append(res, pgx_sqlc.CategoryAnimelayerManga)
-		res = append(res, pgx_sqlc.CategoryAnimelayerMangaHentai)
-		res = append(res, pgx_sqlc.CategoryAnimelayerMusic)
-		res = append(res, pgx_sqlc.CategoryAnimelayerDorama)
+		for _, cat := range allCategories {
+			res = append(res, cat)
+		}
 	}
 
-	return res[0]
-} */
+	return res
+}
 
-func categoriesToAnimelayerCategories(category model.Category) pgx_sqlc.CategoryAnimelayer {
+func categoriesToAnimelayerCategory(category model.Category) pgx_sqlc.CategoryAnimelayer {
 
 	switch category {
 	case model.Categories.Anime:
@@ -57,6 +50,26 @@ func categoriesToAnimelayerCategories(category model.Category) pgx_sqlc.Category
 		return pgx_sqlc.CategoryAnimelayerDorama
 	default:
 		return pgx_sqlc.CategoryAnimelayerAnime
+	}
+}
+
+func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Category {
+
+	switch category {
+	case pgx_sqlc.CategoryAnimelayerAnime:
+		return model.Categories.Anime
+	case pgx_sqlc.CategoryAnimelayerAnimeHentai:
+		return model.Categories.AnimeHentai
+	case pgx_sqlc.CategoryAnimelayerManga:
+		return model.Categories.Manga
+	case pgx_sqlc.CategoryAnimelayerMangaHentai:
+		return model.Categories.MangaHentai
+	case pgx_sqlc.CategoryAnimelayerMusic:
+		return model.Categories.Music
+	case pgx_sqlc.CategoryAnimelayerDorama:
+		return model.Categories.Dorama
+	default:
+		return model.Categories.Anime
 	}
 }
 

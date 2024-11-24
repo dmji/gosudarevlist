@@ -46,7 +46,17 @@ script LazyLoadImage(target templ.JSExpression) {
 
 }
 
+script InitFilterPanel(searchBarId, filtersPanelId string) {
+	if(localStorage.getItem("show_filters") == 1) {
+		document.querySelector('#'+searchBarId).classList.toggle('rounded-b-none')
+		document.querySelector('#'+filtersPanelId).classList.toggle('hidden')
+	} else {
+		localStorage.setItem("show_filters", 0);
+	}
+}
+
 script ToggleFilterPanel(searchBarId, filtersPanelId string) {
 	document.querySelector('#'+searchBarId).classList.toggle('rounded-b-none')
 	document.querySelector('#'+filtersPanelId).classList.toggle('hidden')
+	localStorage.setItem("show_filters", localStorage.getItem("show_filters") == 1 ? 0 : 1);
 }

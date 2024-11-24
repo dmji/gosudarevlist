@@ -60,6 +60,14 @@ templ onAirBadge(IsCompleted bool) {
 	}
 }
 
+templ categoryBadge(category string) {
+	if len(category) > 0 {
+		<label class="top-[13px] left-4 px-3 absolute text-white text-xs font-bold bg-[#3c36dd] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-b-lg border-solid border-2 border-[#423cf1]">
+			{ category }
+		</label>
+	}
+}
+
 // Recursive template
 // Child of templ:  storage.templ
 // Render from Api: /api/cards
@@ -80,8 +88,9 @@ templ ListItem(cards []model.ItemCartData, nextPageEndpint, nextPageParams strin
 					<div class="px-1">{ card.TorrentWeight }</div>
 				</div>
 				// horizontal row with image and description
-				<div class="grid grid-flow-col">
+				<div class="grid grid-flow-col place-content-start">
 					<div class="relative">
+						@categoryBadge(card.CategoryPresentation)
 						@onAirBadge(card.IsCompleted)
 						<img
 							original_src={ queryPosterFromItem(&card) }

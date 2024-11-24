@@ -4,18 +4,17 @@ import (
 	"collector/cmd/env"
 	"collector/handlers"
 	"collector/pkg/logger"
-	"collector/pkg/middleware"
 	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"collector/pkg/recollection/service"
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/dmji/go-animelayer-parser"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -68,6 +67,23 @@ func main() {
 		logger.Panicw(ctx, "unable to parse connString", "error", err)
 	}
 
+	dbConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
+		dt, err := conn.LoadType(ctx, "CATEGORY_ANIMELAYER")
+		if err != nil {
+			return err
+		}
+
+		conn.TypeMap().RegisterType(dt)
+
+		dt, err = conn.LoadType(ctx, "_CATEGORY_ANIMELAYER")
+		if err != nil {
+			return err
+		}
+		conn.TypeMap().RegisterType(dt)
+
+		return nil
+	}
+
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
 		panic(err)
@@ -82,28 +98,8 @@ func main() {
 	//
 	mux := http.NewServeMux()
 
-	// pages
-	mux.HandleFunc("/", r.HomePageHandler)
-	mux.HandleFunc("/updates", r.UpdatesListHandler)
-	mux.HandleFunc("/profile", r.ProfilePageHandler)
-	mux.HandleFunc("/anime",
-		middleware.HxPushUrlMiddleware(r.ShelfPageHandler),
-	)
-
-	// parsers
-	mux.HandleFunc("/parser/animelayer", r.ScannerPageHandler)
-
-	// api
-	mux.HandleFunc("GET /api/push_url",
-		middleware.HxPushUrlMiddleware(func(w http.ResponseWriter, r *http.Request) { log.Print("Changed!") }),
-	)
-	mux.HandleFunc("/api/cards",
-		//middleware.PushQueryToRequestMiddleware(
-		middleware.HxPushUrlMiddleware(
-			r.ApiCards,
-		),
-		//),
-	)
+	r.InitMuxWithDefaultPages(mux.HandleFunc)
+	r.InitMuxWithDefaultApi(mux.HandleFunc)
 
 	//mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
 	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
