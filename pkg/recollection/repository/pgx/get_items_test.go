@@ -1,51 +1,35 @@
 package repository_pgx_test
 
 import (
-	"collector/cmd/env"
-	"collector/pkg/logger"
 	"collector/pkg/recollection/model"
-	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"context"
-	"os"
 	"testing"
-
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func TestGetITemsByCategory(t *testing.T) {
 
-	env.LoadEnv(10, true)
+	repo, ctx := InitRepo(context.Background())
 
-	ctx := context.Background()
+	repo.GetItems(ctx, model.OptionsGetItems{
+		PageIndex:       0,
+		CountForOnePage: 20,
+	})
+}
 
-	dbConfig, err := pgxpool.ParseConfig(os.Getenv("GOOSE_DBSTRING"))
-	if err != nil {
-		logger.Panicw(ctx, "unable to parse connString", "error", err)
-	}
+func TestGetFiltersByCategory(t *testing.T) {
 
-	dbConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
-		dt, err := conn.LoadType(ctx, "CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
+	repo, ctx := InitRepo(context.Background())
 
-		conn.TypeMap().RegisterType(dt)
+	items, _ := repo.GetFilters(ctx, model.OptionsGetItems{
+		PageIndex:       0,
+		CountForOnePage: 20,
 
-		dt, err = conn.LoadType(ctx, "_CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
-		conn.TypeMap().RegisterType(dt)
+		SearchQuery: "",
+		Categories: []model.Category{
+			model.Categories.Anime,
+			model.Categories.AnimeHentai,
+		},
+	})
 
-		return nil
-	}
-
-	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	repo := repository_pgx.New(connPgx)
-	repo.GetItems(ctx, model.OptionsGetItems{})
+	println(items)
 }
