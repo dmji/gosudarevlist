@@ -21,12 +21,14 @@ func (r *router) InitMuxWithDefaultPages(HandleFunc func(pattern string, handler
 
 	HandleFunc("/", r.HomePageHandler)
 
-	HandleFunc("/animelayer", middleware.HxPushUrlMiddleware(r.ShelfPageHandler))
-	HandleFunc("/animelayer/updates", r.UpdatesListHandler)
+	HandleFunc("/animelayer", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
+	HandleFunc("/animelayer/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
 
 	HandleFunc("/profile", r.ProfilePageHandler)
 }
 
 func (r *router) InitMuxWithDefaultApi(HandleFunc func(pattern string, handler func(http.ResponseWriter, *http.Request))) {
 	HandleFunc("/api/cards", middleware.HxPushUrlMiddleware(r.ApiCards))
+	HandleFunc("/api/filters", middleware.HxPushUrlMiddleware(r.ApiFilters))
+	HandleFunc("/api/updates", middleware.HxPushUrlMiddleware(r.ApiUpdates))
 }

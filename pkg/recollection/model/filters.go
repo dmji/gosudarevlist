@@ -1,11 +1,13 @@
 package model
 
 type FilterItem struct {
-	Value string
-	Count int64
+	Presentation string
+	Value        string
+	Count        int64
 }
 
 type FilterGroup struct {
-	Name  string
-	Items []FilterItem
+	Name          string
+	DisplayTitle  string
+	CheckboxItems []FilterItem
 }

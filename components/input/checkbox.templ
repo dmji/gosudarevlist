@@ -1,21 +1,20 @@
 package input
 
-import "collector/internal/filter_cards"
+import "collector/pkg/recollection/model"
 
-templ Checkbox(value *filter_cards.FilterValue, prm *filter_cards.FilterCategoryParams) {
+templ Checkbox(parameterName string, prm model.FilterItem) {
 	<input
 		type="checkbox"
-		if prm.IsCustomThirdStateEnable {
+		if false {
 			onclick={ checkBoxCustomClick(templ.JSExpression("this")) }
 			onload={ checkBoxCustomStateLoad(templ.JSExpression("this")) }
 		}
-		name={ prm.Name }
-		value={ templ.EscapeString(value.ParameterName) }
-		value_indeterminate={ `^` + templ.EscapeString(value.ParameterName) }
+		name={ parameterName }
+		value={ templ.EscapeString(prm.Value) }
+		value_indeterminate={ `^` + templ.EscapeString(prm.Value) }
 		class="form-checkbox text-primary rounded mr-2 w-4 h-4"
-		checked?={ value.Checked.Bool() }
 	/>
-	<span>{ value.DisplayName }</span>
+	<span>{ prm.Presentation }</span>
 }
 
 script checkBoxCustomClick(cb templ.JSExpression) {

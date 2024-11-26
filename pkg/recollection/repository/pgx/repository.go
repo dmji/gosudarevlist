@@ -1,7 +1,6 @@
 package repository_pgx
 
 import (
-	"collector/internal/custom_types"
 	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"time"
@@ -49,25 +48,4 @@ func timeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
 		return &t.Time
 	}
 	return nil
-}
-
-func boolExToPgxBool(b custom_types.BoolEx) (pgtype.Bool, error) {
-
-	pgBool := pgtype.Bool{}
-
-	switch b {
-	case custom_types.BoolExTrue:
-		err := pgBool.Scan(true)
-		if err != nil {
-			return pgBool, err
-		}
-	case custom_types.BoolExIntermediate:
-		err := pgBool.Scan(false)
-		if err != nil {
-			return pgBool, err
-		}
-	default:
-	}
-
-	return pgBool, nil
 }

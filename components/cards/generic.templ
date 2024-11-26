@@ -1,0 +1,31 @@
+package cards
+
+import "collector/components/scripts"
+
+templ Trigger(nextPageEndpint, nextPageParams string) {
+	<div
+		hx-boost="true"
+		hx-get={ nextPageEndpint + nextPageParams }
+		hx-trigger="revealed"
+		hx-swap="outerHTML"
+		class="pt-96"
+	></div>
+}
+
+templ putPageNumberResetTrigger(currentPage, i, n int) {
+	if i == int(float64(n)*0.25) {
+		<div
+			class="group"
+			hx-trigger="intersect"
+			hx-on::trigger={ scripts.QueryUpdatePage(currentPage) }
+		>
+			{ children... }
+		</div>
+	} else {
+		<div
+			class="group"
+		>
+			{ children... }
+		</div>
+	}
+}

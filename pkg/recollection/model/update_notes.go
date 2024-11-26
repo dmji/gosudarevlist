@@ -3,11 +3,11 @@ package model
 import "time"
 
 type UpdateItem struct {
-	Date       *time.Time
-	Identifier string
-	Title      string
-	Status     Status
-	Notes      []UpdateItemNote
+	Date         *time.Time
+	Identifier   string
+	Title        string
+	UpdateStatus UpdateStatus
+	Notes        []UpdateItemNote
 }
 
 type UpdateItemNote struct {
@@ -16,11 +16,24 @@ type UpdateItemNote struct {
 	ValueNew   string
 }
 
-type Status int
+type UpdateStatus int
 
 const (
-	StatusNew Status = iota
+	StatusNew UpdateStatus = iota
 	StatusRemoved
 	StatusUpdated
 	StatusUnknown
 )
+
+func (s *UpdateStatus) Presentation() string {
+	switch *s {
+	case StatusNew:
+		return "Новое"
+	case StatusRemoved:
+		return "Удалено"
+	case StatusUpdated:
+		return "Обновлено"
+	default:
+		return ""
+	}
+}

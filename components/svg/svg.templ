@@ -1,0 +1,43 @@
+package svg
+
+templ ChangeStatus(bPlus bool) {
+	<svg
+		class="h-5 w-5"
+		viewBox="0 0 1024 1024"
+		version="1.1"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="#000000"
+	>
+		<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+		<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+		<g id="SVGRepo_iconCarrier">
+			<path d="M512 512m-448 0a448 448 0 1 0 896 0 448 448 0 1 0-896 0Z" fill={ colorForStatusIconSvg(bPlus) }></path>
+			if bPlus {
+				<path d="M448 298.666667h128v426.666666h-128z" fill="#FFFFFF"></path>
+			}
+			<path d="M298.666667 448h426.666666v128H298.666667z" fill="#FFFFFF"></path>
+		</g>
+	</svg>
+}
+
+func colorForStatusIconSvg(bPlus bool) string {
+	if bPlus {
+		return "#00ba00"
+	} else {
+		return "#ff0000"
+	}
+}
+
+templ ShowFilters() {
+	<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#6b7280" viewBox="0 0 24 24">
+		<path d="M10,10,4,2H20l-6,8V22H10Z"></path>
+	</svg>
+}
+
+templ ClearFilters() {
+	<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M9 9L15 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+		<path d="M15 9L9 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+		<circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+	</svg>
+}

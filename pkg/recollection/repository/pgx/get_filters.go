@@ -11,15 +11,10 @@ import (
 
 func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) ([]model.FilterGroup, error) {
 
-	isCompletedPgx, err := boolExToPgxBool(opt.IsCompleted)
-	if err != nil {
-		return nil, err
-	}
-
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
-		SearchQuery:   opt.SearchQuery,
+		//SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		IsCompleted:   isCompletedPgx,
+		StatusArray:   statusesToPgxStatuses(opt.Statuses),
 	})
 
 	if err != nil {
@@ -33,14 +28,17 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 	for _, item := range items {
 		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
 		if i == -1 {
-			cardItems = append(cardItems, model.FilterGroup{Name: item.Name})
+			cardItems = append(cardItems, model.FilterGroup{
+				Name: item.Name,
+			})
 			i = len(cardItems) - 1
 		}
 
-		cardItems[i].Items = append(cardItems[i].Items,
+		cardItems[i].CheckboxItems = append(cardItems[i].CheckboxItems,
 			model.FilterItem{
-				Value: item.Value,
-				Count: item.Count,
+				Presentation: item.Value,
+				Value:        item.Value,
+				Count:        item.Count,
 			},
 		)
 	}

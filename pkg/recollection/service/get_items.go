@@ -15,7 +15,7 @@ func (s *services) GetItems(ctx context.Context, opt *query_cards.ApiCardsParams
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,
-		IsCompleted: opt.IsCompleted.Value,
+		Statuses:    opt.Statuses,
 	})
 
 	if err != nil {
@@ -34,7 +34,7 @@ func (s *services) GetUpdates(ctx context.Context, opt *query_cards.ApiCardsPara
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,
-		IsCompleted: opt.IsCompleted.Value,
+		Statuses:    opt.Statuses,
 	})
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (s *services) GetFilters(ctx context.Context, opt *query_cards.ApiCardsPara
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,
-		IsCompleted: opt.IsCompleted.Value,
+		Statuses:    opt.Statuses,
 	})
 
 	if err != nil {

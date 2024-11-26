@@ -10,10 +10,15 @@ func TestGetITemsByCategory(t *testing.T) {
 
 	repo, ctx := InitRepo(context.Background())
 
-	repo.GetItems(ctx, model.OptionsGetItems{
-		PageIndex:       0,
+	items, _ := repo.GetItems(ctx, model.OptionsGetItems{
+		PageIndex:       1,
 		CountForOnePage: 20,
+
+		SearchQuery: "",
+		Categories:  []model.Category{},
+		Statuses:    []model.Status{},
 	})
+	println(items)
 }
 
 func TestGetFiltersByCategory(t *testing.T) {

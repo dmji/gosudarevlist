@@ -14,11 +14,11 @@ import (
 )
 
 type ApiCardsParams struct {
-	Page        custom_types.Page        `url:"page"`
-	SearchQuery string                   `url:"query"`
-	IsCompleted *custom_types.BoolExProp `url:"status"`
-	ShowFilters bool                     `url:"show_filters,omitempty"`
-	Categories  []model.Category         `url:"category,space"`
+	Page        custom_types.Page `url:"page"`
+	SearchQuery string            `url:"query"`
+
+	Categories []model.Category `url:"category,space"`
+	Statuses   []model.Status   `url:"release_status,space"`
 }
 
 func (p ApiCardsParams) IsCompletedUrl() string {
@@ -31,9 +31,9 @@ func (p ApiCardsParams) CategoriesUrl() string {
 
 func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	res := &ApiCardsParams{
-		IsCompleted: &custom_types.BoolExProp{
+		/* 		IsCompleted: &custom_types.BoolExProp{
 			Name: "completed",
-		},
+		}, */
 	}
 
 	q = custom_url.QueryCustomParse(q)
@@ -44,7 +44,7 @@ func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	}
 
 	res.SearchQuery = q.Get(res.getUrlTagByFieldName("SearchQuery"))
-	res.IsCompleted.DecodeValues(q.Get(res.getUrlTagByFieldName("IsCompleted")))
+	//res.IsCompleted.DecodeValues(q.Get(res.getUrlTagByFieldName("IsCompleted")))
 
 	if categoriesList := q.Get(res.getUrlTagByFieldName("Categories")); len(categoriesList) > 0 {
 		if categories := strings.Split(categoriesList, " "); len(categories) != 0 {
@@ -56,6 +56,20 @@ func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 				}
 
 				res.Categories = append(res.Categories, c)
+			}
+		}
+	}
+
+	if statusesList := q.Get(res.getUrlTagByFieldName("Statuses")); len(statusesList) > 0 {
+		if statuses := strings.Split(statusesList, " "); len(statuses) != 0 {
+			for _, status := range statuses {
+				c, err := model.StatusFromString(status)
+				if err != nil {
+					logger.Errorw(ctx, "failed parse query status", "error", err)
+					continue
+				}
+
+				res.Statuses = append(res.Statuses, c)
 			}
 		}
 	}

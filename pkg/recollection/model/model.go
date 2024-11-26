@@ -1,16 +1,12 @@
 package model
 
-import (
-	"collector/internal/custom_types"
-)
-
 type OptionsGetItems struct {
 	PageIndex       int64
 	CountForOnePage int64
 
 	SearchQuery string
 	Categories  []Category
-	IsCompleted custom_types.BoolEx
+	Statuses    []Status
 }
 
 type ItemCartData struct {

@@ -1,9 +1,6 @@
 package custom_types
 
-import (
-	"net/url"
-)
-
+/*
 type BoolEx int
 
 type BoolExProp struct {
@@ -48,3 +45,4 @@ const (
 	BoolExIntermediate
 	BoolExTrue
 )
+*/

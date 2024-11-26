@@ -1,0 +1,62 @@
+package pages 
+
+import (
+	"collector/components"
+	"collector/components/cards"
+	"time"
+)
+
+var generationTime = time.Now().Add(time.Duration(1221313133123)).Format("2006-01-02:15:04:05")
+
+templ CollectionUpdates(nextPageEndpint, nextPageParams, searchField string) {
+	@components.Layout("AnimeLayer Updates") {
+		<div class="max-w-6xl mx-auto">
+			<div class="py-1">
+				<span></span>
+			</div>
+			<div class="divide-y h-96 bg-yellow-50 rounded-lg">
+				<div class="h-96 flex items-center justify-center">
+					<div class="bg-white p-8 rounded-lg shadow-md text-center">
+						<h1 class="text-2xl font-bold mb-4">Anime List Updated</h1>
+						<p id="timer" class="text-4xl font-mono"></p>
+						<p id="timer_creted" class="mt-4 text-sm text-gray-600">{ generationTime }</p>
+					</div>
+					@Interval()
+				</div>
+			</div>
+			<div class="py-1">
+				<span></span>
+			</div>
+			<div class="divide-y">
+				@cards.Filters(nextPageEndpint, "#card-container", searchField)
+			</div>
+			<div class="py-1">
+				<span></span>
+			</div>
+			<div class="bg-white shadow-md rounded-lg overflow-hidden">
+				<ul id="card-container" class="divide-y divide-gray-200">
+					@cards.Trigger(nextPageEndpint, nextPageParams)
+				</ul>
+			</div>
+		</div>
+	}
+}
+
+script Interval() {
+	const countDownDate = new Date(document.getElementById('timer_creted').textContent).getTime();
+    function updateTimer() {
+		var now = new Date().getTime();
+        var distance = countDownDate - now;
+
+		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('timer').textContent = 
+            `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+    
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}

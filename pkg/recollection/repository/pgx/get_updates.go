@@ -12,18 +12,13 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
-	isCompletedPgx, err := boolExToPgxBool(opt.IsCompleted)
-	if err != nil {
-		return nil, err
-	}
-
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
 		Count:       int32(opt.CountForOnePage),
 		OffsetCount: int32(startID),
 
-		IsCompleted:   isCompletedPgx,
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
+		StatusArray:   statusesToPgxStatuses(opt.Statuses),
 	})
 
 	if err != nil {
@@ -36,16 +31,16 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 	cardItems := make([]model.UpdateItem, 0, len(items))
 	for _, item := range items {
 		cardItems = append(cardItems, model.UpdateItem{
-			Title:  item.Title,
-			Status: pgxStatusToStatus(item.UpdateStatus),
-			Date:   timeFromPgTimestamp(item.UpdateDate),
+			Title:        item.Title,
+			UpdateStatus: pgxStatusToStatus(item.UpdateStatus),
+			Date:         timeFromPgTimestamp(item.UpdateDate),
 		})
 	}
 
 	return cardItems, nil
 }
 
-func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) model.Status {
+func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) model.UpdateStatus {
 	switch status {
 	case pgx_sqlc.UpdateStatusNew:
 		return model.StatusNew

@@ -3,6 +3,10 @@ WITH sq AS (
     SELECT unnest(
             ARRAY [@category_array::CATEGORY_ANIMELAYER[]] 
     ) as cat
+), cmpl as (
+     SELECT unnest(
+            ARRAY [@status_array::bool[]] 
+    ) as cat
 )
 SELECT id,
  identifier,
@@ -21,11 +25,11 @@ SELECT id,
  category
 FROM animelayer_items
 WHERE category IN (SELECT cat FROM sq)
+    AND case WHEN is_completed THEN true ELSE (COALESCE(updated_date, created_date) < now() - (interval '1 year'))::boolean end IN (SELECT cat FROM cmpl)
     AND (
         @search_query::text = ''
         OR SIMILARITY(title, @search_query) > 0.05
     )
-    AND coalesce(sqlc.narg('is_completed'), is_completed) = is_completed
 ORDER BY CASE
         WHEN LENGTH(@search_query::text) > 0 THEN SIMILARITY(title, @search_query::text)
     END DESC,

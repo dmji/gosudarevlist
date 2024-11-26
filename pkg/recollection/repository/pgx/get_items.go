@@ -22,17 +22,13 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
-	isCompletedPgx, err := boolExToPgxBool(opt.IsCompleted)
-	if err != nil {
-		return nil, err
-	}
-
 	items, err := r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
-		Count:         int32(opt.CountForOnePage),
-		OffsetCount:   int32(startID),
+		Count:       int32(opt.CountForOnePage),
+		OffsetCount: int32(startID),
+
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		IsCompleted:   isCompletedPgx,
+		StatusArray:   statusesToPgxStatuses(opt.Statuses),
 	})
 
 	if err != nil {

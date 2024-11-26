@@ -1,6 +1,7 @@
 package repository_pgx
 
 import (
+	"collector/pkg/recollection/model"
 	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"time"
@@ -9,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, category animelayer.Category) error {
+func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, category model.Category) error {
 
 	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -17,11 +18,6 @@ func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, c
 	}
 	defer tx.Rollback(ctx)
 	r := repo.query.WithTx(tx)
-
-	categoryPgx, err := categoryToPgxCategory(category)
-	if err != nil {
-		return err
-	}
 
 	now := time.Now()
 	lastCheckedDate, err := timeToPgTimestamp(&now)
@@ -53,7 +49,7 @@ func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, c
 			BlobImagePreview: "",
 			TorrentFilesSize: item.Metrics.FilesSize,
 			Notes:            item.Notes,
-			Category:         categoryPgx,
+			Category:         categoriesToAnimelayerCategory(category),
 		},
 	)
 

@@ -1,36 +1,24 @@
 package handlers
 
 import (
-	"collector/components/pages"
+	"collector/components/cards"
 	"collector/internal/query_cards"
+	"collector/pkg/custom_url"
 	"net/http"
 )
 
-func (s *router) UpdatesListHandler(w http.ResponseWriter, r *http.Request) {
-
+func (s *router) ApiUpdates(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	params := query_cards.Parse(ctx, r.URL.Query(), 1)
 
 	items := s.s.GetUpdates(ctx, params)
 
-	notes := make([]pages.Item, 0, len(items))
-	for _, item := range items {
-		notes = append(notes, pages.Item{
-			Name:       item.Title,
-			Identifier: item.Identifier,
-			Status:     item.Status,
-			Date:       item.Date,
-			/* 			Changes: []pages.Change{
-				{
-					TextOld: item.ValueOld,
-					TextNew: item.ValueNew,
-				},
-			}, */
-		})
-	}
+	params.Page += 1
+	query := params.Values(ctx)
+	nextPageParams := custom_url.QueryValuesToString(&query)
 
-	err := pages.FormList(notes).Render(r.Context(), w)
+	err := cards.CollectionUpdatesBatch(items, r.URL.Path, nextPageParams, true, int(params.Page)-1).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

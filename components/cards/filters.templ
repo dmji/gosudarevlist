@@ -3,80 +3,84 @@ package cards
 import (
 	"collector/components/input"
 	"collector/components/scripts"
-	"collector/internal/filter_cards"
+	"collector/components/svg"
+	"collector/pkg/recollection/model"
 )
 
 const searchBarId = "searchBar"
 const filtersPanelId = "filtersPanel"
 
 //
-templ Filters(nextPageEndpint, cardsTarget string, params *filter_cards.FilterParameters) {
+templ Filters(nextPageEndpint, cardsTarget, searchField string) {
 	<form
 		id="filters"
 		hx-boost="true"
 		hx-get={ nextPageEndpint }
 		hx-target={ cardsTarget }
-		class="group mx-auto px-4"
+		hx-on::after-request="console.log(window.location.href)"
+		class="group"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
 		<div class="flex items-center gap-1 relative">
-			@SearchBar(searchBarId, params.SearchField)
+			@SearchBar(searchBarId, searchField)
 			<div class="top-1.5 right-2 absolute place-self-center fill-gray-500">
+				// Button Reset Value Filters
 				<button
 					type="button"
 					onclick={ scripts.ResetFilters(templ.JSExpression("this")) }
 					class="text-gray-500 pb-3 font-light
 					py-2 rounded"
 				>
-					<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M9 9L15 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-						<path d="M15 9L9 15" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-						<circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></circle>
-					</svg>
+					@svg.ClearFilters()
 				</button>
-				@buttonToggleFilters()
+				// Button Toggle Show Filters
+				<button
+					type="button"
+					onclick={ scripts.ToggleFilterPanel(searchBarId, filtersPanelId) }
+					class="py-2 px-3 rounded"
+				>
+					@svg.ShowFilters()
+				</button>
 			</div>
 		</div>
 		<div id={ filtersPanelId } class="hidden rounded-b-lg border-x-2 border-b-2 border-gray-300">
 			<div class="w-auto px-4 gap-1 bg-white rounded-b-lg shadow-md p-6">
-				@FilterFlags(params.Categories)
+				@FilterFlags()
 			</div>
 		</div>
 	</form>
 	@scripts.InitFilterPanel(searchBarId, filtersPanelId)
 }
 
-templ buttonToggleFilters() {
-	<button
-		type="button"
-		onclick={ scripts.ToggleFilterPanel(searchBarId, filtersPanelId) }
-		class="py-2 px-3 rounded"
-	>
-		<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#6b7280" viewBox="0 0 24 24">
-			<path d="M10,10,4,2H20l-6,8V22H10Z"></path>
-		</svg>
-	</button>
+templ FilterFlags() {
+	<div
+		id="filters-categories"
+		hx-boost="true"
+		hx-get="/api/filters"
+		hx-trigger="load"
+		hx-target="this"
+		hx-swap="innerHTML"
+		class="space-y-2"
+	></div>
 }
 
-templ FilterFlags(filterData []filter_cards.FilterCategory) {
-	<div class="space-y-2">
-		<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))] max-sm:grid-cols-1">
-			for _, category := range filterData {
-				<div>
-					if len(category.DisplayTitle) > 0 {
-						<h3 class="font-semibold mb-2">{ category.DisplayTitle }</h3>
+templ FilterFlagsPopulate(filterData []model.FilterGroup) {
+	<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))] max-sm:grid-cols-1">
+		for _, category := range filterData {
+			<div>
+				if len(category.DisplayTitle) > 0 {
+					<h3 class="font-semibold mb-2">{ category.DisplayTitle }</h3>
+				}
+				<div class="space-y-2">
+					<input type="hidden" name={ category.Name } value=""/>
+					for _, cb := range category.CheckboxItems {
+						<label class="flex items-center">
+							@input.Checkbox(category.Name, cb)
+						</label>
 					}
-					<div class="space-y-2">
-						<input type="hidden" name={ category.Parameter.Name } value=""/>
-						for _, value := range category.Values {
-							<label class="flex items-center">
-								@input.Checkbox(&value, category.Parameter)
-							</label>
-						}
-					</div>
 				</div>
-			}
-		</div>
+			</div>
+		}
 	</div>
 }
 

@@ -4,7 +4,6 @@ import (
 	"collector/components"
 	"collector/components/cards"
 	"collector/components/navigation"
-	"collector/internal/filter_cards"
 )
 
 var t = navigation.PaginationOpt{
@@ -20,22 +19,18 @@ var t = navigation.PaginationOpt{
 	},
 }
 
-templ Gallery(params *filter_cards.FilterParameters, nextPageEndpint, nextPageParams string) {
-	@components.Layout("Anime") {
+templ CollectionListing(nextPageEndpint, nextPageParams, searchField string) {
+	@components.Layout("AnimeLayer Collection") {
 		<div class="pt-3">
-			@cards.Filters(nextPageEndpint, "#card-container", params)
-			<div class="py-2">
-				//@navigation.Pagination(true, t)
+			<div class="px-4">
+				@cards.Filters(nextPageEndpint, "#card-container", searchField)
+			</div>
+			<div class="py-1">
 				<span></span>
 			</div>
 			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-4 px-4 items-stretch">
-				@cards.ListItemRenderTrigger(nextPageEndpint, nextPageParams)
+				@cards.Trigger(nextPageEndpint, nextPageParams)
 			</div>
-			/* 
-			<div class="py-2">
-				@navigation.Pagination(true, t)
-			</div>
-			*/
 		</div>
 	}
 }

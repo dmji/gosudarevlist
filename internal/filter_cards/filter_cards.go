@@ -1,10 +1,6 @@
 package filter_cards
 
-import (
-	"collector/internal/custom_types"
-	"collector/internal/query_cards"
-)
-
+/*
 type FilterValue struct {
 	DisplayName   string
 	ParameterName string
@@ -68,3 +64,4 @@ func NewFiltersState(prm *query_cards.ApiCardsParams) *FilterParameters {
 		},
 	}
 }
+*/
