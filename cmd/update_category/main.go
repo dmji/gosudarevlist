@@ -76,7 +76,7 @@ func main() {
 				continue
 			}
 
-			err = repo.InsertItem(ctx, t, env.StrToCategory(category))
+			err = repo.InsertItem(ctx, t, env.StrToCategoryModel(category))
 			if err != nil {
 				logger.Errorw(ctx, "failed item inserting", "identifier", identifier, "error", err)
 				continue

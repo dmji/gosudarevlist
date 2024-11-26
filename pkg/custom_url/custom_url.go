@@ -58,8 +58,6 @@ func QueryValuesToString(q *url.Values, opts ...QueryValuesToStringParamOpt) str
 		o(&prm)
 	}
 
-	//q.Del("page")
-
 	s := q.Encode()
 
 	if len(s) == 0 {

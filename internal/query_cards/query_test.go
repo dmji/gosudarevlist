@@ -13,10 +13,6 @@ func TestQueryWriteRead(t *testing.T) {
 	opt := query_cards.ApiCardsParams{
 		Page:        2,
 		SearchQuery: "Worry",
-		/* 		IsCompleted: &custom_types.BoolExProp{
-			Value: custom_types.BoolExFalse,
-			Name:  "completed",
-		}, */
 		Categories: []model.Category{
 			model.Categories.Anime,
 			model.Categories.AnimeHentai,
@@ -32,10 +28,6 @@ func TestQueryWriteRead(t *testing.T) {
 	u, _ := url.ParseQuery(s)
 	qn := query_cards.Parse(context.Background(), u, 1)
 
-	/* if *opt.IsCompleted != *qn.IsCompleted {
-		t.Fatalf("expected %v, got %v", opt.IsCompleted, qn.IsCompleted)
-	}
-	*/
 	if opt.Page != qn.Page {
 		t.Fatalf("expected %v, got %v", opt.Page, qn.Page)
 	}

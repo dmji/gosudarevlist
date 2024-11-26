@@ -69,7 +69,7 @@ func main() {
 		panic(err)
 	}
 
-	err = repo.InsertItem(ctx, t, env.StrToCategory(category))
+	err = repo.InsertItem(ctx, t, env.StrToCategoryModel(category))
 	if err != nil {
 		panic(err)
 	}

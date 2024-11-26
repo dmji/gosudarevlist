@@ -29,7 +29,8 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
 		if i == -1 {
 			cardItems = append(cardItems, model.FilterGroup{
-				Name: item.Name,
+				DisplayTitle: item.Name,
+				Name:         item.Name,
 			})
 			i = len(cardItems) - 1
 		}

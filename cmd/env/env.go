@@ -1,6 +1,8 @@
 package env
 
 import (
+	"collector/pkg/recollection/model"
+
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/joho/godotenv"
 )
@@ -36,6 +38,24 @@ func StrToCategory(str string) animelayer.Category {
 		return animelayer.Categories.Dorama()
 	case "music":
 		return animelayer.Categories.Music()
+	}
+	panic("incorrect string")
+}
+
+func StrToCategoryModel(str string) model.Category {
+	switch str {
+	case "anime":
+		return model.Categories.Anime
+	case "anime_hentai":
+		return model.Categories.AnimeHentai
+	case "manga":
+		return model.Categories.Manga
+	case "manga_hentai":
+		return model.Categories.MangaHentai
+	case "dorama":
+		return model.Categories.Dorama
+	case "music":
+		return model.Categories.Music
 	}
 	panic("incorrect string")
 }

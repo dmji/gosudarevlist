@@ -1,6 +1,9 @@
 package input
 
-import "collector/pkg/recollection/model"
+import (
+	"collector/pkg/recollection/model"
+	"fmt"
+)
 
 templ Checkbox(parameterName string, prm model.FilterItem) {
 	<input
@@ -13,8 +16,10 @@ templ Checkbox(parameterName string, prm model.FilterItem) {
 		value={ templ.EscapeString(prm.Value) }
 		value_indeterminate={ `^` + templ.EscapeString(prm.Value) }
 		class="form-checkbox text-primary rounded mr-2 w-4 h-4"
+		disabled?={ prm.Count == 0 }
 	/>
 	<span>{ prm.Presentation }</span>
+	<span class="px-1 text-xs text-gray-500">{ fmt.Sprintf("(%d)", prm.Count) }</span>
 }
 
 script checkBoxCustomClick(cb templ.JSExpression) {

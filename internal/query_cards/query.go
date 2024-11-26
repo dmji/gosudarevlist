@@ -30,11 +30,7 @@ func (p ApiCardsParams) CategoriesUrl() string {
 }
 
 func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
-	res := &ApiCardsParams{
-		/* 		IsCompleted: &custom_types.BoolExProp{
-			Name: "completed",
-		}, */
-	}
+	res := &ApiCardsParams{}
 
 	q = custom_url.QueryCustomParse(q)
 
@@ -44,7 +40,6 @@ func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	}
 
 	res.SearchQuery = q.Get(res.getUrlTagByFieldName("SearchQuery"))
-	//res.IsCompleted.DecodeValues(q.Get(res.getUrlTagByFieldName("IsCompleted")))
 
 	if categoriesList := q.Get(res.getUrlTagByFieldName("Categories")); len(categoriesList) > 0 {
 		if categories := strings.Split(categoriesList, " "); len(categories) != 0 {
