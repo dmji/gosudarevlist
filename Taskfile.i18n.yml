@@ -9,19 +9,18 @@ tasks:
     cmds:
       - task langs:refresh
       - touch lang/translate.{{.CLI_ARGS}}.yaml 
-      - goi18n merge lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
       - mv lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
-
 
   diff:
     cmds:
       - task langs:refresh
       - touch lang/translate.{{.CLI_ARGS}}.yaml 
-      - goi18n merge lang/active.{{.CLI_ARGS}}.yaml lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang lang/active.{{.CLI_ARGS}}.yaml lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
 
   merge:
     cmds:
-      - goi18n merge -sourceLanguage {{.CLI_ARGS}} lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang -sourceLanguage {{.CLI_ARGS}} lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
       - rm lang/translate.{{.CLI_ARGS}}.yaml
 
 

@@ -1,0 +1,3 @@
+HelloPerson:
+    description: Greeting message
+    other: Привет {{.Name}}!
