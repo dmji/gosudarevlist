@@ -8,6 +8,7 @@ dotenv: ['.env', '{{.ENV}}/.env.', '{{.HOME}}/.env']
 includes:
   goose: ./Taskfile.Goose.yml
   tailwind: ./Taskfile.Tailwind.yml
+  langs: ./Taskfile.i18n.yml
 
 tasks:
   dev:
@@ -24,6 +25,8 @@ tasks:
   air-rebuild-cmd:
     cmds:
       - sqlc generate -f ./build/sqlc.yaml
+      - templ generate
+      - task langs:refresh
       - go build -o ./tmp/main ./cmd/server/
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
 
@@ -32,3 +35,4 @@ tasks:
       - go install github.com/air-verse/air@latest
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
       - go install github.com/pressly/goose/v3/cmd/goose@latest
+      - go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest

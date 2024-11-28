@@ -1,0 +1,28 @@
+version: "3"
+
+tasks:
+  refresh:
+    cmds:
+      - goi18n extract -outdir lang -format yaml
+  
+  init:
+    cmds:
+      - task langs:refresh
+      - touch lang/translate.{{.CLI_ARGS}}.yaml 
+      - goi18n merge lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
+      - mv lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
+
+
+  diff:
+    cmds:
+      - task langs:refresh
+      - touch lang/translate.{{.CLI_ARGS}}.yaml 
+      - goi18n merge lang/active.{{.CLI_ARGS}}.yaml lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
+
+  merge:
+    cmds:
+      - goi18n merge -sourceLanguage {{.CLI_ARGS}} lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
+      - rm lang/translate.{{.CLI_ARGS}}.yaml
+
+
+
