@@ -1,6 +1,12 @@
 package model
 
-import "errors"
+import (
+	"collector/pkg/lang"
+	"context"
+	"errors"
+
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+)
 
 type Status string
 
@@ -30,12 +36,22 @@ var Statuses = statuses{
 	OnAir:     "on_air",
 }
 
-func (c *Status) Presentation() string {
+func (c *Status) Presentation(ctx context.Context) string {
 	switch *c {
 	case Statuses.Completed:
-		return "Completed"
+		return lang.Message(ctx, &i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "ModelReleaseStatusCompletedPresentation",
+				Other: "Completed",
+			},
+		})
 	case Statuses.OnAir:
-		return "On Air"
+		return lang.Message(ctx, &i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "ModelReleaseStatusOnAirPresentation",
+				Other: "On Air",
+			},
+		})
 	case Statuses.All:
 		return ""
 	default:

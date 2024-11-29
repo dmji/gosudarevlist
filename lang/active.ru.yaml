@@ -1,3 +1,7 @@
 HelloPerson:
     description: Greeting message
-    other: Привет {{.Name}}!
+    other: Привет {{.Name}}
+ModelReleaseStatusCompletedPresentation: Завершено
+ModelReleaseStatusOnAirPresentation: Выпускается
+QueryCardsFilterCategoriesPresentation: Категория
+QueryCardsFilterStatusesPresentation: Статус

@@ -1,3 +1,7 @@
 HelloPerson:
     description: Greeting message
     other: Hello {{.Name}}
+ModelReleaseStatusCompletedPresentation: Completed
+ModelReleaseStatusOnAirPresentation: On Air
+QueryCardsFilterCategoriesPresentation: Category
+QueryCardsFilterStatusesPresentation: Status

@@ -55,41 +55,17 @@ func FromContext(ctx context.Context) *loggerZap {
 }
 
 func Infow(ctx context.Context, msg string, keysAndValues ...interface{}) {
-	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
-		loggerC.logger.Infow(msg, keysAndValues...)
-
-		return
-	}
-
-	globalLogger.logger.Infow(msg, keysAndValues...)
+	FromContext(ctx).logger.Infow(msg, keysAndValues...)
 }
 
 func Errorw(ctx context.Context, msg string, keysAndValues ...interface{}) {
-	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
-		loggerC.logger.Errorw(msg, keysAndValues...)
-
-		return
-	}
-
-	globalLogger.logger.Errorw(msg, keysAndValues...)
+	FromContext(ctx).logger.Errorw(msg, keysAndValues...)
 }
 
 func Panicw(ctx context.Context, msg string, keysAndValues ...interface{}) {
-	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
-		loggerC.logger.Panicw(msg, keysAndValues...)
-
-		return
-	}
-
-	globalLogger.logger.Panicw(msg, keysAndValues...)
+	FromContext(ctx).logger.Panicw(msg, keysAndValues...)
 }
 
 func Fatalw(ctx context.Context, msg string, keysAndValues ...interface{}) {
-	if loggerC, ok := ctx.Value(loggerCtxValue).(*loggerZap); ok {
-		loggerC.logger.Fatalw(msg, keysAndValues...)
-
-		return
-	}
-
-	globalLogger.logger.Panicw(msg, keysAndValues...)
+	FromContext(ctx).logger.Panicw(msg, keysAndValues...)
 }

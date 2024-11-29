@@ -1,6 +1,7 @@
 package repository_pgx
 
 import (
+	"collector/internal/query_cards"
 	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"time"
@@ -19,14 +20,16 @@ type sqlDriver interface {
 }
 
 type repository struct {
-	query *sqlc.Queries
-	db    sqlDriver
+	query           *sqlc.Queries
+	db              sqlDriver
+	filtersStringer *query_cards.Stringer
 }
 
 func New(db sqlDriver) *repository {
 	return &repository{
-		db:    db,
-		query: sqlc.New(db),
+		db:              db,
+		query:           sqlc.New(db),
+		filtersStringer: query_cards.NewStringer(),
 	}
 }
 

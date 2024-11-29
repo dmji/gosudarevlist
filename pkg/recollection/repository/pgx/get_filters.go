@@ -29,7 +29,7 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
 		if i == -1 {
 			cardItems = append(cardItems, model.FilterGroup{
-				DisplayTitle: item.Name,
+				DisplayTitle: r.filtersStringer.GetTitlePresentation(ctx, item.Name),
 				Name:         item.Name,
 			})
 			i = len(cardItems) - 1
@@ -37,7 +37,7 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 
 		cardItems[i].CheckboxItems = append(cardItems[i].CheckboxItems,
 			model.FilterItem{
-				Presentation: item.Value,
+				Presentation: r.filtersStringer.GetItemPresentation(ctx, item.Name, item.Value),
 				Value:        item.Value,
 				Count:        item.Count,
 			},

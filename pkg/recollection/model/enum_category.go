@@ -1,6 +1,9 @@
 package model
 
-import "errors"
+import (
+	"context"
+	"errors"
+)
 
 type Category string
 
@@ -47,7 +50,7 @@ var Categories = categories{
 	All:         "",
 }
 
-func (c *Category) Presentation() string {
+func (c *Category) Presentation(ctx context.Context) string {
 	switch *c {
 	case Categories.Anime:
 		return "Anime"

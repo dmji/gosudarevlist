@@ -10,9 +10,9 @@ import (
 	"log"
 )
 
-func categoryPresentation(s model.Category, bShow bool) string {
+func categoryPresentation(ctx context.Context, s model.Category, bShow bool) string {
 	if bShow {
-		return s.Presentation()
+		return s.Presentation(ctx)
 	}
 
 	return ""
@@ -48,7 +48,7 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 			UpdatedDate:          time_ru_format.Format(timeFromPgTimestamp(item.UpdatedDate)),
 			TorrentWeight:        item.TorrentFilesSize,
 			AnimeLayerRef:        fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-			CategoryPresentation: categoryPresentation(pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
+			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
 			IsCompleted:          item.IsCompleted,
 		})
 	}
