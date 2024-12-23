@@ -25,10 +25,9 @@ tasks:
   air-rebuild-cmd:
     cmds:
       - sqlc generate -f ./build/sqlc.yaml
-      - templ generate
       - task langs:refresh
-      - go build -o ./tmp/main ./cmd/server/
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
+      - go build -o ./tmp/main ./cmd/server/
 
   update-apps:
     cmds:
