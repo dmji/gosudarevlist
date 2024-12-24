@@ -51,4 +51,5 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        script: ./restart.bash &
+        command_timeout: 30s
+        script_path: restart.bash
