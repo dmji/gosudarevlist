@@ -26,7 +26,10 @@ templ optionalLineMetaData(title, value string) {
 
 templ onAirBadge(IsCompleted bool) {
 	if !IsCompleted {
-		<label class="top-5 max-sm:top-1.5 right-4 px-3 absolute place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]">
+		<label
+			class="top-1.5 right-4 px-3 absolute
+				   place-self-center text-white font-bold bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-2 border-[#ab2828]"
+		>
 			ON AIR
 		</label>
 	}
@@ -34,7 +37,10 @@ templ onAirBadge(IsCompleted bool) {
 
 templ categoryBadge(category string) {
 	if len(category) > 0 {
-		<label class="top-[13px] left-4 px-3 absolute text-white text-xs font-bold bg-[#3c36dd] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-b-lg border-solid border-2 border-[#423cf1]">
+		<label
+			class="top-0 left-4 px-3 absolute 
+				 text-white text-xs font-bold bg-[#3c36dd] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-b-lg border-solid border-2 border-[#423cf1]"
+		>
 			{ category }
 		</label>
 	}
@@ -61,17 +67,19 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 				</div>
 				// horizontal row with image and description
 				<div class="grid grid-flow-col place-content-start">
-					<div class="relative">
-						@categoryBadge(card.CategoryPresentation)
-						@onAirBadge(card.IsCompleted)
-						<img
-							original_src={ queryPosterFromItem(&card) }
-							src={ noImagePlaceholder }
-							alt={ card.Title }
-							hx-trigger="intersect once"
-							hx-on::trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
-							class="w-full h-[385px] mt-0 max-sm:h-1/2 object-scale-down"
-						/>
+					<div class="w-fit pt-4 pl-4">
+						<div class="relative">
+							@categoryBadge(card.CategoryPresentation)
+							@onAirBadge(card.IsCompleted)
+							<img
+								original_src={ queryPosterFromItem(&card) }
+								src={ noImagePlaceholder }
+								alt={ card.Title }
+								hx-trigger="intersect once"
+								hx-on::trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+								class="w-[256px] h-[385px] object-scale-down object-top"
+							/>
+						</div>
 					</div>
 					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
 						@templ.Raw(card.Description, nil)
