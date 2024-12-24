@@ -1,10 +1,11 @@
 package repository_pgx
 
 import (
-	"collector/pkg/recollection/model"
-	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"time"
+
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"

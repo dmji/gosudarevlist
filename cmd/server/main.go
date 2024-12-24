@@ -1,17 +1,19 @@
 package main
 
 import (
-	"collector/cmd/env"
-	"collector/handlers"
-	"collector/pkg/logger"
-	repository_pgx "collector/pkg/recollection/repository/pgx"
-	"collector/pkg/recollection/service"
 	"context"
 	"flag"
 	"fmt"
 	"net"
 	"net/http"
 	"os"
+
+	"github.com/dmji/gosudarevlist/assets"
+	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/handlers"
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
+	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"
@@ -105,7 +107,7 @@ func main() {
 	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
 
 	// static assets
-	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	mux.Handle("/assets/", http.StripPrefix("/assets/", assets.Handler()))
 
 	//
 	//

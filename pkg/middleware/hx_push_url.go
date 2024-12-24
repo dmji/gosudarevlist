@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"collector/pkg/custom_url"
 	"log"
 	"net/http"
 	"net/url"
+
+	"github.com/dmji/gosudarevlist/pkg/custom_url"
 )
 
 func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {

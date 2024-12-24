@@ -1,12 +1,13 @@
 package repository_pgx
 
 import (
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
-	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"log"
 	"slices"
+
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
 
 func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) ([]model.FilterGroup, error) {

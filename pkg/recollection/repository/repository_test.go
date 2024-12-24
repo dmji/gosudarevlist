@@ -1,9 +1,10 @@
 package repository_test
 
 import (
-	"collector/pkg/recollection/repository"
-	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"testing"
+
+	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 )
 
 func TestInterfacePgx(t *testing.T) {

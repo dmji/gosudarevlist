@@ -1,9 +1,10 @@
 package repository_pgx_test
 
 import (
-	"collector/pkg/recollection/model"
 	"context"
 	"testing"
+
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func TestGetITemsByCategory(t *testing.T) {

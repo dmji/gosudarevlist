@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"collector/components/cards"
-	"collector/internal/query_cards"
-	"collector/pkg/custom_url"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/components/cards"
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	"github.com/dmji/gosudarevlist/pkg/custom_url"
 )
 
 func (s *router) ApiUpdates(w http.ResponseWriter, r *http.Request) {

@@ -1,12 +1,13 @@
 package query_cards
 
 import (
-	"collector/pkg/custom_url"
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
 	"context"
 	"net/url"
 	"strings"
+
+	"github.com/dmji/gosudarevlist/pkg/custom_url"
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 
 	"github.com/google/go-querystring/query"
 )

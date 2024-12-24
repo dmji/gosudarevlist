@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"collector/components/cards"
-	"collector/internal/query_cards"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/components/cards"
+	"github.com/dmji/gosudarevlist/internal/query_cards"
 )
 
 func (router *router) ApiFilters(w http.ResponseWriter, r *http.Request) {

@@ -1,9 +1,10 @@
 package query_cards
 
 import (
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
 	"context"
+
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 type Stringer struct {

@@ -1,8 +1,9 @@
 package repository_pgx
 
 import (
-	"collector/pkg/recollection/model"
 	"context"
+
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (r *repository) InsertUpdateNote(ctx context.Context, params model.UpdateItem) error {

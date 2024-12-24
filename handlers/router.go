@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"collector/pkg/lang"
-	"collector/pkg/middleware"
-	"collector/pkg/recollection/service"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/lang"
+	"github.com/dmji/gosudarevlist/pkg/middleware"
+	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 )
 
 type router struct {

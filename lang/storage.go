@@ -41,10 +41,6 @@ func New() *Storage {
 	return s
 }
 
-func (s *Storage) Reload() {
-	s.bundle.MustLoadMessageFile("lang/active.ru.yaml")
-}
-
 func (s *Storage) Get(tag TagLang) *Loader {
 
 	res, ok := s.instances[tag]

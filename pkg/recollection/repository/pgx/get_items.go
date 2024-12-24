@@ -1,13 +1,14 @@
 package repository_pgx
 
 import (
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
-	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
-	"collector/pkg/time_ru_format.go"
 	"context"
 	"fmt"
 	"log"
+
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 )
 
 func categoryPresentation(ctx context.Context, s model.Category, bShow bool) string {

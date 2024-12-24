@@ -1,7 +1,7 @@
 package env
 
 import (
-	"collector/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/joho/godotenv"

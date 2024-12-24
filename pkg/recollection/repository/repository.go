@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"collector/pkg/recollection/model"
 	"context"
+
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 
 	"github.com/dmji/go-animelayer-parser"
 )

@@ -1,12 +1,13 @@
 package repository_pgx_test
 
 import (
-	"collector/cmd/env"
-	"collector/pkg/logger"
-	"collector/pkg/recollection/repository"
-	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"context"
 	"os"
+
+	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"

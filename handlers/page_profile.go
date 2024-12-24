@@ -1,8 +1,9 @@
 package handlers
 
 import (
-	"collector/components/pages"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/components/pages"
 )
 
 func (s *router) ProfilePageHandler(w http.ResponseWriter, r *http.Request) {

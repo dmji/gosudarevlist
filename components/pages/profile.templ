@@ -1,6 +1,6 @@
 package pages
 
-import "collector/components"
+import "github.com/dmji/gosudarevlist/components"
 
 templ profileImage(src string) {
 	<img src={ src } alt="Profile" class="w-[385px] h-auto rounded-lg shadow-lg"/>
@@ -115,7 +115,7 @@ templ loginForm() {
 templ profile() {
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 		<div>
-			@profileImage("/assets/no_image.jpg")
+			@profileImage("/assets/images/no_image.jpg")
 		</div>
 		<div>
 			@profileInfo("John Doe", "john@example.com", "A passionate developer with a love for Go and web technologies.")

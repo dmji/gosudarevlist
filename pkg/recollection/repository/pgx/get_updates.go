@@ -1,11 +1,12 @@
 package repository_pgx
 
 import (
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
-	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"log"
+
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
 
 func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) ([]model.UpdateItem, error) {

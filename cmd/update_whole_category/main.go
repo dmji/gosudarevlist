@@ -1,13 +1,14 @@
 package main
 
 import (
-	"collector/cmd/env"
-	"collector/pkg/logger"
-	repository_pgx "collector/pkg/recollection/repository/pgx"
 	"context"
 	"errors"
 	"flag"
 	"os"
+
+	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"

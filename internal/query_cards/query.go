@@ -1,12 +1,13 @@
 package query_cards
 
 import (
-	"collector/internal/custom_types"
-	"collector/pkg/lang"
-	"collector/pkg/recollection/model"
 	"context"
 	"reflect"
 	"strings"
+
+	"github.com/dmji/gosudarevlist/internal/custom_types"
+	"github.com/dmji/gosudarevlist/lang"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )

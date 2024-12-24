@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"collector/pkg/lang"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/lang"
 )
 
 func detectLang(s string) lang.TagLang {

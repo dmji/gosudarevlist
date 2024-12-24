@@ -1,10 +1,11 @@
 package service
 
 import (
-	"collector/internal/query_cards"
-	"collector/pkg/recollection/model"
-	"collector/pkg/recollection/repository"
 	"context"
+
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
 
 	"github.com/dmji/go-animelayer-parser"
 )

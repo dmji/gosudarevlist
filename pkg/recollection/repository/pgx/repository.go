@@ -1,10 +1,11 @@
 package repository_pgx
 
 import (
-	"collector/internal/query_cards"
-	sqlc "collector/pkg/recollection/repository/pgx/sqlc"
 	"context"
 	"time"
+
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"

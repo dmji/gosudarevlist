@@ -1,9 +1,10 @@
 package model
 
 import (
-	"collector/pkg/lang"
 	"context"
 	"errors"
+
+	"github.com/dmji/gosudarevlist/lang"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )

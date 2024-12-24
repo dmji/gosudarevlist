@@ -2,9 +2,9 @@ package repository_pgx
 
 /*
 import (
-	animelayer_model "collector/pkg/animelayer/model"
-	sqlc "collector/pkg/animelayer/repository/sqlc"
-	animelayer_comparator "collector/pkg/comparator"
+	animelayer_model "github.com/dmji/gosudarevlist/pkg/animelayer/model"
+	sqlc "github.com/dmji/gosudarevlist/pkg/animelayer/repository/sqlc"
+	animelayer_comparator "github.com/dmji/gosudarevlist/pkg/comparator"
 	"context"
 
 	"github.com/jackc/pgx/v5"

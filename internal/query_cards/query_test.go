@@ -1,12 +1,13 @@
 package query_cards_test
 
 import (
-	"collector/internal/query_cards"
-	"collector/pkg/recollection/model"
 	"context"
 	"net/url"
 	"slices"
 	"testing"
+
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func TestQueryWriteRead(t *testing.T) {

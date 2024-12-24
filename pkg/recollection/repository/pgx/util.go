@@ -1,8 +1,8 @@
 package repository_pgx
 
 import (
-	"collector/pkg/recollection/model"
-	pgx_sqlc "collector/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
 
 var allCategories = []pgx_sqlc.CategoryAnimelayer{

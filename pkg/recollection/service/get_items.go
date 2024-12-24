@@ -1,10 +1,11 @@
 package service
 
 import (
-	"collector/internal/query_cards"
-	"collector/pkg/logger"
-	"collector/pkg/recollection/model"
 	"context"
+
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (s *services) GetItems(ctx context.Context, opt *query_cards.ApiCardsParams) []model.ItemCartData {

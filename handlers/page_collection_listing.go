@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"collector/components/pages"
-	"collector/internal/query_cards"
-	"collector/pkg/custom_url"
-	"collector/pkg/logger"
 	"net/http"
+
+	"github.com/dmji/gosudarevlist/components/pages"
+	"github.com/dmji/gosudarevlist/internal/query_cards"
+	"github.com/dmji/gosudarevlist/pkg/custom_url"
+	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
 func (router *router) CollectionListingPageHandler(w http.ResponseWriter, r *http.Request) {
