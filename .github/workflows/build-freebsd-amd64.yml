@@ -44,11 +44,11 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./~builds/freebsd/amd64/
 
-    - name: executing remote ssh commands using password
+    - name: executing remote ssh commands
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        script: ./restart.bash
+        script: ./restart.bash &
