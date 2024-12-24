@@ -52,4 +52,5 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         command_timeout: 30s
-        script_path: restart.bash
+        script: |
+          nohup ./restart.bash > nohup.out & 
