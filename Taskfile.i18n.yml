@@ -3,25 +3,25 @@ version: "3"
 tasks:
   refresh:
     cmds:
-      - goi18n extract -outdir lang -format yaml
+      - goi18n extract -outdir lang/translations -format yaml
   
   init:
     cmds:
       - task langs:refresh
-      - touch lang/translate.{{.CLI_ARGS}}.yaml 
-      - goi18n merge -format yaml -outdir=lang lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
-      - mv lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
+      - touch lang/translations/translate.{{.CLI_ARGS}}.yaml 
+      - goi18n merge -format yaml -outdir=lang lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
+      - mv lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
 
   diff:
     cmds:
       - task langs:refresh
-      - touch lang/translate.{{.CLI_ARGS}}.yaml 
-      - goi18n merge -format yaml -outdir=lang lang/active.{{.CLI_ARGS}}.yaml lang/active.en.yaml lang/translate.{{.CLI_ARGS}}.yaml
+      - touch lang/translations/translate.{{.CLI_ARGS}}.yaml 
+      - goi18n merge -format yaml -outdir=lang lang/translations/active.{{.CLI_ARGS}}.yaml lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
 
   merge:
     cmds:
-      - goi18n merge -format yaml -outdir=lang -sourceLanguage {{.CLI_ARGS}} lang/translate.{{.CLI_ARGS}}.yaml lang/active.{{.CLI_ARGS}}.yaml
-      - rm lang/translate.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang -sourceLanguage {{.CLI_ARGS}} lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
+      - rm lang/translations/translate.{{.CLI_ARGS}}.yaml
 
 
 
