@@ -49,6 +49,7 @@ tasks:
   build-current:
     cmds:
       - go build -trimpath -tags embed -o ./~builds/server ./cmd/server/.
+      
   build-freebsd-amd64:
     cmds:
       - env GOOS=freebsd GOARCH=amd64 go build -trimpath -tags embed -o ./~builds/freebsd/amd64/server ./cmd/server/.
