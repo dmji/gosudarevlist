@@ -27,6 +27,9 @@ jobs:
     - name: Set up tools
       run: task update-build-apps
 
+    - name: Pre-Build
+      run: task pre-build
+
     - name: Build
       run: task build-freebsd-amd64
 
