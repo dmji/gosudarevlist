@@ -31,7 +31,24 @@ tasks:
 
   update-apps:
     cmds:
+      - task update-build-apps
       - go install github.com/air-verse/air@latest
-      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-      - go install github.com/pressly/goose/v3/cmd/goose@latest
       - go install -v github.com/nicksnyder/go-i18n/v2/goi18n@latest
+      - go install github.com/pressly/goose/v3/cmd/goose@latest
+
+  update-build-apps:
+    cmds:
+      - go install github.com/a-h/templ/cmd/templ@latest
+      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+  pre-build:
+    cmds:
+      - templ generate 
+      - sqlc generate -f ./build/sqlc.yaml
+
+  build-current:
+    cmds:
+      - go build -trimpath -tags embed -o ./~builds/server ./cmd/server/.
+  build-freebsd-amd64:
+    cmds:
+      - env GOOS=freebsd GOARCH=amd64 go build -trimpath -tags embed -o ./~builds/freebsd/amd64/server ./cmd/server/.
