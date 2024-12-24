@@ -21,10 +21,11 @@ jobs:
       with:
         go-version: '1.23.1'
 
+    - name: Install Taskfile
+      run: sudo snap install task --classic
+
     - name: Set up tools
-      run: 
-        - sudo snap install task --classic
-        - task update-build-apps
+      run: task update-build-apps
 
     - name: Build
       run: task build-freebsd-amd64
