@@ -1,6 +1,6 @@
 # About
 
-Full-Stack Web-App to Replicate AnimeLayer.ru
+Full-Stack Web-App тти AnimeLayer.ru
 
 [Hosted on serv00](https://dmji.serv00.net/animelayer)
 [Telegram Bot with MiniApp](https://t.me/MyMediaNotifyBot/web)
@@ -22,57 +22,23 @@ Full-Stack Web-App to Replicate AnimeLayer.ru
 ### Work-In-Progress TODO
 
 * [X] Host on free serv00 with auto-deploy via github actions
+* [ ] Implement auto-update vith chron
 * [ ] Improve filtering
 * [ ] Profile page
 * [ ] OAuth with Telegram
 
 # Project Structure
 
-### Assets
-
-Generally anything that might requie in runtime (CSS, images etc)
-
-Contains package to embed files into binary-exec
-
-### Lang
-
-lang/translations - folder to store localized strings as i18n toml files
-
-Contains package to embed files into binary-exec
-
-### Build
-
-Should contain dockerfiles and other files requied in build-stage
-
-### ~Builds
-
-Temp folder as build output target
-
-### Cmd
-
-Inheret from clean architure folder for executable applications
-
-cmd/env util package for updaters apps `TODO: merge all into one and remove that package`
-
-### Internal
-
-Inheret from clean architure folder
-
-### Pkg
-
-Inheret from clean architure folder
-
-### Components
-
-Folder with a-h/templ template files
-
-### Handlers
-
-Folder with front-end handlers routing
-
-### Migrations
-
-Sequence migration files to initialize postgres with goose
+`assets` - anything that might requie in runtime (CSS, images etc)
+`langlang/translations` - folder to store localized strings as i18n toml files
+`build` - should contain dockerfiles and other files requied in build-stage
+`cmd` - inheret from clean architure folder for executable applications
+`internal` - inheret from clean architure folder
+`pkg` - inheret from clean architure folder
+`cmd/env (TODO: merge all into one and remove that package)` - util package for updaters apps
+`components` - folder with a-h/templ template files
+`handlers` - folder with front-end handlers routing
+`migrations` - sequence migration files to initialize postgres with goose
 
 # Building
 

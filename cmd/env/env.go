@@ -27,17 +27,19 @@ func LoadEnv(deep int, canPanic bool) {
 func StrToCategory(str string) animelayer.Category {
 	switch str {
 	case "anime":
-		return animelayer.Categories.Anime()
+		return animelayer.Categories.Anime
 	case "anime_hentai":
-		return animelayer.Categories.AnimeHentai()
+		return animelayer.Categories.AnimeHentai
 	case "manga":
-		return animelayer.Categories.Manga()
+		return animelayer.Categories.Manga
 	case "manga_hentai":
-		return animelayer.Categories.MangaHentai()
+		return animelayer.Categories.MangaHentai
 	case "dorama":
-		return animelayer.Categories.Dorama()
+		return animelayer.Categories.Dorama
 	case "music":
-		return animelayer.Categories.Music()
+		return animelayer.Categories.Music
+	case "":
+		return animelayer.Categories.All
 	}
 	panic("incorrect string")
 }

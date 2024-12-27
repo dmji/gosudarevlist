@@ -29,7 +29,7 @@ func CategoryFromString(s string) (Category, error) {
 	return Categories.Anime, errors.New("string not match any of categories")
 }
 
-type categories struct {
+var Categories = struct {
 	Anime       Category
 	AnimeHentai Category
 	Manga       Category
@@ -37,10 +37,7 @@ type categories struct {
 	Music       Category
 	Dorama      Category
 	All         Category
-}
-
-// Categories - object to emulate enum class
-var Categories = categories{
+}{
 	Anime:       "anime",
 	AnimeHentai: "anime_hentai",
 	Manga:       "manga",
