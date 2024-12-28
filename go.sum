@@ -5,8 +5,6 @@ github.com/a-h/templ v0.2.793/go.mod h1:lq48JXoUvuQrU0VThrK31yFwdRjTCnIE5bcPCM9I
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dmji/go-animelayer-parser v0.1.1 h1:5UJQWEbn8XemFKhk3aDaAVeK7tMOUKHMXDA/+/OvbWk=
-github.com/dmji/go-animelayer-parser v0.1.1/go.mod h1:2Hbl8zqJgPbZIY7CW3QImK7m0IZDL4+SLsYl05QvJoU=
 github.com/dmji/go-animelayer-parser v0.1.2 h1:z/lQllAhKIgRErMH5QoWeSWKpsvniVrp6RqWobNtpwI=
 github.com/dmji/go-animelayer-parser v0.1.2/go.mod h1:v0vrT3ZGJ2k5jmaFLQZFFdwGyPFYPJqNXhLiXhX3Ue8=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=

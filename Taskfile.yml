@@ -41,6 +41,12 @@ tasks:
       - go install github.com/a-h/templ/cmd/templ@latest
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
     
+  update-refactoring-tools:
+    cmds:
+      - go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
+      - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
+      - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
+
   pre-build:
     cmds:
       - templ generate 
