@@ -61,3 +61,23 @@ func StrToCategoryModel(str string) model.Category {
 	}
 	panic("incorrect string")
 }
+
+func AnimelayerCategoryToModelCategory(category animelayer.Category) model.Category {
+
+	switch category {
+	case animelayer.Categories.Anime:
+		return model.Categories.Anime
+	case animelayer.Categories.AnimeHentai:
+		return model.Categories.AnimeHentai
+	case animelayer.Categories.Manga:
+		return model.Categories.Manga
+	case animelayer.Categories.MangaHentai:
+		return model.Categories.MangaHentai
+	case animelayer.Categories.Music:
+		return model.Categories.Music
+	case animelayer.Categories.Dorama:
+		return model.Categories.Dorama
+	default:
+		return model.Categories.Anime
+	}
+}

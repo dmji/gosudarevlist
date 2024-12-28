@@ -7,11 +7,14 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 
-	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, category model.Category) error {
+func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerItem) error {
+
+	oldItem, err := repo.GetItemByIdentifier(ctx, item.Identifier)
+	_ = oldItem
 
 	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -26,31 +29,30 @@ func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, c
 		return err
 	}
 
-	createdDate, err := timeToPgTimestamp(item.Updated.CreatedDate)
+	createdDate, err := timeToPgTimestamp(item.CreatedDate)
 	if err != nil {
 		return err
 	}
 
-	updatedDate, err := timeToPgTimestamp(item.Updated.UpdatedDate)
+	updatedDate, err := timeToPgTimestamp(item.UpdatedDate)
 	if err != nil {
 		return err
 	}
 
-	itemId, err := r.InsertItem(ctx,
-		pgx_sqlc.InsertItemParams{
-			Identifier:       item.Identifier,
-			Title:            item.Title,
-			IsCompleted:      item.IsCompleted,
+	itemId, err := r.UpdateItem(ctx,
+		pgx_sqlc.UpdateItemParams{
+			Title:            pgtype.Text{},
+			IsCompleted:      pgtype.Bool{},
 			LastCheckedDate:  lastCheckedDate,
 			CreatedDate:      createdDate,
 			UpdatedDate:      updatedDate,
-			RefImageCover:    item.RefImageCover,
-			RefImagePreview:  item.RefImagePreview,
-			BlobImageCover:   "",
-			BlobImagePreview: "",
-			TorrentFilesSize: item.Metrics.FilesSize,
-			Notes:            item.Notes,
-			Category:         categoriesToAnimelayerCategory(category),
+			RefImageCover:    pgtype.Text{},
+			RefImagePreview:  pgtype.Text{},
+			BlobImageCover:   pgtype.Text{},
+			BlobImagePreview: pgtype.Text{},
+			TorrentFilesSize: pgtype.Text{},
+			Notes:            pgtype.Text{},
+			Identifier:       item.Identifier,
 		},
 	)
 
@@ -61,7 +63,7 @@ func (repo *repository) InsertItem(ctx context.Context, item *animelayer.Item, c
 	err = r.InsertUpdateNote(ctx, pgx_sqlc.InsertUpdateNoteParams{
 		ItemID:     itemId,
 		UpdateDate: lastCheckedDate,
-		//Status:     model.StatusNew,
+		Status:     updateStatusToPgxUpdateStatus(ctx, model.StatusUpdated),
 	})
 
 	//

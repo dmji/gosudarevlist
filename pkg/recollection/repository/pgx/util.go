@@ -1,6 +1,9 @@
 package repository_pgx
 
 import (
+	"context"
+
+	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
@@ -87,5 +90,21 @@ func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Categor
 		return model.Categories.Dorama
 	default:
 		return model.Categories.Anime
+	}
+}
+
+func updateStatusToPgxUpdateStatus(ctx context.Context, status model.UpdateStatus) pgx_sqlc.UpdateStatus {
+	switch status {
+	case model.StatusNew:
+		return pgx_sqlc.UpdateStatusNew
+	case model.StatusRemoved:
+		return pgx_sqlc.UpdateStatusRemoved
+	case model.StatusUpdated:
+		return pgx_sqlc.UpdateStatusUpdate
+	case model.StatusUnknown:
+		fallthrough
+	default:
+		logger.Errorw(ctx, "unexpected model update status", "value", status)
+		return pgx_sqlc.UpdateStatusNew
 	}
 }

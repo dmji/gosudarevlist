@@ -4,9 +4,11 @@ import (
 	"context"
 	"flag"
 	"os"
+	"time"
 
 	"github.com/dmji/gosudarevlist/cmd/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 
 	"github.com/dmji/go-animelayer-parser"
@@ -56,6 +58,8 @@ func main() {
 
 	repo := repository_pgx.New(connPgx)
 
+	lastCheckedDate := time.Now()
+
 	//
 	// Actions
 	//
@@ -67,17 +71,31 @@ func main() {
 			break
 		}
 
-		for _, item := range items {
+		for _, itemFromPage := range items {
 
-			identifier := item.Identifier
+			identifier := itemFromPage.Identifier
 
-			t, err := p.GetItemByIdentifier(ctx, identifier)
+			item, err := p.GetItemByIdentifier(ctx, identifier)
 			if err != nil {
 				logger.Errorw(ctx, "failed item parsing", "identifier", identifier, "error", err)
 				continue
 			}
 
-			err = repo.InsertItem(ctx, t, env.StrToCategoryModel(category))
+			err = repo.InsertItem(ctx, &model.AnimelayerItem{
+				Identifier:       item.Identifier,
+				Title:            item.Title,
+				IsCompleted:      item.IsCompleted,
+				LastCheckedDate:  &lastCheckedDate,
+				CreatedDate:      item.Updated.CreatedDate,
+				UpdatedDate:      item.Updated.UpdatedDate,
+				RefImageCover:    item.RefImageCover,
+				RefImagePreview:  item.RefImagePreview,
+				BlobImageCover:   "",
+				BlobImagePreview: "",
+				TorrentFilesSize: item.Metrics.FilesSize,
+				Notes:            item.Notes,
+				Category:         env.AnimelayerCategoryToModelCategory(item.Category),
+			}, env.StrToCategoryModel(category))
 			if err != nil {
 				logger.Errorw(ctx, "failed item inserting", "identifier", identifier, "error", err)
 				continue
