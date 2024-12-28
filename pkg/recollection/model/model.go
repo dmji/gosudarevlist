@@ -24,6 +24,7 @@ type ItemCartData struct {
 }
 
 type AnimelayerItem struct {
+	Id               int64
 	Identifier       string
 	Title            string
 	IsCompleted      bool

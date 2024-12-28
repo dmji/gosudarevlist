@@ -23,5 +23,5 @@ SET title = coalesce(sqlc.narg('title'), title),
         torrent_files_size
     ),
     notes = coalesce(sqlc.narg('notes'), notes)
-WHERE animelayer_items.identifier == @identifier
+WHERE animelayer_items.identifier = @identifier
 RETURNING id;

@@ -14,8 +14,8 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
-		Count:       int32(opt.CountForOnePage),
-		OffsetCount: int32(startID),
+		Count:       opt.CountForOnePage,
+		OffsetCount: startID,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),

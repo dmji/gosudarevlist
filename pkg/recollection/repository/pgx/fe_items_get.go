@@ -24,8 +24,8 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
-		Count:       int32(opt.CountForOnePage),
-		OffsetCount: int32(startID),
+		Count:       opt.CountForOnePage,
+		OffsetCount: startID,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),

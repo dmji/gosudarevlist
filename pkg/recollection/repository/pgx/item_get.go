@@ -16,6 +16,7 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 	}
 
 	return &model.AnimelayerItem{
+		Id:               item.ID,
 		Identifier:       identifier,
 		Title:            item.Title,
 		IsCompleted:      item.IsCompleted,

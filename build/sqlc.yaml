@@ -1,7 +1,12 @@
 version: "2"
+servers:
+- engine: postgresql
+  uri: ${GOOSE_DBSTRING}
 sql:
   - engine: "postgresql"
     queries: "../pkg/recollection/repository/pgx"
+    database:
+      managed: true
     schema: "../migrations"
     gen:
       go:

@@ -24,7 +24,7 @@ tasks:
       
   air-rebuild-cmd:
     cmds:
-      - sqlc generate -f ./build/sqlc.yaml
+      - task sqlc-gen
       - task langs:refresh
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
       - go build -o ./~builds/air_server ./cmd/server/
@@ -50,6 +50,13 @@ tasks:
   pre-build:
     cmds:
       - templ generate 
+      - task sqlc-gen
+
+  sqlc-gen:
+    cmds:
+      - set -a
+      - source .env 
+      - set +a 
       - sqlc generate -f ./build/sqlc.yaml
 
   build-current:
