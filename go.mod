@@ -8,6 +8,7 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1
+	github.com/kolesa-team/go-webp v1.0.4
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/text v0.21.0
