@@ -36,4 +36,4 @@ ORDER BY CASE
     CASE
         WHEN LENGTH(@search_query::text) = 0 THEN COALESCE(updated_date, created_date)
     END DESC
-LIMIT @count OFFSET @offset_count;
+LIMIT @count::bigint OFFSET @offset_count::bigint;

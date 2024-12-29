@@ -50,7 +50,7 @@ tasks:
   pre-build:
     cmds:
       - templ generate 
-      - task sqlc-gen
+      - task sqlc-gen-prod
 
   sqlc-gen:
     cmds:
@@ -58,6 +58,10 @@ tasks:
       - source .env 
       - set +a 
       - sqlc generate -f ./build/sqlc.yaml
+
+  sqlc-gen-prod:
+    cmds:
+      - sqlc generate -f ./build/sqlc_prod.yaml
 
   build-current:
     cmds:
