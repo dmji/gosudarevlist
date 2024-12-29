@@ -57,11 +57,17 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 		return err
 	}
 
-	err = r.InsertUpdateNote(ctx, pgx_sqlc.InsertUpdateNoteParams{
-		ItemID:     itemId,
-		UpdateDate: lastCheckedDate,
-		Status:     updateStatusToPgxUpdateStatus(ctx, model.StatusNew),
+	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
+		Date:         &now,
+		UpdateStatus: model.StatusNew,
+		Notes:        []model.UpdateItemNote{},
+		ItemId:       itemId,
+		//Identifier:   item.Identifier,
 	})
+
+	if err != nil {
+		return err
+	}
 
 	//
 	// Commit

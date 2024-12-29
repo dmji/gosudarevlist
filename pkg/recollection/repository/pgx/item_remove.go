@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -19,21 +18,30 @@ func (repo *repository) RemoveItem(ctx context.Context, identifier string) error
 	r := repo.query.WithTx(tx)
 
 	now := time.Now()
-	lastCheckedDate, err := timeToPgTimestamp(&now)
-	if err != nil {
-		return err
-	}
-
 	itemId, err := r.RemoveItem(ctx, identifier)
 	if err != nil {
 		return err
 	}
 
-	err = r.InsertUpdateNote(ctx, pgx_sqlc.InsertUpdateNoteParams{
-		ItemID:     itemId,
-		UpdateDate: lastCheckedDate,
-		Status:     updateStatusToPgxUpdateStatus(ctx, model.StatusRemoved),
+	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
+		Date:         &now,
+		UpdateStatus: model.StatusRemoved,
+		Notes:        []model.UpdateItemNote{},
+		ItemId:       itemId,
+		//Identifier:   item.Identifier,
 	})
+
+	if err != nil {
+		return err
+	}
+
+	//
+	// Commit
+	//
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

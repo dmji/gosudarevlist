@@ -4,10 +4,12 @@ import "time"
 
 type UpdateItem struct {
 	Date         *time.Time
-	Identifier   string
 	Title        string
 	UpdateStatus UpdateStatus
 	Notes        []UpdateItemNote
+
+	ItemId     int64
+	Identifier string
 }
 
 type UpdateItemNote struct {
