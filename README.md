@@ -3,6 +3,7 @@
 Full-Stack Web-App тти AnimeLayer.ru
 
 [Hosted on serv00](https://dmji.serv00.net/animelayer)
+
 [Telegram Bot with MiniApp](https://t.me/MyMediaNotifyBot/web)
 
 #### Stack:
