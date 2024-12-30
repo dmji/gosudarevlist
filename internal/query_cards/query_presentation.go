@@ -16,7 +16,7 @@ func NewStringer() *Stringer {
 	return &Stringer{
 		mapItemPresentationFunctions: map[string]func(context.Context, string) string{
 			StatusesUrl(): func(ctx context.Context, s string) string {
-				v, err := model.StatusFromString(s)
+				v, err := model.ReleaseStatusFromString(s)
 				if err != nil {
 					return s
 				}

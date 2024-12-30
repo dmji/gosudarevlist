@@ -10,9 +10,13 @@ import (
 
 func (repo *repository) InsertUpdateNote(ctx context.Context, params model.UpdateItem) error {
 
-	item, err := repo.GetItemByIdentifier(ctx, params.Identifier)
-	if err != nil {
-		return err
+	itemId := params.ItemId
+	if itemId == 0 {
+		item, err := repo.GetItemByIdentifier(ctx, params.Identifier)
+		if err != nil {
+			return err
+		}
+		itemId = item.Id
 	}
 
 	pgxDate, err := timeToPgTimestamp(params.Date)
@@ -20,6 +24,9 @@ func (repo *repository) InsertUpdateNote(ctx context.Context, params model.Updat
 		return err
 	}
 
+	//
+	// Start transaction
+	//
 	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
@@ -28,7 +35,7 @@ func (repo *repository) InsertUpdateNote(ctx context.Context, params model.Updat
 	r := repo.query.WithTx(tx)
 
 	updateId, err := r.InsertUpdateNote(ctx, pgx_sqlc.InsertUpdateNoteParams{
-		ItemID:     item.Id,
+		ItemID:     itemId,
 		UpdateDate: pgxDate,
 		Status:     updateStatusToPgxUpdateStatus(ctx, params.UpdateStatus),
 	})
@@ -40,13 +47,14 @@ func (repo *repository) InsertUpdateNote(ctx context.Context, params model.Updat
 	for _, note := range params.Notes {
 		updateNotes = append(updateNotes, pgx_sqlc.InsertUpdateNoteItemsParams{
 			UpdateID: updateId,
-			Title:    note.ValueTitle,
+			Title:    note.ValueTitle.String(),
 			ValueOld: note.ValueOld,
 			ValueNew: note.ValueNew,
 		})
 	}
 
-	_, err = r.InsertUpdateNoteItems(ctx, updateNotes)
+	t, err := r.InsertUpdateNoteItems(ctx, updateNotes)
+	_ = t
 
 	if err != nil {
 		return err

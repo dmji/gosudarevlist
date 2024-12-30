@@ -41,7 +41,7 @@ func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
 	if statusesList := q.Get(res.getUrlTagByFieldName("Statuses")); len(statusesList) > 0 {
 		if statuses := strings.Split(statusesList, " "); len(statuses) != 0 {
 			for _, status := range statuses {
-				c, err := model.StatusFromString(status)
+				c, err := model.ReleaseStatusFromString(status)
 				if err != nil {
 					logger.Errorw(ctx, "failed parse query status", "error", err)
 					continue

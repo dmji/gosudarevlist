@@ -10,6 +10,11 @@ import (
 
 func (repo *repository) RemoveItem(ctx context.Context, identifier string) error {
 
+	now := time.Now()
+
+	//
+	// Start transaction
+	//
 	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
@@ -17,7 +22,6 @@ func (repo *repository) RemoveItem(ctx context.Context, identifier string) error
 	defer tx.Rollback(ctx)
 	r := repo.query.WithTx(tx)
 
-	now := time.Now()
 	itemId, err := r.RemoveItem(ctx, identifier)
 	if err != nil {
 		return err

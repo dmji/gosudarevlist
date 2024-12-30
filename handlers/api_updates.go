@@ -19,7 +19,7 @@ func (s *router) ApiUpdates(w http.ResponseWriter, r *http.Request) {
 	query := params.Values(ctx)
 	nextPageParams := custom_url.QueryValuesToString(&query)
 
-	err := cards.CollectionUpdatesBatch(items, r.URL.Path, nextPageParams, true, int(params.Page)-1).Render(r.Context(), w)
+	err := cards.CollectionUpdatesBatch(ctx, items, r.URL.Path, nextPageParams, true, int(params.Page)-1).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -2,6 +2,7 @@ HelloPerson:
     description: Greeting message
     other: Привет {{.Name}}
 ModelReleaseStatusCompletedPresentation: Завершено
+ModelReleaseStatusIncompletedPresentation: Незавершено
 ModelReleaseStatusOnAirPresentation: Выпускается
 QueryCardsFilterCategoriesPresentation: Категория
 QueryCardsFilterStatusesPresentation: Статус

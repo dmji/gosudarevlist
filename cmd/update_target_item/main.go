@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"flag"
 	"os"
 	"time"
@@ -21,8 +23,8 @@ func init() {
 
 func main() {
 	var identifier, category string
-	flag.StringVar(&identifier, "id", "", "Animelayer Identifier")
-	flag.StringVar(&category, "cat", "", "Animelayer Category")
+	flag.StringVar(&identifier, "id", "67068fe95526ca6e115b3e32", "Animelayer Identifier")
+	flag.StringVar(&category, "cat", "anime", "Animelayer Category")
 	flag.Parse()
 
 	//
@@ -67,17 +69,31 @@ func main() {
 		panic(err)
 	}
 
-	err = repo.RemoveItem(ctx, identifier)
-	if err != nil {
-		panic(err)
-	}
+	/*
+	 	err = repo.RemoveItem(ctx, identifier)
+	   	if err != nil {
+	   		panic(err)
+	   	}
+	*/
 
 	lastCheckedDate := time.Now()
 
-	err = repo.InsertItem(ctx, &model.AnimelayerItem{
+	releaseStatus := model.ReleaseStatuses.OnAir
+	if item.IsCompleted {
+		releaseStatus = model.ReleaseStatuses.Completed
+	} else {
+		year, _ := time.ParseDuration(" 1 year")
+		yearAfterUpdate := item.Updated.UpdatedDate.Add(year)
+		if lastCheckedDate.After(yearAfterUpdate) {
+			releaseStatus = model.ReleaseStatuses.Incompleted
+		}
+	}
+
+	_, err = repo.GetItemByIdentifier(ctx, identifier)
+	newItem := &model.AnimelayerItem{
 		Identifier:       item.Identifier,
 		Title:            item.Title,
-		IsCompleted:      item.IsCompleted,
+		ReleaseStatus:    releaseStatus,
 		LastCheckedDate:  &lastCheckedDate,
 		CreatedDate:      item.Updated.CreatedDate,
 		UpdatedDate:      item.Updated.UpdatedDate,
@@ -88,7 +104,14 @@ func main() {
 		TorrentFilesSize: item.Metrics.FilesSize,
 		Notes:            item.Notes,
 		Category:         env.AnimelayerCategoryToModelCategory(item.Category),
-	}, env.StrToCategoryModel(category))
+	}
+
+	if errors.Is(err, sql.ErrNoRows) {
+		err = repo.InsertItem(ctx, newItem, env.StrToCategoryModel(category))
+	} else {
+		err = repo.UpdateItem(ctx, newItem)
+	}
+
 	if err != nil {
 		panic(err)
 	}

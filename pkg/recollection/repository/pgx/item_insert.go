@@ -2,6 +2,8 @@ package repository_pgx
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"time"
 
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
@@ -11,13 +13,6 @@ import (
 )
 
 func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerItem, category model.Category) error {
-
-	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback(ctx)
-	r := repo.query.WithTx(tx)
 
 	now := time.Now()
 	lastCheckedDate, err := timeToPgTimestamp(&now)
@@ -35,11 +30,21 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 		return err
 	}
 
+	//
+	// Start transaction
+	//
+	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+	r := repo.query.WithTx(tx)
+
 	itemId, err := r.InsertItem(ctx,
 		pgx_sqlc.InsertItemParams{
 			Identifier:       item.Identifier,
 			Title:            item.Title,
-			IsCompleted:      item.IsCompleted,
+			ReleaseStatus:    releaseStatusAnimelayerToPgxReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
 			LastCheckedDate:  lastCheckedDate,
 			CreatedDate:      createdDate,
 			UpdatedDate:      updatedDate,
@@ -53,6 +58,9 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 		},
 	)
 
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil
+	}
 	if err != nil {
 		return err
 	}

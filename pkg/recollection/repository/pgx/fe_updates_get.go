@@ -14,12 +14,13 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
-		Count:       opt.CountForOnePage,
-		OffsetCount: startID,
+		Count:               opt.CountForOnePage,
+		OffsetCount:         startID,
+		SimilarityThreshold: 0.05,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		StatusArray:   statusesToPgxStatuses(opt.Statuses),
+		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses),
 	})
 
 	if err != nil {
@@ -31,10 +32,33 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 
 	cardItems := make([]model.UpdateItem, 0, len(items))
 	for _, item := range items {
+		pgxNotes, err := r.query.GetUpdateNotes(ctx, item.UpdateID)
+		if err != nil {
+			logger.Errorw(ctx, "Pgx repo error | GetUpdateNotes", "error", err)
+			return nil, err
+		}
+
+		notes := make([]model.UpdateItemNote, 0, len(pgxNotes))
+		for _, pgxNote := range pgxNotes {
+
+			field, err := model.UpdateableFieldFromString(pgxNote.Title)
+			if err != nil {
+				logger.Errorw(ctx, "Pgx repo error | GetUpdateNotes string to field", "error", err)
+				return nil, err
+			}
+
+			notes = append(notes, model.UpdateItemNote{
+				ValueTitle: field,
+				ValueOld:   pgxNote.ValueOld,
+				ValueNew:   pgxNote.ValueNew,
+			})
+		}
+
 		cardItems = append(cardItems, model.UpdateItem{
-			Title:        item.Title,
+			Title:        item.ItemTitle,
 			UpdateStatus: pgxStatusToStatus(item.UpdateStatus),
 			Date:         timeFromPgTimestamp(item.UpdateDate),
+			Notes:        notes,
 		})
 	}
 

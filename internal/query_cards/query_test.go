@@ -18,8 +18,8 @@ func TestQueryWriteRead(t *testing.T) {
 			model.Categories.Anime,
 			model.Categories.AnimeHentai,
 		},
-		Statuses: []model.Status{
-			model.Statuses.OnAir,
+		Statuses: []model.ReleaseStatus{
+			model.ReleaseStatuses.OnAir,
 		},
 	}
 

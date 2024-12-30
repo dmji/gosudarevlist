@@ -2,7 +2,7 @@
 INSERT INTO animelayer_items (
         identifier,
         title,
-        is_completed,
+        release_status,
         last_checked_date,
         first_checked_date,
         created_date,
@@ -18,7 +18,7 @@ INSERT INTO animelayer_items (
 VALUES (
         @identifier,
         @title,
-        @is_completed,
+        @release_status,
         @last_checked_date,
         @last_checked_date,
         @created_date,

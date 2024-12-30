@@ -16,7 +16,6 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 
 	"github.com/dmji/go-animelayer-parser"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -69,22 +68,7 @@ func main() {
 		logger.Panicw(ctx, "unable to parse connString", "error", err)
 	}
 
-	dbConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
-		dt, err := conn.LoadType(ctx, "CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
-
-		conn.TypeMap().RegisterType(dt)
-
-		dt, err = conn.LoadType(ctx, "_CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
-		conn.TypeMap().RegisterType(dt)
-
-		return nil
-	}
+	dbConfig.AfterConnect = repository_pgx.AfterConnectFunction()
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {

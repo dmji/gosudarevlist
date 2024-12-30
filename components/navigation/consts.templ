@@ -2,6 +2,10 @@ package navigation
 
 type class string
 
+func (c class) String() string {
+	return string(c)
+}
+
 const (
 	navButtonSingleStyle   class = " rounded-full"
 	navButtonGroupBegStyle class = " rounded-s-full"

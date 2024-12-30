@@ -1,13 +1,14 @@
 package cards
 
 import (
+	"context"
 	"github.com/dmji/gosudarevlist/components/svg"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 	"time"
 )
 
-templ CollectionUpdatesBatch(items []model.UpdateItem, nextPageEndpint, nextPageParams string, bAutoloadNextPage bool, currentPage int) {
+templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, nextPageEndpint, nextPageParams string, bAutoloadNextPage bool, currentPage int) {
 	for i, item := range items {
 		@putPageNumberResetTrigger(currentPage, i, len(items)) {
 			<li class="p-2">
@@ -19,6 +20,9 @@ templ CollectionUpdatesBatch(items []model.UpdateItem, nextPageEndpint, nextPage
 				if len(item.Notes) > 0 {
 					for _, change := range item.Notes {
 						<ul class="pl-8 mt-1">
+							<i class="text-xs text-gray-500">
+								{ change.ValueTitle.Presentation(ctx) }
+							</i>
 							@fillItemChange(change)
 						</ul>
 					}
@@ -62,27 +66,35 @@ templ fillItemChange(change model.UpdateItemNote) {
 			<div class="px-2 py-2 bg-red-300">
 				@svg.ChangeStatus(false)
 			</div>
-			<div class="text-xs  px-2 py-1 flex-grow bg-red-200 content-center ">{ change.ValueOld }</div>
+			<div class="text-xs  px-2 py-1 flex-grow bg-red-200 content-center ">
+				@templ.Raw(change.ValueOld)
+			</div>
 		</li>
 		<li class="flex overflow-hidden rounded-b-xl">
 			<div class="px-2 py-2 bg-green-400">
 				@svg.ChangeStatus(true)
 			</div>
-			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.ValueNew }</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">
+				@templ.Raw(change.ValueNew)
+			</div>
 		</li>
 	} else if len(change.ValueOld) > 0 {
 		<li class="flex overflow-hidden rounded-xl">
 			<div class="px-2 py-2 bg-red-300">
 				@svg.ChangeStatus(false)
 			</div>
-			<div class="text-xs px-2 py-1 flex-grow bg-red-200 content-center">{ change.ValueOld }</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-red-200 content-center">
+				@templ.Raw(change.ValueOld)
+			</div>
 		</li>
 	} else if len(change.ValueNew) > 0 {
 		<li class="flex overflow-hidden rounded-xl">
 			<div class="px-2 py-2 bg-green-400">
 				@svg.ChangeStatus(true)
 			</div>
-			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">{ change.ValueNew }</div>
+			<div class="text-xs px-2 py-1 flex-grow bg-green-200 content-center">
+				@templ.Raw(change.ValueNew)
+			</div>
 		</li>
 	}
 }

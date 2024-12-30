@@ -1,12 +1,27 @@
 -- +goose Up
 -- +goose StatementBegin
+CREATE TYPE CATEGORY_ANIMELAYER AS ENUM (
+     'anime',
+     'manga',
+     'music',
+     'dorama',
+     'anime_hentai',
+     'manga_hentai'
+);
+
+CREATE TYPE RELEASE_STATUS_ANIMELAYER AS ENUM (
+     'on_air',
+     'incompleted',
+     'completed'
+);
+
 CREATE TABLE IF NOT EXISTS animelayer_items (
      id BIGSERIAL NOT NULL,
      -- animelater id to form urls
      identifier TEXT NOT NULL,
      -- descriptions 
      title TEXT NOT NULL,
-     is_completed BOOLEAN NOT NULL,
+     release_status RELEASE_STATUS_ANIMELAYER NOT NULL,
      -- internal timestamps
      last_checked_date timestamp NOT NULL,
      first_checked_date timestamp NOT NULL,
@@ -43,5 +58,9 @@ ADD CONSTRAINT animelayer_items_identifier_not_empty CHECK (identifier <> '');
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS animelayer_items CASCADE;
+
+DROP TYPE CATEGORY_ANIMELAYER;
+
+DROP TYPE RELEASE_STATUS_ANIMELAYER;
 
 -- +goose StatementEnd

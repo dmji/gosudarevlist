@@ -15,7 +15,7 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
 		//SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		StatusArray:   statusesToPgxStatuses(opt.Statuses),
+		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses),
 	})
 
 	if err != nil {

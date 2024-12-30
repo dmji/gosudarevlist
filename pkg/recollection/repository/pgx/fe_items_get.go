@@ -24,12 +24,13 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
-		Count:       opt.CountForOnePage,
-		OffsetCount: startID,
+		Count:               opt.CountForOnePage,
+		OffsetCount:         startID,
+		SimilarityThreshold: 0.05,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		StatusArray:   statusesToPgxStatuses(opt.Statuses),
+		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses),
 	})
 
 	if err != nil {
@@ -50,7 +51,7 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 			TorrentWeight:        item.TorrentFilesSize,
 			AnimeLayerRef:        fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
-			IsCompleted:          item.IsCompleted,
+			ReleaseStatus:        pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
 		})
 	}
 

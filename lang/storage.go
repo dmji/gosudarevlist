@@ -16,6 +16,10 @@ const (
 
 type TagLang string
 
+func (c *TagLang) String() string {
+	return string(*c)
+}
+
 var (
 	TagEnglish TagLang = "en"
 	TagRussian TagLang = "ru"
@@ -46,7 +50,7 @@ func (s *Storage) Get(tag TagLang) *Loader {
 	res, ok := s.instances[tag]
 	if !ok {
 		res = &Loader{
-			locale: i18n.NewLocalizer(s.bundle, string(tag)),
+			locale: i18n.NewLocalizer(s.bundle, tag.String()),
 		}
 		s.instances[tag] = res
 	}

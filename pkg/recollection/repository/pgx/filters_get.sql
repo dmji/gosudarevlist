@@ -6,12 +6,12 @@ WITH sq AS (
 ),
 cmpl as (
      SELECT unnest(
-            ARRAY [@status_array::bool[]] 
+            ARRAY [@status_array::RELEASE_STATUS_ANIMELAYER[]] 
     ) as cat
 ),
 items AS (
 SELECT category,
- case WHEN is_completed THEN true ELSE (COALESCE(updated_date, created_date) < now() - (interval '1 year'))::boolean end as is_completed,
+ release_status,
  created_date,
  updated_date
 FROM animelayer_items
@@ -23,7 +23,7 @@ FROM items
 GROUP BY category
 UNION
 SELECT DISTINCT 'release_status' AS "name",
-    CASE WHEN is_completed THEN 'completed' ELSE 'on_air' END AS "value",
-    COUNT(is_completed) AS "count"
+    release_status::text as "value",
+    COUNT(release_status) AS "count"
 FROM items
-GROUP BY is_completed;
+GROUP BY release_status;

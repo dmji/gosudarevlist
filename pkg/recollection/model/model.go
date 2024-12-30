@@ -8,7 +8,7 @@ type OptionsGetItems struct {
 
 	SearchQuery string
 	Categories  []Category
-	Statuses    []Status
+	Statuses    []ReleaseStatus
 }
 
 type ItemCartData struct {
@@ -20,14 +20,14 @@ type ItemCartData struct {
 	Description          string
 	AnimeLayerRef        string
 	CategoryPresentation string
-	IsCompleted          bool
+	ReleaseStatus        ReleaseStatus
 }
 
 type AnimelayerItem struct {
 	Id               int64
 	Identifier       string
 	Title            string
-	IsCompleted      bool
+	ReleaseStatus    ReleaseStatus
 	LastCheckedDate  *time.Time
 	FirstCheckedDate *time.Time
 	CreatedDate      *time.Time

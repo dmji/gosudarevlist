@@ -17,7 +17,7 @@ func TestGetITemsByCategory(t *testing.T) {
 
 		SearchQuery: "",
 		Categories:  []model.Category{},
-		Statuses:    []model.Status{},
+		Statuses:    []model.ReleaseStatus{},
 	})
 	println(items)
 }

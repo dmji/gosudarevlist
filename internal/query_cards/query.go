@@ -16,8 +16,8 @@ type ApiCardsParams struct {
 	Page        custom_types.Page `url:"page"`
 	SearchQuery string            `url:"query"`
 
-	Categories []model.Category `url:"category,space"`
-	Statuses   []model.Status   `url:"release_status,space"`
+	Categories []model.Category      `url:"category,space"`
+	Statuses   []model.ReleaseStatus `url:"release_status,space"`
 }
 
 func StatusesUrl() string {

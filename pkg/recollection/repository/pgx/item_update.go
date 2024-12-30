@@ -6,6 +6,7 @@ import (
 
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -14,55 +15,15 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 
 	now := time.Now()
 	oldItem, err := repo.GetItemByIdentifier(ctx, item.Identifier)
-	_ = oldItem
 
 	//
 	// Collect updated notes
 	//
 
-	notes := make([]model.UpdateItemNote, 0, 10)
-	arg := pgx_sqlc.UpdateItemParams{
-		/* 		Title:            pgtype.Text{},
-		   		IsCompleted:      pgtype.Bool{},
-		   		LastCheckedDate:  lastCheckedDate,
-		   		CreatedDate:      createdDate,
-		   		UpdatedDate:      updatedDate,
-		   		RefImageCover:    pgtype.Text{},
-		   		RefImagePreview:  pgtype.Text{},
-		   		BlobImageCover:   pgtype.Text{},
-		   		BlobImagePreview: pgtype.Text{},
-		   		TorrentFilesSize: pgtype.Text{},
-		   		Notes:            pgtype.Text{},
-		   		Identifier:       item.Identifier, */
-	}
-
-	if oldItem.Title != item.Title {
-		arg.Title.Scan(item.Title)
-		notes = append(notes, model.UpdateItemNote{
-			ValueTitle: "Title",
-			ValueOld:   oldItem.Title,
-			ValueNew:   item.Title,
-		})
-
-	}
-
-	/* 	lastCheckedDate, err := timeToPgTimestamp(&now)
-	   	if err != nil {
-	   		return err
-	   	}
-
-	   	createdDate, err := timeToPgTimestamp(item.CreatedDate)
-	   	if err != nil {
-	   		return err
-	   	}
-
-	   	updatedDate, err := timeToPgTimestamp(item.UpdatedDate)
-	   	if err != nil {
-	   		return err
-	   	} */
+	arg, notes := compareItems(ctx, oldItem, item)
 
 	//
-	// Update item
+	// Start transaction
 	//
 	tx, err := repo.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -71,7 +32,7 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	defer tx.Rollback(ctx)
 	r := repo.query.WithTx(tx)
 
-	itemId, err := r.UpdateItem(ctx, arg)
+	itemId, err := r.UpdateItem(ctx, *arg)
 
 	if err != nil {
 		return err
@@ -102,4 +63,108 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	}
 
 	return nil
+}
+
+func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pgx_sqlc.UpdateItemParams, []model.UpdateItemNote) {
+
+	itemUpdate := &pgx_sqlc.UpdateItemParams{
+		Identifier: oldItem.Identifier,
+	}
+	itemNotes := make([]model.UpdateItemNote, 0, 10)
+
+	if isDiffString(oldItem.Title, item.Title) {
+		itemUpdate.Title.Scan(item.Title)
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.Title,
+			ValueOld:   oldItem.Title,
+			ValueNew:   item.Title,
+		})
+	}
+
+	if isDiffString(oldItem.ReleaseStatus.String(), item.ReleaseStatus.String()) {
+		itemUpdate.ReleaseStatus.Scan(item.ReleaseStatus.String())
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.ReleaseStatus,
+			ValueOld:   oldItem.ReleaseStatus.Presentation(ctx),
+			ValueNew:   item.ReleaseStatus.Presentation(ctx),
+		})
+	}
+
+	if isDiffTimes(oldItem.CreatedDate, item.CreatedDate) {
+		itemUpdate.CreatedDate.Scan(*item.CreatedDate)
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.CreatedDate,
+			ValueOld:   time_ru_format.Format(oldItem.CreatedDate),
+			ValueNew:   time_ru_format.Format(item.CreatedDate),
+		})
+	}
+
+	if isDiffTimes(oldItem.UpdatedDate, item.UpdatedDate) {
+		itemUpdate.UpdatedDate.Scan(*item.UpdatedDate)
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.UpdatedDate,
+			ValueOld:   time_ru_format.Format(oldItem.UpdatedDate),
+			ValueNew:   time_ru_format.Format(item.UpdatedDate),
+		})
+	}
+
+	if isDiffTimes(oldItem.LastCheckedDate, item.LastCheckedDate) {
+		itemUpdate.LastCheckedDate.Scan(*item.LastCheckedDate)
+	}
+
+	if isDiffString(oldItem.RefImageCover, item.RefImageCover) {
+		itemUpdate.RefImageCover.Scan(item.RefImageCover)
+	}
+
+	if isDiffString(oldItem.RefImagePreview, item.RefImagePreview) {
+		itemUpdate.RefImagePreview.Scan(item.RefImagePreview)
+	}
+
+	if isDiffString(oldItem.BlobImageCover, item.BlobImageCover) {
+		itemUpdate.BlobImageCover.Scan(item.BlobImageCover)
+	}
+
+	if isDiffString(oldItem.BlobImagePreview, item.BlobImagePreview) {
+		itemUpdate.BlobImagePreview.Scan(item.BlobImagePreview)
+	}
+
+	if isDiffString(oldItem.TorrentFilesSize, item.TorrentFilesSize) {
+		itemUpdate.TorrentFilesSize.Scan(item.TorrentFilesSize)
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.TorrentFilesSize,
+			ValueOld:   oldItem.TorrentFilesSize,
+			ValueNew:   item.TorrentFilesSize,
+		})
+	}
+
+	if isDiffString(oldItem.Notes, item.Notes) {
+		itemUpdate.Notes.Scan(item.Notes)
+		itemNotes = append(itemNotes, model.UpdateItemNote{
+			ValueTitle: model.UpdateableFields.Notes,
+			ValueOld:   oldItem.Notes,
+			ValueNew:   item.Notes,
+		})
+	}
+
+	return itemUpdate, itemNotes
+}
+
+func isDiffString(oldItem, item string) bool {
+	if len(oldItem) == 0 {
+		return true
+	}
+
+	return oldItem != item
+}
+
+func isDiffTimes(oldItem, item *time.Time) bool {
+	if item == nil {
+		return false
+	}
+
+	if oldItem == nil {
+		return true
+	}
+
+	return *oldItem != *item
 }

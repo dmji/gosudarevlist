@@ -80,7 +80,7 @@ const narrowButtonSizeStyle class = "pt-4 px-2"
 
 templ navButtonWithTooltip(icon templ.Component, tooltipText string, text string, style class) {
 	@textTooptip(tooltipText)
-	<div class={ string(style) }>
+	<div class={ style.String() }>
 		<button type="button">
 			<div class="flex">
 				@icon
@@ -94,7 +94,7 @@ templ navButtonWithTooltip(icon templ.Component, tooltipText string, text string
 }
 
 templ navButtonItem(btnType navButtonType) {
-	<div class={ "relative group bn-colors" + string(navButtonStyle(btnType)) }>
+	<div class={ "relative group bn-colors" + navButtonStyle(btnType).String() }>
 		{ children... }
 	</div>
 }

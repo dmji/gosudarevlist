@@ -24,8 +24,8 @@ templ optionalLineMetaData(title, value string) {
 	}
 }
 
-templ onAirBadge(IsCompleted bool) {
-	if !IsCompleted {
+templ onAirBadge(s model.ReleaseStatus) {
+	if s == model.ReleaseStatuses.OnAir {
 		<label
 			class="absolute
 					top-[1%] right-[1%] px-[5%]
@@ -36,6 +36,19 @@ templ onAirBadge(IsCompleted bool) {
 			ON AIR
 		</label>
 	}
+	/*
+	else if s == model.ReleaseStatuses.Incompleted {
+		<label
+			class="absolute
+					top-[1%] right-[1%] px-[5%]
+					text-[#4341cc] font-bold text-xs max-sm:text-xs
+					bg-[#fff27d] shadow-[0_2px_4px_rgba(0,0,0,0.1)]
+					rounded-lg border-solid border-2 border-[#cfc566]"
+		>
+			INCOMPLETED
+		</label>
+	}
+	*/
 }
 
 templ categoryBadge(category string) {
@@ -76,7 +89,7 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 					<div class="w-fit pt-4 pl-4">
 						<div class="relative">
 							@categoryBadge(card.CategoryPresentation)
-							@onAirBadge(card.IsCompleted)
+							@onAirBadge(card.ReleaseStatus)
 							<img
 								original_src={ queryPosterFromItem(&card) }
 								src={ noImagePlaceholder }

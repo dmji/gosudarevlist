@@ -1,5 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
+CREATE TYPE UPDATE_STATUS AS ENUM ('new', 'update', 'removed');
+
 CREATE TABLE animelayer_updates (
      id BIGSERIAL NOT NULL,
      -- item that was updated
@@ -17,5 +19,7 @@ ADD PRIMARY KEY (id);
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS animelayer_updates CASCADE;
+
+DROP TYPE UPDATE_STATUS;
 
 -- +goose StatementEnd

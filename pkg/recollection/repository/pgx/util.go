@@ -33,29 +33,9 @@ func categoriesToAnimelayerCategories(categories []model.Category) []pgx_sqlc.Ca
 	return res
 }
 
-func statusToPgxStatus(statuses model.Status) bool {
-	return statuses == model.Statuses.Completed
-}
-
-func statusesToPgxStatuses(statuses []model.Status) []bool {
-
-	res := make([]bool, 0, len(statuses))
-
-	for _, status := range statuses {
-		res = append(res, statusToPgxStatus(status))
-	}
-
-	if len(res) == 0 {
-		res = append(res, true)
-		res = append(res, false)
-	}
-
-	return res
-}
-
 func categoriesToAnimelayerCategory(category model.Category) pgx_sqlc.CategoryAnimelayer {
-
 	switch category {
+
 	case model.Categories.Anime:
 		return pgx_sqlc.CategoryAnimelayerAnime
 	case model.Categories.AnimeHentai:
@@ -74,8 +54,8 @@ func categoriesToAnimelayerCategory(category model.Category) pgx_sqlc.CategoryAn
 }
 
 func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Category {
-
 	switch category {
+
 	case pgx_sqlc.CategoryAnimelayerAnime:
 		return model.Categories.Anime
 	case pgx_sqlc.CategoryAnimelayerAnimeHentai:
@@ -95,6 +75,7 @@ func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Categor
 
 func updateStatusToPgxUpdateStatus(ctx context.Context, status model.UpdateStatus) pgx_sqlc.UpdateStatus {
 	switch status {
+
 	case model.StatusNew:
 		return pgx_sqlc.UpdateStatusNew
 	case model.StatusRemoved:
@@ -107,4 +88,51 @@ func updateStatusToPgxUpdateStatus(ctx context.Context, status model.UpdateStatu
 		logger.Errorw(ctx, "unexpected model update status", "value", status)
 		return pgx_sqlc.UpdateStatusNew
 	}
+}
+
+func releaseStatusAnimelayerToPgxReleaseStatusAnimelayer(ctx context.Context, status model.ReleaseStatus) pgx_sqlc.ReleaseStatusAnimelayer {
+	switch status {
+
+	case model.ReleaseStatuses.OnAir:
+		return pgx_sqlc.ReleaseStatusAnimelayerOnAir
+	case model.ReleaseStatuses.Incompleted:
+		return pgx_sqlc.ReleaseStatusAnimelayerIncompleted
+	case model.ReleaseStatuses.Completed:
+		return pgx_sqlc.ReleaseStatusAnimelayerCompleted
+	default:
+		logger.Errorw(ctx, "unexpected model update status", "value", status)
+		return pgx_sqlc.ReleaseStatusAnimelayerIncompleted
+	}
+}
+
+func pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx context.Context, status pgx_sqlc.ReleaseStatusAnimelayer) model.ReleaseStatus {
+	switch status {
+
+	case pgx_sqlc.ReleaseStatusAnimelayerOnAir:
+		return model.ReleaseStatuses.OnAir
+	case pgx_sqlc.ReleaseStatusAnimelayerIncompleted:
+		return model.ReleaseStatuses.Incompleted
+	case pgx_sqlc.ReleaseStatusAnimelayerCompleted:
+		return model.ReleaseStatuses.Completed
+	default:
+		logger.Errorw(ctx, "unexpected model update status", "value", status)
+		return model.ReleaseStatuses.Incompleted
+	}
+}
+
+func releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx context.Context, statuses []model.ReleaseStatus) []pgx_sqlc.ReleaseStatusAnimelayer {
+
+	res := make([]pgx_sqlc.ReleaseStatusAnimelayer, 0, len(statuses))
+
+	for _, status := range statuses {
+		res = append(res, releaseStatusAnimelayerToPgxReleaseStatusAnimelayer(ctx, status))
+	}
+
+	if len(res) == 0 {
+		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerOnAir)
+		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerIncompleted)
+		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerCompleted)
+	}
+
+	return res
 }

@@ -1,7 +1,7 @@
 -- name: UpdateItem :one
 UPDATE animelayer_items
 SET title = coalesce(sqlc.narg('title'), title),
-    is_completed = coalesce(sqlc.narg('is_completed'), is_completed),
+    release_status = coalesce(sqlc.narg('release_status'), release_status),
     last_checked_date = coalesce(
         sqlc.narg('last_checked_date'),
         last_checked_date

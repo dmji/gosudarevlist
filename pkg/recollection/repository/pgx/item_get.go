@@ -2,6 +2,8 @@ package repository_pgx
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
@@ -10,6 +12,10 @@ import (
 func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error) {
 
 	item, err := r.query.GetItemByIdentifier(ctx, identifier)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+
 	if err != nil {
 		logger.Errorw(ctx, "Pgx repo error | GetItemByIdentifier", "error", err)
 		return nil, err
@@ -19,7 +25,7 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 		Id:               item.ID,
 		Identifier:       identifier,
 		Title:            item.Title,
-		IsCompleted:      item.IsCompleted,
+		ReleaseStatus:    pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
 		LastCheckedDate:  timeFromPgTimestamp(item.LastCheckedDate),
 		FirstCheckedDate: timeFromPgTimestamp(item.FirstCheckedDate),
 		CreatedDate:      timeFromPgTimestamp(item.CreatedDate),

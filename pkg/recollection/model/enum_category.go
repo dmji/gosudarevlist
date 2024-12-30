@@ -7,26 +7,8 @@ import (
 
 type Category string
 
-func CategoryFromString(s string) (Category, error) {
-	switch s {
-
-	case string(Categories.Anime):
-		return Categories.Anime, nil
-	case string(Categories.AnimeHentai):
-		return Categories.AnimeHentai, nil
-	case string(Categories.Manga):
-		return Categories.Manga, nil
-	case string(Categories.MangaHentai):
-		return Categories.MangaHentai, nil
-	case string(Categories.Music):
-		return Categories.Music, nil
-	case string(Categories.Dorama):
-		return Categories.Dorama, nil
-	case string(Categories.All):
-		return Categories.All, nil
-	}
-
-	return Categories.Anime, errors.New("string not match any of categories")
+func (c *Category) String() string {
+	return string(*c)
 }
 
 var Categories = struct {
@@ -66,4 +48,26 @@ func (c *Category) Presentation(ctx context.Context) string {
 	default:
 		return ""
 	}
+}
+
+func CategoryFromString(s string) (Category, error) {
+	switch s {
+
+	case Categories.Anime.String():
+		return Categories.Anime, nil
+	case Categories.AnimeHentai.String():
+		return Categories.AnimeHentai, nil
+	case Categories.Manga.String():
+		return Categories.Manga, nil
+	case Categories.MangaHentai.String():
+		return Categories.MangaHentai, nil
+	case Categories.Music.String():
+		return Categories.Music, nil
+	case Categories.Dorama.String():
+		return Categories.Dorama, nil
+	case Categories.All.String():
+		return Categories.All, nil
+	}
+
+	return Categories.Anime, errors.New("string not match any of categories")
 }

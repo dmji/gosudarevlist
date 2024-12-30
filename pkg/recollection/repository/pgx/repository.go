@@ -2,13 +2,11 @@ package repository_pgx
 
 import (
 	"context"
-	"time"
 
 	"github.com/dmji/gosudarevlist/internal/query_cards"
 	sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type txStarter interface {
@@ -34,22 +32,40 @@ func New(db sqlDriver) *repository {
 	}
 }
 
-func timeToPgTimestamp(t *time.Time) (pgtype.Timestamp, error) {
+func loadType(ctx context.Context, conn *pgx.Conn, typeName string, bArray bool) error {
 
-	pgTime := pgtype.Timestamp{}
-
-	if t != nil {
-		if err := pgTime.Scan(*t); err != nil {
-			return pgTime, err
-		}
+	dt, err := conn.LoadType(ctx, typeName)
+	if err != nil {
+		return err
 	}
 
-	return pgTime, nil
+	conn.TypeMap().RegisterType(dt)
+
+	if bArray {
+		dt, err = conn.LoadType(ctx, "_"+typeName)
+		if err != nil {
+			return err
+		}
+
+		conn.TypeMap().RegisterType(dt)
+	}
+
+	return nil
 }
 
-func timeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
-	if t.Valid {
-		return &t.Time
+func AfterConnectFunction() func(ctx context.Context, conn *pgx.Conn) error {
+	return func(ctx context.Context, conn *pgx.Conn) error {
+
+		err := loadType(ctx, conn, "CATEGORY_ANIMELAYER", true)
+		if err != nil {
+			return err
+		}
+
+		err = loadType(ctx, conn, "RELEASE_STATUS_ANIMELAYER", true)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
-	return nil
 }

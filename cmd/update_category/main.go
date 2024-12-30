@@ -81,10 +81,21 @@ func main() {
 				continue
 			}
 
+			releaseStatus := model.ReleaseStatuses.OnAir
+			if item.IsCompleted {
+				releaseStatus = model.ReleaseStatuses.Completed
+			} else {
+				year, _ := time.ParseDuration(" 1 year")
+				yearAfterUpdate := item.Updated.UpdatedDate.Add(year)
+				if lastCheckedDate.After(yearAfterUpdate) {
+					releaseStatus = model.ReleaseStatuses.Incompleted
+				}
+			}
+
 			err = repo.InsertItem(ctx, &model.AnimelayerItem{
 				Identifier:       item.Identifier,
 				Title:            item.Title,
-				IsCompleted:      item.IsCompleted,
+				ReleaseStatus:    releaseStatus,
 				LastCheckedDate:  &lastCheckedDate,
 				CreatedDate:      item.Updated.CreatedDate,
 				UpdatedDate:      item.Updated.UpdatedDate,
