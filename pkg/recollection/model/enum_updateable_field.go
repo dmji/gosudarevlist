@@ -5,8 +5,6 @@ import (
 	"errors"
 )
 
-//go:generate go run t~/t.go -type=UpdateableField
-
 type UpdateableField string
 
 func (c *UpdateableField) String() string {
