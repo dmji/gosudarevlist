@@ -93,11 +93,11 @@ func updateStatusToPgxUpdateStatus(ctx context.Context, status model.UpdateStatu
 func releaseStatusAnimelayerToPgxReleaseStatusAnimelayer(ctx context.Context, status model.ReleaseStatus) pgx_sqlc.ReleaseStatusAnimelayer {
 	switch status {
 
-	case model.ReleaseStatuses.OnAir:
+	case model.ReleaseStatusOnAir:
 		return pgx_sqlc.ReleaseStatusAnimelayerOnAir
-	case model.ReleaseStatuses.Incompleted:
+	case model.ReleaseStatusIncompleted:
 		return pgx_sqlc.ReleaseStatusAnimelayerIncompleted
-	case model.ReleaseStatuses.Completed:
+	case model.ReleaseStatusCompleted:
 		return pgx_sqlc.ReleaseStatusAnimelayerCompleted
 	default:
 		logger.Errorw(ctx, "unexpected model update status", "value", status)
@@ -109,14 +109,14 @@ func pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx context.Context, st
 	switch status {
 
 	case pgx_sqlc.ReleaseStatusAnimelayerOnAir:
-		return model.ReleaseStatuses.OnAir
+		return model.ReleaseStatusOnAir
 	case pgx_sqlc.ReleaseStatusAnimelayerIncompleted:
-		return model.ReleaseStatuses.Incompleted
+		return model.ReleaseStatusIncompleted
 	case pgx_sqlc.ReleaseStatusAnimelayerCompleted:
-		return model.ReleaseStatuses.Completed
+		return model.ReleaseStatusCompleted
 	default:
 		logger.Errorw(ctx, "unexpected model update status", "value", status)
-		return model.ReleaseStatuses.Incompleted
+		return model.ReleaseStatusIncompleted
 	}
 }
 

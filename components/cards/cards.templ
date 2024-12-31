@@ -25,7 +25,7 @@ templ optionalLineMetaData(title, value string) {
 }
 
 templ onAirBadge(s model.ReleaseStatus) {
-	if s == model.ReleaseStatuses.OnAir {
+	if s == model.ReleaseStatusOnAir {
 		<label
 			class="absolute
 					top-[1%] right-[1%] px-[5%]
@@ -37,7 +37,7 @@ templ onAirBadge(s model.ReleaseStatus) {
 		</label>
 	}
 	/*
-	else if s == model.ReleaseStatuses.Incompleted {
+	else if s == model.ReleaseStatusIncompleted {
 		<label
 			class="absolute
 					top-[1%] right-[1%] px-[5%]

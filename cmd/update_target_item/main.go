@@ -78,14 +78,14 @@ func main() {
 
 	lastCheckedDate := time.Now()
 
-	releaseStatus := model.ReleaseStatuses.OnAir
+	releaseStatus := model.ReleaseStatusOnAir
 	if item.IsCompleted {
-		releaseStatus = model.ReleaseStatuses.Completed
+		releaseStatus = model.ReleaseStatusCompleted
 	} else {
 		year, _ := time.ParseDuration(" 1 year")
 		yearAfterUpdate := item.Updated.UpdatedDate.Add(year)
 		if lastCheckedDate.After(yearAfterUpdate) {
-			releaseStatus = model.ReleaseStatuses.Incompleted
+			releaseStatus = model.ReleaseStatusIncompleted
 		}
 	}
 

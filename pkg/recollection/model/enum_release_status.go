@@ -1,71 +1,46 @@
 package model
 
+//go:generate go-stringer -type=ReleaseStatus -trimprefix=ReleaseStatus -output enum_release_status_string.go -nametransform=snake_case_lower -fromstringgenfn -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
+
 import (
 	"context"
-	"errors"
 
 	"github.com/dmji/gosudarevlist/lang"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
-type ReleaseStatus string
+type ReleaseStatus int8
 
-func (c *ReleaseStatus) String() string {
-	return string(*c)
-}
-
-var ReleaseStatuses = struct {
-	OnAir       ReleaseStatus
-	Incompleted ReleaseStatus
-	Completed   ReleaseStatus
-	All         ReleaseStatus
-}{
-	OnAir:       "on_air",
-	Incompleted: "incompleted",
-	Completed:   "completed",
-	All:         "",
-}
+const (
+	ReleaseStatusOnAir ReleaseStatus = iota
+	ReleaseStatusIncompleted
+	ReleaseStatusCompleted
+)
 
 func (c *ReleaseStatus) Presentation(ctx context.Context) string {
 	switch *c {
-	case ReleaseStatuses.OnAir:
+	case ReleaseStatusOnAir:
 		return lang.Message(ctx, &i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
-				ID:    "ModelReleaseStatusOnAirPresentation",
+				ID:    _ReleaseStatusOnAir_i18n_ID,
 				Other: "On Air",
 			},
 		})
-	case ReleaseStatuses.Incompleted:
+	case ReleaseStatusIncompleted:
 		return lang.Message(ctx, &i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
-				ID:    "ModelReleaseStatusIncompletedPresentation",
+				ID:    _ReleaseStatusOnAir_i18n_ID,
 				Other: "Incompleted",
 			},
 		})
-	case ReleaseStatuses.Completed:
+	case ReleaseStatusCompleted:
 		return lang.Message(ctx, &i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
-				ID:    "ModelReleaseStatusCompletedPresentation",
+				ID:    _ReleaseStatusCompleted_i18n_ID,
 				Other: "Completed",
 			},
 		})
 	default:
 		return ""
 	}
-}
-
-func ReleaseStatusFromString(s string) (ReleaseStatus, error) {
-	switch s {
-
-	case ReleaseStatuses.OnAir.String():
-		return ReleaseStatuses.OnAir, nil
-	case ReleaseStatuses.Incompleted.String():
-		return ReleaseStatuses.Incompleted, nil
-	case ReleaseStatuses.Completed.String():
-		return ReleaseStatuses.Completed, nil
-	case ReleaseStatuses.All.String():
-		return ReleaseStatuses.All, nil
-	}
-
-	return ReleaseStatuses.Incompleted, errors.New("string not match any of ReleaseStatusAnimelayer")
 }
