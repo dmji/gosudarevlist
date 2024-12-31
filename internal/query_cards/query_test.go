@@ -15,8 +15,8 @@ func TestQueryWriteRead(t *testing.T) {
 		Page:        2,
 		SearchQuery: "Worry",
 		Categories: []model.Category{
-			model.Categories.Anime,
-			model.Categories.AnimeHentai,
+			model.CategoryAnime,
+			model.CategoryAnimeHentai,
 		},
 		Statuses: []model.ReleaseStatus{
 			model.ReleaseStatusOnAir,

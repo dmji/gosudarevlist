@@ -32,8 +32,8 @@ func TestGetFiltersByCategory(t *testing.T) {
 
 		SearchQuery: "",
 		Categories: []model.Category{
-			model.Categories.Anime,
-			model.Categories.AnimeHentai,
+			model.CategoryAnime,
+			model.CategoryAnimeHentai,
 		},
 	})
 

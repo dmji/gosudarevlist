@@ -1,79 +1,43 @@
 package model
 
+//go:generate go-stringer -type=UpdateableField -trimprefix=UpdateableField -output enum_updateable_field_string.go -nametransform=snake_case_lower -fromstringgenfn -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
+
 import (
 	"context"
-	"errors"
 )
 
-type UpdateableField string
+type UpdateableField int8
 
-func (c *UpdateableField) String() string {
-	return string(*c)
-}
-
-var UpdateableFields = struct {
-	Title            UpdateableField
-	ReleaseStatus    UpdateableField
-	LastCheckedDate  UpdateableField
-	CreatedDate      UpdateableField
-	UpdatedDate      UpdateableField
-	TorrentFilesSize UpdateableField
-	Notes            UpdateableField
-	Identifier       UpdateableField
-}{
-	Title:            "title",
-	ReleaseStatus:    "release_status",
-	LastCheckedDate:  "last_checked_date",
-	CreatedDate:      "created_date",
-	UpdatedDate:      "updated_date",
-	TorrentFilesSize: "torrent_files_size",
-	Notes:            "notes",
-	Identifier:       "identifier",
-}
+const (
+	UpdateableFieldTitle UpdateableField = iota
+	UpdateableFieldReleaseStatus
+	UpdateableFieldLastCheckedDate
+	UpdateableFieldCreatedDate
+	UpdateableFieldUpdatedDate
+	UpdateableFieldTorrentFilesSize
+	UpdateableFieldNotes
+	UpdateableFieldIdentifier
+)
 
 func (c *UpdateableField) Presentation(ctx context.Context) string {
 	switch *c {
-	case UpdateableFields.Title:
+	case UpdateableFieldTitle:
 		return "Title"
-	case UpdateableFields.ReleaseStatus:
+	case UpdateableFieldReleaseStatus:
 		return "IsCompleted"
-	case UpdateableFields.LastCheckedDate:
+	case UpdateableFieldLastCheckedDate:
 		return "LastCheckedDate"
-	case UpdateableFields.CreatedDate:
+	case UpdateableFieldCreatedDate:
 		return "CreatedDate"
-	case UpdateableFields.UpdatedDate:
+	case UpdateableFieldUpdatedDate:
 		return "UpdatedDate"
-	case UpdateableFields.TorrentFilesSize:
+	case UpdateableFieldTorrentFilesSize:
 		return "TorrentFilesSize"
-	case UpdateableFields.Notes:
+	case UpdateableFieldNotes:
 		return "Notes"
-	case UpdateableFields.Identifier:
+	case UpdateableFieldIdentifier:
 		return "Identifier"
 	default:
 		return ""
 	}
-}
-
-func UpdateableFieldFromString(s string) (UpdateableField, error) {
-	switch s {
-
-	case UpdateableFields.Title.String():
-		return UpdateableFields.Title, nil
-	case UpdateableFields.ReleaseStatus.String():
-		return UpdateableFields.ReleaseStatus, nil
-	case UpdateableFields.LastCheckedDate.String():
-		return UpdateableFields.LastCheckedDate, nil
-	case UpdateableFields.CreatedDate.String():
-		return UpdateableFields.CreatedDate, nil
-	case UpdateableFields.UpdatedDate.String():
-		return UpdateableFields.UpdatedDate, nil
-	case UpdateableFields.TorrentFilesSize.String():
-		return UpdateableFields.TorrentFilesSize, nil
-	case UpdateableFields.Notes.String():
-		return UpdateableFields.Notes, nil
-	case UpdateableFields.Identifier.String():
-		return UpdateableFields.Identifier, nil
-	}
-
-	return UpdateableFields.Title, errors.New("string not match any of UpdateableFields")
 }

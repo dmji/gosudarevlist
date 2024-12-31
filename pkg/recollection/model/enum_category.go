@@ -1,73 +1,37 @@
 package model
 
+//go:generate go-stringer -type=Category -trimprefix=Category -output enum_category_string.go -nametransform=snake_case_lower -fromstringgenfn -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
+
 import (
 	"context"
-	"errors"
 )
 
-type Category string
+type Category int8
 
-func (c *Category) String() string {
-	return string(*c)
-}
-
-var Categories = struct {
-	Anime       Category
-	AnimeHentai Category
-	Manga       Category
-	MangaHentai Category
-	Music       Category
-	Dorama      Category
-	All         Category
-}{
-	Anime:       "anime",
-	AnimeHentai: "anime_hentai",
-	Manga:       "manga",
-	MangaHentai: "manga_henai",
-	Music:       "music",
-	Dorama:      "dorama",
-	All:         "",
-}
+const (
+	CategoryAnime Category = iota
+	CategoryAnimeHentai
+	CategoryManga
+	CategoryMangaHentai
+	CategoryMusic
+	CategoryDorama
+)
 
 func (c *Category) Presentation(ctx context.Context) string {
 	switch *c {
-	case Categories.Anime:
+	case CategoryAnime:
 		return "Anime"
-	case Categories.AnimeHentai:
+	case CategoryAnimeHentai:
 		return "Anime Hentai"
-	case Categories.Manga:
+	case CategoryManga:
 		return "Manga"
-	case Categories.MangaHentai:
+	case CategoryMangaHentai:
 		return "Manga Hentai"
-	case Categories.Music:
+	case CategoryMusic:
 		return "Music"
-	case Categories.Dorama:
+	case CategoryDorama:
 		return "Dorama"
-	case Categories.All:
-		return ""
 	default:
 		return ""
 	}
-}
-
-func CategoryFromString(s string) (Category, error) {
-	switch s {
-
-	case Categories.Anime.String():
-		return Categories.Anime, nil
-	case Categories.AnimeHentai.String():
-		return Categories.AnimeHentai, nil
-	case Categories.Manga.String():
-		return Categories.Manga, nil
-	case Categories.MangaHentai.String():
-		return Categories.MangaHentai, nil
-	case Categories.Music.String():
-		return Categories.Music, nil
-	case Categories.Dorama.String():
-		return Categories.Dorama, nil
-	case Categories.All.String():
-		return Categories.All, nil
-	}
-
-	return Categories.Anime, errors.New("string not match any of categories")
 }

@@ -75,7 +75,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.Title, item.Title) {
 		itemUpdate.Title.Scan(item.Title)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.Title,
+			ValueTitle: model.UpdateableFieldTitle,
 			ValueOld:   oldItem.Title,
 			ValueNew:   item.Title,
 		})
@@ -84,7 +84,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.ReleaseStatus.String(), item.ReleaseStatus.String()) {
 		itemUpdate.ReleaseStatus.Scan(item.ReleaseStatus.String())
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.ReleaseStatus,
+			ValueTitle: model.UpdateableFieldReleaseStatus,
 			ValueOld:   oldItem.ReleaseStatus.Presentation(ctx),
 			ValueNew:   item.ReleaseStatus.Presentation(ctx),
 		})
@@ -93,7 +93,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffTimes(oldItem.CreatedDate, item.CreatedDate) {
 		itemUpdate.CreatedDate.Scan(*item.CreatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.CreatedDate,
+			ValueTitle: model.UpdateableFieldCreatedDate,
 			ValueOld:   time_ru_format.Format(oldItem.CreatedDate),
 			ValueNew:   time_ru_format.Format(item.CreatedDate),
 		})
@@ -102,7 +102,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffTimes(oldItem.UpdatedDate, item.UpdatedDate) {
 		itemUpdate.UpdatedDate.Scan(*item.UpdatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.UpdatedDate,
+			ValueTitle: model.UpdateableFieldUpdatedDate,
 			ValueOld:   time_ru_format.Format(oldItem.UpdatedDate),
 			ValueNew:   time_ru_format.Format(item.UpdatedDate),
 		})
@@ -131,7 +131,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.TorrentFilesSize, item.TorrentFilesSize) {
 		itemUpdate.TorrentFilesSize.Scan(item.TorrentFilesSize)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.TorrentFilesSize,
+			ValueTitle: model.UpdateableFieldTorrentFilesSize,
 			ValueOld:   oldItem.TorrentFilesSize,
 			ValueNew:   item.TorrentFilesSize,
 		})
@@ -140,7 +140,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.Notes, item.Notes) {
 		itemUpdate.Notes.Scan(item.Notes)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFields.Notes,
+			ValueTitle: model.UpdateableFieldNotes,
 			ValueOld:   oldItem.Notes,
 			ValueNew:   item.Notes,
 		})

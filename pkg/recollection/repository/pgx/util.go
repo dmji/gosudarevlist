@@ -36,17 +36,17 @@ func categoriesToAnimelayerCategories(categories []model.Category) []pgx_sqlc.Ca
 func categoriesToAnimelayerCategory(category model.Category) pgx_sqlc.CategoryAnimelayer {
 	switch category {
 
-	case model.Categories.Anime:
+	case model.CategoryAnime:
 		return pgx_sqlc.CategoryAnimelayerAnime
-	case model.Categories.AnimeHentai:
+	case model.CategoryAnimeHentai:
 		return pgx_sqlc.CategoryAnimelayerAnimeHentai
-	case model.Categories.Manga:
+	case model.CategoryManga:
 		return pgx_sqlc.CategoryAnimelayerManga
-	case model.Categories.MangaHentai:
+	case model.CategoryMangaHentai:
 		return pgx_sqlc.CategoryAnimelayerMangaHentai
-	case model.Categories.Music:
+	case model.CategoryMusic:
 		return pgx_sqlc.CategoryAnimelayerMusic
-	case model.Categories.Dorama:
+	case model.CategoryDorama:
 		return pgx_sqlc.CategoryAnimelayerDorama
 	default:
 		return pgx_sqlc.CategoryAnimelayerAnime
@@ -57,19 +57,19 @@ func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Categor
 	switch category {
 
 	case pgx_sqlc.CategoryAnimelayerAnime:
-		return model.Categories.Anime
+		return model.CategoryAnime
 	case pgx_sqlc.CategoryAnimelayerAnimeHentai:
-		return model.Categories.AnimeHentai
+		return model.CategoryAnimeHentai
 	case pgx_sqlc.CategoryAnimelayerManga:
-		return model.Categories.Manga
+		return model.CategoryManga
 	case pgx_sqlc.CategoryAnimelayerMangaHentai:
-		return model.Categories.MangaHentai
+		return model.CategoryMangaHentai
 	case pgx_sqlc.CategoryAnimelayerMusic:
-		return model.Categories.Music
+		return model.CategoryMusic
 	case pgx_sqlc.CategoryAnimelayerDorama:
-		return model.Categories.Dorama
+		return model.CategoryDorama
 	default:
-		return model.Categories.Anime
+		return model.CategoryAnime
 	}
 }
 

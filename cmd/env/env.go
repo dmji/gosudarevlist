@@ -24,40 +24,28 @@ func LoadEnv(deep int, canPanic bool) {
 	}
 }
 
-func StrToCategory(str string) animelayer.Category {
-	switch str {
-	case "anime":
-		return animelayer.Categories.Anime
-	case "anime_hentai":
-		return animelayer.Categories.AnimeHentai
-	case "manga":
-		return animelayer.Categories.Manga
-	case "manga_hentai":
-		return animelayer.Categories.MangaHentai
-	case "dorama":
-		return animelayer.Categories.Dorama
-	case "music":
-		return animelayer.Categories.Music
-	case "":
-		return animelayer.Categories.All
+func StrToCategory(s string) animelayer.Category {
+	e, err := animelayer.CategoryFromString(s)
+	if err != nil {
+		panic("incorrect string")
 	}
-	panic("incorrect string")
+	return e
 }
 
 func StrToCategoryModel(str string) model.Category {
 	switch str {
 	case "anime":
-		return model.Categories.Anime
+		return model.CategoryAnime
 	case "anime_hentai":
-		return model.Categories.AnimeHentai
+		return model.CategoryAnimeHentai
 	case "manga":
-		return model.Categories.Manga
+		return model.CategoryManga
 	case "manga_hentai":
-		return model.Categories.MangaHentai
+		return model.CategoryMangaHentai
 	case "dorama":
-		return model.Categories.Dorama
+		return model.CategoryDorama
 	case "music":
-		return model.Categories.Music
+		return model.CategoryMusic
 	}
 	panic("incorrect string")
 }
@@ -65,19 +53,19 @@ func StrToCategoryModel(str string) model.Category {
 func AnimelayerCategoryToModelCategory(category animelayer.Category) model.Category {
 
 	switch category {
-	case animelayer.Categories.Anime:
-		return model.Categories.Anime
-	case animelayer.Categories.AnimeHentai:
-		return model.Categories.AnimeHentai
-	case animelayer.Categories.Manga:
-		return model.Categories.Manga
-	case animelayer.Categories.MangaHentai:
-		return model.Categories.MangaHentai
-	case animelayer.Categories.Music:
-		return model.Categories.Music
-	case animelayer.Categories.Dorama:
-		return model.Categories.Dorama
+	case animelayer.CategoryAnime:
+		return model.CategoryAnime
+	case animelayer.CategoryAnimeHentai:
+		return model.CategoryAnimeHentai
+	case animelayer.CategoryManga:
+		return model.CategoryManga
+	case animelayer.CategoryMangaHentai:
+		return model.CategoryMangaHentai
+	case animelayer.CategoryMusic:
+		return model.CategoryMusic
+	case animelayer.CategoryDorama:
+		return model.CategoryDorama
 	default:
-		return model.Categories.Anime
+		return model.CategoryAnime
 	}
 }

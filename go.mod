@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/a-h/templ v0.2.793
-	github.com/dmji/go-animelayer-parser v0.1.2
+	github.com/dmji/go-animelayer-parser v0.1.3
 	github.com/google/go-querystring v1.1.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1
