@@ -24,6 +24,7 @@ tasks:
       
   air-rebuild-cmd:
     cmds:
+      - go generate ./...
       - task sqlc-gen
       - task langs:refresh
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
@@ -50,6 +51,7 @@ tasks:
 
   pre-build:
     cmds:
+      - go generate ./...
       - templ generate 
       - task sqlc-gen-prod
 

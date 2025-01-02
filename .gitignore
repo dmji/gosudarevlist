@@ -33,6 +33,9 @@ assets/css/tailwind.css
 *_templ.go
 *_templ.txt
 
+# go-stringer
+*_string.go
+
 # sqlc
 *.sqlc_gen.go
 *.session.sql
