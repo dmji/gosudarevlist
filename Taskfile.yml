@@ -38,7 +38,7 @@ tasks:
 
   update-build-apps:
     cmds:
-      - go install -v github.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
+      - go install github.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
       - go install github.com/a-h/templ/cmd/templ@latest
       - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
       - go install github.com/dmji/go-stringer@latest
