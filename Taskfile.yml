@@ -34,7 +34,7 @@ tasks:
     cmds:
       - task update-build-apps
       - go install github.com/air-verse/air@latest
-      - go install -v github.com/dmji/go-i18n/goi18n@latest
+      - go install -v github.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
       - go install github.com/pressly/goose/v3/cmd/goose@latest
 
   update-build-apps:
