@@ -4,6 +4,9 @@ package model
 
 import (
 	"context"
+
+	"github.com/dmji/gosudarevlist/lang"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 type Category int8
@@ -20,17 +23,35 @@ const (
 func (c *Category) Presentation(ctx context.Context) string {
 	switch *c {
 	case CategoryAnime:
-		return "Anime"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryAnime_i18n_ID,
+			Other: "Anime",
+		})
 	case CategoryAnimeHentai:
-		return "Anime Hentai"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryAnimeHentai_i18n_ID,
+			Other: "Anime Hentai",
+		})
 	case CategoryManga:
-		return "Manga"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryManga_i18n_ID,
+			Other: "Manga",
+		})
 	case CategoryMangaHentai:
-		return "Manga Hentai"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryMangaHentai_i18n_ID,
+			Other: "Manga Hentai",
+		})
 	case CategoryMusic:
-		return "Music"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryMusic_i18n_ID,
+			Other: "Music",
+		})
 	case CategoryDorama:
-		return "Dorama"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryDorama_i18n_ID,
+			Other: "Dorama",
+		})
 	default:
 		return ""
 	}

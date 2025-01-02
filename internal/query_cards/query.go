@@ -25,11 +25,9 @@ func StatusesUrl() string {
 }
 
 func StatusesPresentation(ctx context.Context) string {
-	return lang.Message(ctx, &i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "QueryCardsFilterStatusesPresentation",
-			Other: "Status",
-		},
+	return lang.Message(ctx, &i18n.Message{
+		ID:    "QueryCardsFilterStatusesPresentation",
+		Other: "Status",
 	})
 }
 
@@ -38,11 +36,9 @@ func CategoriesUrl() string {
 }
 
 func CategoriesPresentation(ctx context.Context) string {
-	return lang.Message(ctx, &i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "QueryCardsFilterCategoriesPresentation",
-			Other: "Category",
-		},
+	return lang.Message(ctx, &i18n.Message{
+		ID:    "QueryCardsFilterCategoriesPresentation",
+		Other: "Category",
 	})
 }
 

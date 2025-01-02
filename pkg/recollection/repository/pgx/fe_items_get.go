@@ -3,7 +3,6 @@ package repository_pgx
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
@@ -37,8 +36,6 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 		logger.Errorw(ctx, "Pgx repo error | GetItems", "error", err)
 		return nil, err
 	}
-
-	log.Printf("In-Memory repo | GetItems result items: %d", len(items))
 
 	cardItems := make([]model.ItemCartData, 0, len(items))
 	for _, item := range items {

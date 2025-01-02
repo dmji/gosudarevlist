@@ -2,7 +2,6 @@ package repository_pgx
 
 import (
 	"context"
-	"log"
 	"slices"
 
 	"github.com/dmji/gosudarevlist/pkg/logger"
@@ -22,8 +21,6 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 		logger.Errorw(ctx, "Pgx repo error | GetItems", "error", err)
 		return nil, err
 	}
-
-	log.Printf("In-Memory repo | GetItems result items: %d", len(items))
 
 	cardItems := make([]model.FilterGroup, 0, 5)
 	for _, item := range items {

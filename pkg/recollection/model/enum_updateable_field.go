@@ -4,6 +4,9 @@ package model
 
 import (
 	"context"
+
+	"github.com/dmji/gosudarevlist/lang"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 type UpdateableField int8
@@ -21,22 +24,47 @@ const (
 
 func (c *UpdateableField) Presentation(ctx context.Context) string {
 	switch *c {
+
 	case UpdateableFieldTitle:
-		return "Title"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldTitle_i18n_ID,
+			Other: "Title",
+		})
 	case UpdateableFieldReleaseStatus:
-		return "IsCompleted"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldReleaseStatus_i18n_ID,
+			Other: "Release Status",
+		})
 	case UpdateableFieldLastCheckedDate:
-		return "LastCheckedDate"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldLastCheckedDate_i18n_ID,
+			Other: "LastCheckedDate",
+		})
 	case UpdateableFieldCreatedDate:
-		return "CreatedDate"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldCreatedDate_i18n_ID,
+			Other: "CreatedDate",
+		})
 	case UpdateableFieldUpdatedDate:
-		return "UpdatedDate"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldUpdatedDate_i18n_ID,
+			Other: "UpdatedDate",
+		})
 	case UpdateableFieldTorrentFilesSize:
-		return "TorrentFilesSize"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldTorrentFilesSize_i18n_ID,
+			Other: "TorrentFilesSize",
+		})
 	case UpdateableFieldNotes:
-		return "Notes"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldNotes_i18n_ID,
+			Other: "Notes",
+		})
 	case UpdateableFieldIdentifier:
-		return "Identifier"
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _UpdateableFieldIdentifier_i18n_ID,
+			Other: "Identifier",
+		})
 	default:
 		return ""
 	}

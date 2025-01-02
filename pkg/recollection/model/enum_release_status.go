@@ -20,25 +20,19 @@ const (
 func (c *ReleaseStatus) Presentation(ctx context.Context) string {
 	switch *c {
 	case ReleaseStatusOnAir:
-		return lang.Message(ctx, &i18n.LocalizeConfig{
-			DefaultMessage: &i18n.Message{
-				ID:    _ReleaseStatusOnAir_i18n_ID,
-				Other: "On Air",
-			},
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _ReleaseStatusOnAir_i18n_ID,
+			Other: "On Air",
 		})
 	case ReleaseStatusIncompleted:
-		return lang.Message(ctx, &i18n.LocalizeConfig{
-			DefaultMessage: &i18n.Message{
-				ID:    _ReleaseStatusOnAir_i18n_ID,
-				Other: "Incompleted",
-			},
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _ReleaseStatusIncompleted_i18n_ID,
+			Other: "Incompleted",
 		})
 	case ReleaseStatusCompleted:
-		return lang.Message(ctx, &i18n.LocalizeConfig{
-			DefaultMessage: &i18n.Message{
-				ID:    _ReleaseStatusCompleted_i18n_ID,
-				Other: "Completed",
-			},
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _ReleaseStatusCompleted_i18n_ID,
+			Other: "Completed",
 		})
 	default:
 		return ""

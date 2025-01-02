@@ -51,6 +51,7 @@ func (s *Storage) Get(tag TagLang) *Loader {
 	if !ok {
 		res = &Loader{
 			locale: i18n.NewLocalizer(s.bundle, tag.String()),
+			Tag:    tag,
 		}
 		s.instances[tag] = res
 	}

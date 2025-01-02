@@ -1,8 +1,22 @@
 HelloPerson:
     description: Greeting message
     other: Hello {{.Name}}
+ModelCategoryAnimeHentaiPresentation: Anime Hentai
+ModelCategoryAnimePresentation: Anime
+ModelCategoryDoramaPresentation: Dorama
+ModelCategoryMangaHentaiPresentation: Manga Hentai
+ModelCategoryMangaPresentation: Manga
+ModelCategoryMusicPresentation: Music
 ModelReleaseStatusCompletedPresentation: Completed
 ModelReleaseStatusIncompletedPresentation: Incompleted
 ModelReleaseStatusOnAirPresentation: On Air
+ModelUpdateableFieldCreatedDatePresentation: CreatedDate
+ModelUpdateableFieldIdentifierPresentation: Identifier
+ModelUpdateableFieldLastCheckedDatePresentation: LastCheckedDate
+ModelUpdateableFieldNotesPresentation: Notes
+ModelUpdateableFieldReleaseStatusPresentation: Release Status
+ModelUpdateableFieldTitlePresentation: Title
+ModelUpdateableFieldTorrentFilesSizePresentation: TorrentFilesSize
+ModelUpdateableFieldUpdatedDatePresentation: UpdatedDate
 QueryCardsFilterCategoriesPresentation: Category
 QueryCardsFilterStatusesPresentation: Status
