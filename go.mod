@@ -1,9 +1,9 @@
 module github.com/dmji/gosudarevlist
 
-go 1.23.1
+go 1.23.4
 
 require (
-	github.com/a-h/templ v0.2.793
+	github.com/a-h/templ v0.3.819
 	github.com/dmji/go-animelayer-parser v0.1.3
 	github.com/google/go-querystring v1.1.0
 	github.com/jackc/pgx/v5 v5.7.2
