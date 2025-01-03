@@ -31,7 +31,13 @@ func init() {
 	flag.Int64Var(&parameter.ListenPortTcp, "port", 8080, "Port for tcp connection")
 	flag.Parse()
 
-	env.LoadEnv(10, true)
+	_, bGoose := os.LookupEnv("GOOSE_DBSTRING")
+	_, bLogin := os.LookupEnv("ANIMELAYER_LOGIN")
+	_, bPassword := os.LookupEnv("ANIMELAYER_PASSWORD")
+
+	if !bGoose || !bLogin || !bPassword {
+		env.LoadEnv(10, true)
+	}
 }
 
 func main() {
@@ -59,7 +65,6 @@ func main() {
 	}
 
 	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayer_client))
-
 	//
 	// Init Service
 	//
