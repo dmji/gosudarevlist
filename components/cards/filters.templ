@@ -17,7 +17,6 @@ templ Filters(nextPageEndpint, cardsTarget, searchField string) {
 		hx-boost="true"
 		hx-get={ nextPageEndpint }
 		hx-target={ cardsTarget }
-		hx-on::after-request="console.log(window.location.href)"
 		class="group"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
