@@ -24,7 +24,7 @@ func LangerToContextMiddleware(storage *lang.Storage, handler func(w http.Respon
 		} else {
 			cookie := http.Cookie{
 				Name:   "prefered-language",
-				Value:  "ru",
+				Value:  "en",
 				Path:   "/",
 				MaxAge: 3600,
 				//HttpOnly: true,
