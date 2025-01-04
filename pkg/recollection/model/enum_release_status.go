@@ -17,8 +17,8 @@ const (
 	ReleaseStatusCompleted
 )
 
-func (c *ReleaseStatus) Presentation(ctx context.Context) string {
-	switch *c {
+func (c ReleaseStatus) Presentation(ctx context.Context) string {
+	switch c {
 	case ReleaseStatusOnAir:
 		return lang.Message(ctx, &i18n.Message{
 			ID:    _ReleaseStatusOnAir_i18n_ID,

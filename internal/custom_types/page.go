@@ -6,13 +6,12 @@ import (
 
 type Page int
 
-func (p *Page) DecodeValues(value string, defaultValue int) error {
-	*p = Page(defaultValue)
+func (p *Page) UnmarshalText(value []byte) error {
 	if len(value) == 0 {
 		return nil
 	}
 
-	page, err := strconv.ParseInt(value, 10, 64)
+	page, err := strconv.ParseInt(string(value), 10, 64)
 	if err != nil {
 		return err
 	}

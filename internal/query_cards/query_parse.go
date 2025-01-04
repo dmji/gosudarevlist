@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/dmji/gosudarevlist/internal/custom_types"
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
@@ -12,12 +13,14 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-func Parse(ctx context.Context, q url.Values, defaultPage int) *ApiCardsParams {
-	res := &ApiCardsParams{}
+func Parse(ctx context.Context, q url.Values, defaultPage custom_types.Page) *ApiCardsParams {
+	res := &ApiCardsParams{
+		Page: defaultPage,
+	}
 
 	q = custom_url.QueryCustomParse(q)
 
-	err := res.Page.DecodeValues(q.Get(res.getUrlTagByFieldName("Page")), defaultPage)
+	err := res.Page.UnmarshalText([]byte(q.Get(res.getUrlTagByFieldName("Page"))))
 	if err != nil {
 		logger.Errorw(ctx, "parsing page string to int", "error", err)
 	}

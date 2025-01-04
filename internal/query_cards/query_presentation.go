@@ -12,23 +12,25 @@ type Stringer struct {
 	mapTitlePresentationFunctions map[string]func(context.Context) string
 }
 
+type presentationStringer interface {
+	Presentation(ctx context.Context) string
+}
+
+func presentationFromString[T presentationStringer](enumFromString func(string) (T, error)) func(context.Context, string) string {
+	return func(ctx context.Context, s string) string {
+		v, err := enumFromString(s)
+		if err != nil {
+			return s
+		}
+		return v.Presentation(ctx)
+	}
+}
+
 func NewStringer() *Stringer {
 	return &Stringer{
 		mapItemPresentationFunctions: map[string]func(context.Context, string) string{
-			StatusesUrl(): func(ctx context.Context, s string) string {
-				v, err := model.ReleaseStatusFromString(s)
-				if err != nil {
-					return s
-				}
-				return v.Presentation(ctx)
-			},
-			CategoriesUrl(): func(ctx context.Context, s string) string {
-				v, err := model.CategoryFromString(s)
-				if err != nil {
-					return s
-				}
-				return v.Presentation(ctx)
-			},
+			StatusesUrl():   presentationFromString(model.ReleaseStatusFromString),
+			CategoriesUrl(): presentationFromString(model.CategoryFromString),
 		},
 		mapTitlePresentationFunctions: map[string]func(context.Context) string{
 			StatusesUrl():   StatusesPresentation,

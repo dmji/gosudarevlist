@@ -22,8 +22,8 @@ const (
 	UpdateableFieldIdentifier
 )
 
-func (c *UpdateableField) Presentation(ctx context.Context) string {
-	switch *c {
+func (c UpdateableField) Presentation(ctx context.Context) string {
+	switch c {
 
 	case UpdateableFieldTitle:
 		return lang.Message(ctx, &i18n.Message{

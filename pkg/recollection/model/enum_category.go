@@ -20,8 +20,8 @@ const (
 	CategoryDorama
 )
 
-func (c *Category) Presentation(ctx context.Context) string {
-	switch *c {
+func (c Category) Presentation(ctx context.Context) string {
+	switch c {
 	case CategoryAnime:
 		return lang.Message(ctx, &i18n.Message{
 			ID:    _CategoryAnime_i18n_ID,
