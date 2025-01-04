@@ -23,9 +23,9 @@ func New(s service.Service) *router {
 	}
 }
 
-func (r *router) middlewareHandler(HandleFunOriginal func(string, func(http.ResponseWriter, *http.Request))) func(pattern string, handler http.HandlerFunc) {
+func (r *router) middlewareHandler(HandleFuncOriginal func(string, func(http.ResponseWriter, *http.Request))) func(pattern string, handler http.HandlerFunc) {
 	return func(pattern string, handler http.HandlerFunc) {
-		HandleFunOriginal(pattern, middleware.LangerToContextMiddleware(r.l, handler))
+		HandleFuncOriginal(pattern, middleware.LangerToContextMiddleware(r.l, handler))
 	}
 
 }
@@ -35,16 +35,19 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
 	HandleFunc("/", r.HomePageHandler)
-	HandleFunc("/animelayer", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
-	HandleFunc("/animelayer/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
-	HandleFunc("/profile", r.ProfilePageHandler)
+	HandleFunc("GET /animelayer", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
+	HandleFunc("GET /animelayer/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+	HandleFunc("GET /profile", r.ProfilePageHandler)
 }
 
 func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(pattern string, handler func(http.ResponseWriter, *http.Request))) {
 
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
-	HandleFunc("/api/cards", middleware.HxPushUrlMiddleware(r.ApiCards))
-	HandleFunc("/api/filters", middleware.HxPushUrlMiddleware(r.ApiFilters))
-	HandleFunc("/api/updates", middleware.HxPushUrlMiddleware(r.ApiUpdates))
+	HandleFunc("GET /api/cards", middleware.HxPushUrlMiddleware(r.ApiCards))
+	HandleFunc("GET /api/filters", middleware.HxPushUrlMiddleware(r.ApiFilters))
+	HandleFunc("GET /api/updates", middleware.HxPushUrlMiddleware(r.ApiUpdates))
+
+	HandleFunc("PUT /settings", r.SettingsHandler)
+
 }

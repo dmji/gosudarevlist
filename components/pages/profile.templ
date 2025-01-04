@@ -43,10 +43,15 @@ templ settings() {
 	<div class="space-y-4">
 		<div>
 			<label for="language" class="block mb-2">Language</label>
-			<select id="language" class="w-full p-2 border rounded">
+			<select
+				id="language-settings"
+				hx-put="/settings"
+				hx-swap="none"
+				hx-vals='javascript:{language: document.getElementById("language-settings").value}'
+				class="w-full p-2 border rounded"
+			>
 				<option value="en">English</option>
-				<option value="es">Español</option>
-				<option value="fr">Français</option>
+				<option value="ru">Русский</option>
 			</select>
 		</div>
 		<div>
@@ -56,6 +61,7 @@ templ settings() {
 				<option value="dark">Dark</option>
 			</select>
 		</div>
+		/*
 		<div class="space-y-2">
 			<div>
 				<input type="checkbox" id="notifications" class="mr-2"/>
@@ -70,6 +76,7 @@ templ settings() {
 				<label for="privacy">Enhanced privacy mode</label>
 			</div>
 		</div>
+		*/
 	</div>
 }
 
