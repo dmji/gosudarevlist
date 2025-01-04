@@ -65,12 +65,12 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) model.UpdateStatus {
 	switch status {
 	case pgx_sqlc.UpdateStatusNew:
-		return model.StatusNew
+		return model.UpdateStatusNew
 	case pgx_sqlc.UpdateStatusUpdate:
-		return model.StatusUpdated
+		return model.UpdateStatusUpdated
 	case pgx_sqlc.UpdateStatusRemoved:
-		return model.StatusRemoved
+		return model.UpdateStatusRemoved
 	default:
-		return model.StatusUnknown
+		return model.UpdateStatusUnknown
 	}
 }

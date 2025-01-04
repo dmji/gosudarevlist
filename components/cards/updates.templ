@@ -13,7 +13,7 @@ templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, next
 		@putPageNumberResetTrigger(currentPage, i, len(items)) {
 			<li class="p-2">
 				<div class="flex items-center space-x-4 rounded-md">
-					@statusBadgeFromText(item.UpdateStatus, item.Date)
+					@statusBadgeFromText(ctx, item.UpdateStatus, item.Date)
 					<span class="text-sm">{ item.Title }</span>
 					//<span class="text-sm text-gray-500 cursor-help" title={ item.Identifier }>ℹ️</span>
 				</div>
@@ -37,21 +37,21 @@ templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, next
 
 func statusToColorClasses(status model.UpdateStatus) string {
 	switch status {
-	case model.StatusNew:
+	case model.UpdateStatusNew:
 		return "bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border border-green-400"
-	case model.StatusRemoved:
+	case model.UpdateStatusRemoved:
 		return "bg-red-100 text-red-800  dark:bg-gray-700 dark:text-red-400 border border-red-400"
-	case model.StatusUpdated:
+	case model.UpdateStatusUpdated:
 		return "bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
 	default:
 		return ""
 	}
 }
 
-templ statusBadgeFromText(status model.UpdateStatus, date *time.Time) {
+templ statusBadgeFromText(ctx context.Context, status model.UpdateStatus, date *time.Time) {
 	<div class={ "text-xs font-medium py-0.5 rounded w-20 justify-center text-center" + " " + statusToColorClasses(status) }>
 		<div>
-			{  status.Presentation() }
+			{  status.Presentation(ctx) }
 			<br/>
 		</div>
 		<div class="text-xxs">

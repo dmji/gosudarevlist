@@ -76,13 +76,13 @@ func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) model.Categor
 func updateStatusToPgxUpdateStatus(ctx context.Context, status model.UpdateStatus) pgx_sqlc.UpdateStatus {
 	switch status {
 
-	case model.StatusNew:
+	case model.UpdateStatusNew:
 		return pgx_sqlc.UpdateStatusNew
-	case model.StatusRemoved:
+	case model.UpdateStatusRemoved:
 		return pgx_sqlc.UpdateStatusRemoved
-	case model.StatusUpdated:
+	case model.UpdateStatusUpdated:
 		return pgx_sqlc.UpdateStatusUpdate
-	case model.StatusUnknown:
+	case model.UpdateStatusUnknown:
 		fallthrough
 	default:
 		logger.Errorw(ctx, "unexpected model update status", "value", status)

@@ -44,7 +44,7 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 
 	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
 		Date:         &now,
-		UpdateStatus: model.StatusUpdated,
+		UpdateStatus: model.UpdateStatusUpdated,
 		Notes:        notes,
 		ItemId:       itemId,
 		//Identifier:   item.Identifier,

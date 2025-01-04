@@ -10,6 +10,9 @@ ModelCategoryMusicPresentation: Music
 ModelReleaseStatusCompletedPresentation: Completed
 ModelReleaseStatusIncompletedPresentation: Incompleted
 ModelReleaseStatusOnAirPresentation: On Air
+ModelUpdateStatusNewPresentation: On Air
+ModelUpdateStatusRemovedPresentation: Removed
+ModelUpdateStatusUpdatedPresentation: Updated
 ModelUpdateableFieldCreatedDatePresentation: CreatedDate
 ModelUpdateableFieldIdentifierPresentation: Identifier
 ModelUpdateableFieldLastCheckedDatePresentation: LastCheckedDate

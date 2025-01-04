@@ -29,7 +29,7 @@ func (repo *repository) RemoveItem(ctx context.Context, identifier string) error
 
 	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
 		Date:         &now,
-		UpdateStatus: model.StatusRemoved,
+		UpdateStatus: model.UpdateStatusRemoved,
 		Notes:        []model.UpdateItemNote{},
 		ItemId:       itemId,
 		//Identifier:   item.Identifier,

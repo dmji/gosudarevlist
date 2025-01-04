@@ -17,25 +17,3 @@ type UpdateItem struct {
 	ItemId     int64
 	Identifier string
 }
-
-type UpdateStatus int
-
-const (
-	StatusNew UpdateStatus = iota
-	StatusRemoved
-	StatusUpdated
-	StatusUnknown
-)
-
-func (s *UpdateStatus) Presentation() string {
-	switch *s {
-	case StatusNew:
-		return "Новое"
-	case StatusRemoved:
-		return "Удалено"
-	case StatusUpdated:
-		return "Обновлено"
-	default:
-		return ""
-	}
-}
