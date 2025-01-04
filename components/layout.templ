@@ -1,11 +1,14 @@
 package components
 
-import "github.com/dmji/gosudarevlist/components/navigation"
+import (
+	"github.com/dmji/gosudarevlist/components/navigation"
+	"github.com/dmji/gosudarevlist/components/scripts"
+)
 
 //<script src="https://unpkg.com/intercooler@1.2.3"></script>
 templ Layout(title string) {
 	<!DOCTYPE html>
-	<html lang="en">
+	<html lang="en" class="scroll-smooth">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -13,6 +16,7 @@ templ Layout(title string) {
 			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
 			<link href="/assets/images/favicon.ico" rel="icon" type="image/x-icon"/>
+			@scripts.SelectTheme(templ.JSExpression("null"))
 		</head>
 		<body class="bg-[#f0f0f0] m-0 p-0;  font-family: Arial, sans-serif;">
 			@navigation.Navbar()

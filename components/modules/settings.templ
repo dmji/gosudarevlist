@@ -1,0 +1,76 @@
+package modules
+
+import (
+	"context"
+	"github.com/dmji/gosudarevlist/components/scripts"
+	"github.com/dmji/gosudarevlist/lang"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+)
+
+templ Settings(ctx context.Context) {
+	<h3 class="text-xl font-semibold mb-4 mt-4">{ lang.Message(ctx, &i18n.Message{ID: "TemplProfileSettingsTitle", Other: "Settings"}) }</h3>
+	<div class="space-y-4">
+		<div>
+			<label for="language" class="block mb-2">
+				{ lang.Message(ctx, &i18n.Message{ID: "TemplProfileSettingsLanguageSelect", Other: "Language"}) }
+			</label>
+			<select
+				id="settings-language"
+				hx-put="/settings"
+				hx-vals='javascript:{language: document.getElementById("settings-language").value}'
+				hx-swap="none"
+				hx-on::after-request="location.reload()"
+				class="w-full p-2 border rounded"
+			>
+				<option value="en" selected>English</option>
+				<option value="ru">Русский</option>
+			</select>
+		</div>
+		<div>
+			<label for="theme" class="block mb-2">Theme</label>
+			<select
+				id="settings-theme"
+				hx-put="/settings"
+				hx-vals='javascript:{theme: document.getElementById("settings-theme").value}'
+				hx-swap="none"
+				class="w-full p-2 border rounded"
+				onchange={ scripts.SelectTheme(templ.JSExpression("this")) }
+			>
+				<option value="light">Light</option>
+				<option value="dark">Dark</option>
+				<option value="auto" selected>System Default</option>
+			</select>
+		</div>
+		/*
+		<div class="space-y-2">
+			<div>
+				<input type="checkbox" id="notifications" class="mr-2"/>
+				<label for="notifications">Enable notifications</label>
+			</div>
+			<div>
+				<input type="checkbox" id="newsletter" class="mr-2"/>
+				<label for="newsletter">Subscribe to newsletter</label>
+			</div>
+			<div>
+				<input type="checkbox" id="privacy" class="mr-2"/>
+				<label for="privacy">Enhanced privacy mode</label>
+			</div>
+		</div>
+		*/
+	</div>
+	@updateSettingsValuesFromLocalStorage()
+}
+
+script updateSettingsValuesFromLocalStorage() {
+
+    let v = (a, b) => { return a != null ? a : b; }
+    let getCookie = (name) => {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    document.getElementById('settings-theme').value = v(localStorage.theme, 'auto');
+    document.getElementById('settings-language').value = v(getCookie('prefered-language'), 'en');
+}

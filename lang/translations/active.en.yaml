@@ -23,3 +23,5 @@ ModelUpdateableFieldTorrentFilesSizePresentation: TorrentFilesSize
 ModelUpdateableFieldUpdatedDatePresentation: UpdatedDate
 QueryCardsFilterCategoriesPresentation: Category
 QueryCardsFilterStatusesPresentation: Status
+TemplProfileSettingsLanguageSelect: Language
+TemplProfileSettingsTitle: Settings

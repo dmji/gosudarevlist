@@ -8,3 +8,5 @@ QueryCardsFilterCategoriesPresentation: Категория
 QueryCardsFilterStatusesPresentation: Статус
 ModelUpdateableFieldTitlePresentation: Название
 ModelUpdateableFieldReleaseStatusPresentation: Статус Релиза
+TemplProfileSettingsTitle: Настройки
+TemplProfileSettingsLanguageSelect: Язык

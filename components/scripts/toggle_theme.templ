@@ -1,0 +1,19 @@
+package scripts 
+
+script SelectTheme(target templ.JSExpression) {
+    // reset value if specified
+    if(target != null) {
+        if(target.value != 'auto') { 
+            localStorage.theme = target.value;
+        } else {
+            localStorage.removeItem('theme'); 
+        }
+    }
+    
+    // update dom
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && (window.matchMedia('(prefers-color-scheme: dark)').matches || document.cookie.match('prefered-theme=dark')))) {
+		document.querySelector('html').classList.add('dark')
+	} else {
+		document.querySelector('html').classList.remove('dark')
+	}
+}

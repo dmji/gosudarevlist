@@ -15,7 +15,7 @@ module.exports = {
     'leading-9',
     'shadow-lg'
   ],
-  darkMode: 'class',
+  darkMode: 'selector',
   theme: {
     extend: {},
     fontSize: {
