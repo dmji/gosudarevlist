@@ -31,14 +31,23 @@ Full-Stack Web-App тти AnimeLayer.ru
 # Project Structure
 
 `assets` - anything that might requie in runtime (CSS, images etc)
+
 `langlang/translations` - folder to store localized strings as i18n toml files
+
 `build` - should contain dockerfiles and other files requied in build-stage
+
 `cmd` - inheret from clean architure folder for executable applications
+
 `internal` - inheret from clean architure folder
+
 `pkg` - inheret from clean architure folder
+
 `cmd/env (TODO: merge all into one and remove that package)` - util package for updaters apps
+
 `components` - folder with a-h/templ template files
+
 `handlers` - folder with front-end handlers routing
+
 `migrations` - sequence migration files to initialize postgres with goose
 
 # Building
