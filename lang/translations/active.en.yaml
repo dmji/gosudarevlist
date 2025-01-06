@@ -7,6 +7,8 @@ ModelCategoryDoramaPresentation: Dorama
 ModelCategoryMangaHentaiPresentation: Manga Hentai
 ModelCategoryMangaPresentation: Manga
 ModelCategoryMusicPresentation: Music
+ModelFilterCategoryPresentation: Category
+ModelFilterReleaseStatusPresentation: Release Status
 ModelReleaseStatusCompletedPresentation: Completed
 ModelReleaseStatusIncompletedPresentation: Incompleted
 ModelReleaseStatusOnAirPresentation: On Air
@@ -21,7 +23,5 @@ ModelUpdateableFieldReleaseStatusPresentation: Release Status
 ModelUpdateableFieldTitlePresentation: Title
 ModelUpdateableFieldTorrentFilesSizePresentation: TorrentFilesSize
 ModelUpdateableFieldUpdatedDatePresentation: UpdatedDate
-QueryCardsFilterCategoriesPresentation: Category
-QueryCardsFilterStatusesPresentation: Status
 TemplProfileSettingsLanguageSelect: Language
 TemplProfileSettingsTitle: Settings

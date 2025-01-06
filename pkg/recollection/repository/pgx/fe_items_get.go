@@ -28,8 +28,8 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 		SimilarityThreshold: 0.05,
 
 		SearchQuery:   opt.SearchQuery,
-		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses),
+		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
+		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
 	})
 
 	if err != nil {

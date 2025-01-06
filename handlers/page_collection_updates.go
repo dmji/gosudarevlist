@@ -4,25 +4,34 @@ import (
 	"net/http"
 
 	"github.com/dmji/gosudarevlist/components/pages"
-	"github.com/dmji/gosudarevlist/internal/query_cards"
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (router *router) CollectionUpdatesPageHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	prm := query_cards.Parse(ctx, r.URL.Query(), 1)
+	params, err := custom_url.Decode(r.URL.RawQuery, model.WithApiCardsParamsSetPage(1))
+	if err != nil {
+		logger.Errorw(ctx, "CollectionUpdatesPageHandler decode query failed", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	query := prm.Values(ctx)
-	nextPageParams := custom_url.QueryValuesToString(&query)
+	nextPageParams, err := custom_url.Encode(params)
+	if err != nil {
+		logger.Errorw(ctx, "CollectionUpdatesPageHandler encode query failed", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	logger.Infow(ctx, "Handler | ShelfPageHandler params", "params", nextPageParams)
 
-	err := pages.CollectionUpdates(
+	err = pages.CollectionUpdates(
 		"/api/updates",
-		nextPageParams,
-		prm.SearchQuery,
+		custom_url.QueryOrEmpty(nextPageParams),
+		params.SearchQuery,
 	).Render(r.Context(), w)
 
 	if err != nil {

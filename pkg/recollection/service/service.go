@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/internal/query_cards"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
 
@@ -16,9 +15,9 @@ type services struct {
 }
 
 type Service interface {
-	GetItems(ctx context.Context, opt *query_cards.ApiCardsParams) []model.ItemCartData
-	GetUpdates(ctx context.Context, opt *query_cards.ApiCardsParams) []model.UpdateItem
-	GetFilters(ctx context.Context, opt *query_cards.ApiCardsParams) []model.FilterGroup
+	GetItems(ctx context.Context, opt *model.ApiCardsParams) []model.ItemCartData
+	GetUpdates(ctx context.Context, opt *model.ApiCardsParams) []model.UpdateItem
+	GetFilters(ctx context.Context, opt *model.ApiCardsParams) []model.FilterGroup
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {

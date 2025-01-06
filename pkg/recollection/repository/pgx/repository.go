@@ -3,7 +3,6 @@ package repository_pgx
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/internal/query_cards"
 	sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 
 	"github.com/jackc/pgx/v5"
@@ -19,16 +18,14 @@ type sqlDriver interface {
 }
 
 type repository struct {
-	query           *sqlc.Queries
-	db              sqlDriver
-	filtersStringer *query_cards.Stringer
+	query *sqlc.Queries
+	db    sqlDriver
 }
 
 func New(db sqlDriver) *repository {
 	return &repository{
-		db:              db,
-		query:           sqlc.New(db),
-		filtersStringer: query_cards.NewStringer(),
+		db:    db,
+		query: sqlc.New(db),
 	}
 }
 

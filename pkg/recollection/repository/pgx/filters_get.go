@@ -13,8 +13,8 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
 		//SearchQuery:   opt.SearchQuery,
-		CategoryArray: categoriesToAnimelayerCategories(opt.Categories),
-		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses),
+		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, false),
+		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, false),
 	})
 
 	if err != nil {
@@ -24,20 +24,34 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 
 	cardItems := make([]model.FilterGroup, 0, 5)
 	for _, item := range items {
+
+		filterType, err := model.FilterFromString(item.Name)
+		if err != nil {
+			logger.Errorw(ctx, "failed parse filter type", "error", err)
+			continue
+		}
+
 		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
 		if i == -1 {
 			cardItems = append(cardItems, model.FilterGroup{
-				DisplayTitle: r.filtersStringer.GetTitlePresentation(ctx, item.Name),
+				DisplayTitle: filterType.Presentation(ctx),
 				Name:         item.Name,
 			})
 			i = len(cardItems) - 1
 		}
 
+		present, err := filterType.ChildsPresentation(ctx, item.Value)
+		if err != nil {
+			logger.Errorw(ctx, "failed parse filter type child presentation", "error", err)
+			continue
+		}
+
 		cardItems[i].CheckboxItems = append(cardItems[i].CheckboxItems,
 			model.FilterItem{
-				Presentation: r.filtersStringer.GetItemPresentation(ctx, item.Name, item.Value),
+				Presentation: present,
 				Value:        item.Value,
 				Count:        item.Count,
+				Selected:     item.Selected.Valid && item.Selected.Bool,
 			},
 		)
 	}

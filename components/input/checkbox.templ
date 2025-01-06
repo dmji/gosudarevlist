@@ -17,6 +17,7 @@ templ Checkbox(parameterName string, prm model.FilterItem) {
 		value_indeterminate={ `^` + templ.EscapeString(prm.Value) }
 		class="form-checkbox text-primary rounded mr-2 w-4 h-4"
 		disabled?={ prm.Count == 0 }
+		checked?={ prm.Selected }
 	/>
 	<span>{ prm.Presentation }</span>
 	<span class="px-1 text-xs text-gray-500">{ fmt.Sprintf("(%d)", prm.Count) }</span>

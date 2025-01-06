@@ -17,17 +17,15 @@ var allCategories = []pgx_sqlc.CategoryAnimelayer{
 	pgx_sqlc.CategoryAnimelayerDorama,
 }
 
-func categoriesToAnimelayerCategories(categories []model.Category) []pgx_sqlc.CategoryAnimelayer {
+func categoriesToAnimelayerCategories(categories []model.Category, AppendAllOnEmpty bool) []pgx_sqlc.CategoryAnimelayer {
 	res := make([]pgx_sqlc.CategoryAnimelayer, 0, len(categories))
 
 	for _, category := range categories {
 		res = append(res, categoriesToAnimelayerCategory(category))
 	}
 
-	if len(res) == 0 {
-		for _, cat := range allCategories {
-			res = append(res, cat)
-		}
+	if AppendAllOnEmpty && len(res) == 0 {
+		res = append(res, allCategories...)
 	}
 
 	return res
@@ -120,7 +118,13 @@ func pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx context.Context, st
 	}
 }
 
-func releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx context.Context, statuses []model.ReleaseStatus) []pgx_sqlc.ReleaseStatusAnimelayer {
+var allReleaseStatus = []pgx_sqlc.ReleaseStatusAnimelayer{
+	pgx_sqlc.ReleaseStatusAnimelayerOnAir,
+	pgx_sqlc.ReleaseStatusAnimelayerIncompleted,
+	pgx_sqlc.ReleaseStatusAnimelayerCompleted,
+}
+
+func releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx context.Context, statuses []model.ReleaseStatus, AppendAllOnEmpty bool) []pgx_sqlc.ReleaseStatusAnimelayer {
 
 	res := make([]pgx_sqlc.ReleaseStatusAnimelayer, 0, len(statuses))
 
@@ -128,10 +132,8 @@ func releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx context.Conte
 		res = append(res, releaseStatusAnimelayerToPgxReleaseStatusAnimelayer(ctx, status))
 	}
 
-	if len(res) == 0 {
-		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerOnAir)
-		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerIncompleted)
-		res = append(res, pgx_sqlc.ReleaseStatusAnimelayerCompleted)
+	if AppendAllOnEmpty && len(res) == 0 {
+		res = append(res, allReleaseStatus...)
 	}
 
 	return res

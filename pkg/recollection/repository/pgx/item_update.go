@@ -15,6 +15,9 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 
 	now := time.Now()
 	oldItem, err := repo.GetItemByIdentifier(ctx, item.Identifier)
+	if err != nil {
+		return err
+	}
 
 	//
 	// Collect updated notes

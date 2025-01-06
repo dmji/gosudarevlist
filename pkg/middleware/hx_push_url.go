@@ -2,10 +2,13 @@ package middleware
 
 import (
 	"log"
+	"maps"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
+	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
 func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
@@ -16,11 +19,18 @@ func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) h
 		if err != nil {
 			log.Panic(err)
 		}
+		logger.Infow(r.Context(), "queries", "current", currentUrl.Query().Encode(), "request", r.URL.Query().Encode())
+		currentQuery := currentUrl.Query()
+		for key, values := range r.URL.Query() {
+			currentQuery[key] = values
+		}
+		for key := range currentQuery {
+			currentQuery[key] = slices.DeleteFunc(currentQuery[key], func(value string) bool { return len(value) == 0 })
+		}
+		maps.DeleteFunc(currentQuery, func(key string, value []string) bool { return len(value) == 0 })
 
-		mergedQuery := custom_url.QueryCustomParse(r.URL.Query())
-
-		log.Printf("Middleware Hx-Push-Url | Query URI: %v", mergedQuery.Encode())
-		newUri := currentUrl.Path + custom_url.QueryValuesToString(&mergedQuery)
+		log.Printf("Middleware Hx-Push-Url | Query URI: %v", currentQuery.Encode())
+		newUri := currentUrl.Path + custom_url.QueryOrEmpty(currentQuery.Encode())
 
 		w.Header().Set("Access-Control-Expose-Headers", "Hx-Push-Url")
 		w.Header().Set("Hx-Push-Url", newUri)
@@ -28,6 +38,7 @@ func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) h
 		log.Printf("Middleware Hx-Push-Url | Prev URI: %s", currentUri)
 		log.Printf("Middleware Hx-Push-Url | New URI: %s", newUri)
 
+		r.URL.RawQuery = currentQuery.Encode()
 		handler(w, r)
 	}
 }
