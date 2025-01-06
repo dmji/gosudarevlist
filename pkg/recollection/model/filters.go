@@ -1,10 +1,11 @@
 package model
 
 type FilterItem struct {
-	Presentation string
-	Value        string
-	Count        int64
-	Selected     bool
+	Presentation  string
+	Value         string
+	Count         int64
+	CountFiltered int64
+	Selected      bool
 }
 
 type FilterGroup struct {

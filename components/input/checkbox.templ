@@ -20,7 +20,7 @@ templ Checkbox(parameterName string, prm model.FilterItem) {
 		checked?={ prm.Selected }
 	/>
 	<span>{ prm.Presentation }</span>
-	<span class="px-1 text-xs text-gray-500">{ fmt.Sprintf("(%d)", prm.Count) }</span>
+	<span class="px-1 text-xs text-gray-500">{ fmt.Sprintf("(%d / %d)", prm.CountFiltered, prm.Count) }</span>
 }
 
 script checkBoxCustomClick(cb templ.JSExpression) {

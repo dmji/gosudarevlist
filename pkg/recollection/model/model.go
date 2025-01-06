@@ -6,9 +6,11 @@ type OptionsGetItems struct {
 	PageIndex       int64
 	CountForOnePage int64
 
-	SearchQuery string
-	Categories  []Category
-	Statuses    []ReleaseStatus
+	SimilarityThreshold float64
+	SearchQuery         string
+
+	Categories []Category
+	Statuses   []ReleaseStatus
 }
 
 type ItemCartData struct {

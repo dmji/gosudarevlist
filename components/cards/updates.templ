@@ -9,26 +9,26 @@ import (
 )
 
 templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, nextPageEndpint, nextPageParams string, bAutoloadNextPage bool, currentPage int) {
-	for i, item := range items {
-		@putPageNumberResetTrigger(currentPage, i, len(items)) {
-			<li class="p-2">
-				<div class="flex items-center space-x-4 rounded-md">
-					@statusBadgeFromText(ctx, item.UpdateStatus, item.Date)
-					<span class="text-sm">{ item.Title }</span>
-					//<span class="text-sm text-gray-500 cursor-help" title={ item.Identifier }>ℹ️</span>
-				</div>
-				if len(item.Notes) > 0 {
-					for _, change := range item.Notes {
-						<ul class="pl-8 mt-1">
-							<i class="text-xs text-gray-500">
-								{ change.ValueTitle.Presentation(ctx) }
-							</i>
-							@fillItemChange(change)
-						</ul>
-					}
+	for _, item := range items {
+		//@putPageNumberResetTrigger(currentPage, i, len(items)) {
+		<li class="p-2">
+			<div class="flex items-center space-x-4 rounded-md">
+				@statusBadgeFromText(ctx, item.UpdateStatus, item.Date)
+				<span class="text-sm">{ item.Title }</span>
+				//<span class="text-sm text-gray-500 cursor-help" title={ item.Identifier }>ℹ️</span>
+			</div>
+			if len(item.Notes) > 0 {
+				for _, change := range item.Notes {
+					<ul class="pl-8 mt-1">
+						<i class="text-xs text-gray-500">
+							{ change.ValueTitle.Presentation(ctx) }
+						</i>
+						@fillItemChange(change)
+					</ul>
 				}
-			</li>
-		}
+			}
+		</li>
+		//}
 	}
 	if len(items) > 0 && bAutoloadNextPage {
 		@Trigger(nextPageEndpint, nextPageParams)

@@ -25,7 +25,7 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	items, err := r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
 		Count:               opt.CountForOnePage,
 		OffsetCount:         startID,
-		SimilarityThreshold: 0.05,
+		SimilarityThreshold: opt.SimilarityThreshold,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),

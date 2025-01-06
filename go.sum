@@ -11,6 +11,12 @@ github.com/dmji/qs v0.0.0-20250106000511-0e3d36b52e28 h1:MMYIvmOPitNDgHrKePcFBaM
 github.com/dmji/qs v0.0.0-20250106000511-0e3d36b52e28/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
 github.com/dmji/qs v0.0.0-20250106001635-7681d3548ab9 h1:aKoHVo17Axhshf5PO1Yon9OvcpUMjzLTmlgNGrPinog=
 github.com/dmji/qs v0.0.0-20250106001635-7681d3548ab9/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
+github.com/dmji/qs v0.0.0-20250106202537-e178bfbfc192 h1:yEybU/qGSq66XdKei6EfZPY1MOsACPatwn+5NB7jRP4=
+github.com/dmji/qs v0.0.0-20250106202537-e178bfbfc192/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
+github.com/dmji/qs v0.0.0-20250106203007-cbc4eb2c3c40 h1:OvnBuqH/eNV4iUCR7s526uBVf8Dj2AQKPY6h1xeGvQ4=
+github.com/dmji/qs v0.0.0-20250106203007-cbc4eb2c3c40/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
+github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf h1:C9F1v6PM9R711l2u6uLKal/Idh4mTnsq5ZN2uNfJZ7Y=
+github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=

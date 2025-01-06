@@ -12,9 +12,13 @@ import (
 func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) ([]model.FilterGroup, error) {
 
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
-		//SearchQuery:   opt.SearchQuery,
-		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, false),
-		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, false),
+		CheckedCategoryArray:  categoriesToAnimelayerCategories(opt.Categories, false),
+		CheckedStatusArray:    releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, false),
+		SelectedCategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
+		SelectedStatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
+
+		SearchQuery:         opt.SearchQuery,
+		SimilarityThreshold: opt.SimilarityThreshold,
 	})
 
 	if err != nil {
@@ -25,22 +29,22 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 	cardItems := make([]model.FilterGroup, 0, 5)
 	for _, item := range items {
 
-		filterType, err := model.FilterFromString(item.Name)
+		filterType, err := model.FilterFromString(item.Name.String)
 		if err != nil {
 			logger.Errorw(ctx, "failed parse filter type", "error", err)
 			continue
 		}
 
-		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
+		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name.String })
 		if i == -1 {
 			cardItems = append(cardItems, model.FilterGroup{
 				DisplayTitle: filterType.Presentation(ctx),
-				Name:         item.Name,
+				Name:         item.Name.String,
 			})
 			i = len(cardItems) - 1
 		}
 
-		present, err := filterType.ChildsPresentation(ctx, item.Value)
+		present, err := filterType.ChildsPresentation(ctx, item.Value.String)
 		if err != nil {
 			logger.Errorw(ctx, "failed parse filter type child presentation", "error", err)
 			continue
@@ -48,10 +52,11 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 
 		cardItems[i].CheckboxItems = append(cardItems[i].CheckboxItems,
 			model.FilterItem{
-				Presentation: present,
-				Value:        item.Value,
-				Count:        item.Count,
-				Selected:     item.Selected.Valid && item.Selected.Bool,
+				Presentation:  present,
+				Value:         item.Value.String,
+				Count:         item.Count.Int64,
+				CountFiltered: item.CountFiltered.Int64,
+				Selected:      item.Selected.Valid && item.Selected.Bool,
 			},
 		)
 	}

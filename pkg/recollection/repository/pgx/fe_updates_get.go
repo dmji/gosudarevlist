@@ -15,7 +15,7 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
 		Count:               opt.CountForOnePage,
 		OffsetCount:         startID,
-		SimilarityThreshold: 0.05,
+		SimilarityThreshold: opt.SimilarityThreshold,
 
 		SearchQuery:   opt.SearchQuery,
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),

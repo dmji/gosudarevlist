@@ -10,8 +10,9 @@ import (
 func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams) []model.ItemCartData {
 
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
-		CountForOnePage: 20,
-		PageIndex:       int64(opt.Page),
+		CountForOnePage:     20,
+		PageIndex:           int64(opt.Page),
+		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,
@@ -29,8 +30,9 @@ func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams) []mo
 func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams) []model.UpdateItem {
 
 	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetItems{
-		CountForOnePage: 20,
-		PageIndex:       int64(opt.Page),
+		CountForOnePage:     20,
+		PageIndex:           int64(opt.Page),
+		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,
@@ -48,8 +50,9 @@ func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams) []
 func (s *services) GetFilters(ctx context.Context, opt *model.ApiCardsParams) []model.FilterGroup {
 
 	items, err := s.AnimeLayerRepositoryDriver.GetFilters(ctx, model.OptionsGetItems{
-		CountForOnePage: 20,
-		PageIndex:       int64(opt.Page),
+		CountForOnePage:     20,
+		PageIndex:           int64(opt.Page),
+		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
 		Categories:  opt.Categories,

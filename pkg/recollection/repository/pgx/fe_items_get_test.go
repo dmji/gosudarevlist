@@ -15,9 +15,11 @@ func TestGetITemsByCategory(t *testing.T) {
 		PageIndex:       1,
 		CountForOnePage: 20,
 
-		SearchQuery: "",
-		Categories:  []model.Category{},
-		Statuses:    []model.ReleaseStatus{},
+		SearchQuery:         "",
+		SimilarityThreshold: 0.05,
+
+		Categories: []model.Category{},
+		Statuses:   []model.ReleaseStatus{},
 	})
 	println(items)
 }
@@ -30,7 +32,9 @@ func TestGetFiltersByCategory(t *testing.T) {
 		PageIndex:       0,
 		CountForOnePage: 20,
 
-		SearchQuery: "",
+		SearchQuery:         "",
+		SimilarityThreshold: 0.05,
+
 		Categories: []model.Category{
 			model.CategoryAnime,
 			model.CategoryAnimeHentai,
