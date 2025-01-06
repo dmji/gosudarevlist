@@ -1,6 +1,6 @@
 package model
 
-//go:generate go-stringer -type=ReleaseStatus -trimprefix=ReleaseStatus -output enum_release_status_string.go -nametransform=snake_case_lower -fromstringgenfn -marshaljson -marshalqs -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
+//go:generate go-stringer -type=ReleaseStatus -trimprefix=ReleaseStatus -output enum_release_status_string.go -nametransform=snake_case_lower -fromstringgenfn -marshaljson -marshalqs -marshalqspkg=github.com/dmji/qs -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
 
 import (
 	"context"
