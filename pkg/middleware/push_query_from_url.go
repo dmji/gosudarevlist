@@ -8,7 +8,7 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-func PushQueryFromUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+func PushQueryFromUrlMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		currentUri := r.Header.Get("HX-Current-URL")
