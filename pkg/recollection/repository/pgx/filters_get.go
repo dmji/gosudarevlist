@@ -29,22 +29,22 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 	cardItems := make([]model.FilterGroup, 0, 5)
 	for _, item := range items {
 
-		filterType, err := model.FilterFromString(item.Name.String)
+		filterType, err := model.FilterFromString(item.Name)
 		if err != nil {
 			logger.Errorw(ctx, "failed parse filter type", "error", err)
 			continue
 		}
 
-		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name.String })
+		i := slices.IndexFunc(cardItems, func(e model.FilterGroup) bool { return e.Name == item.Name })
 		if i == -1 {
 			cardItems = append(cardItems, model.FilterGroup{
 				DisplayTitle: filterType.Presentation(ctx),
-				Name:         item.Name.String,
+				Name:         item.Name,
 			})
 			i = len(cardItems) - 1
 		}
 
-		present, err := filterType.ChildsPresentation(ctx, item.Value.String)
+		present, err := filterType.ChildsPresentation(ctx, item.Value)
 		if err != nil {
 			logger.Errorw(ctx, "failed parse filter type child presentation", "error", err)
 			continue
@@ -53,10 +53,10 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 		cardItems[i].CheckboxItems = append(cardItems[i].CheckboxItems,
 			model.FilterItem{
 				Presentation:  present,
-				Value:         item.Value.String,
-				Count:         item.Count.Int64,
-				CountFiltered: item.CountFiltered.Int64,
-				Selected:      item.Selected.Valid && item.Selected.Bool,
+				Value:         item.Value,
+				Count:         item.Count,
+				CountFiltered: item.CountFiltered,
+				Selected:      item.Selected,
 			},
 		)
 	}
