@@ -15,9 +15,9 @@ type services struct {
 }
 
 type Service interface {
-	GetItems(ctx context.Context, opt *model.ApiCardsParams) []model.ItemCartData
-	GetUpdates(ctx context.Context, opt *model.ApiCardsParams) []model.UpdateItem
-	GetFilters(ctx context.Context, opt *model.ApiCardsParams) []model.FilterGroup
+	GetItems(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.ItemCartData
+	GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.UpdateItem
+	GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.FilterGroup
 }
 
 func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {

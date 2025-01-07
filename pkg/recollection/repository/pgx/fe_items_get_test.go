@@ -8,7 +8,6 @@ import (
 )
 
 func TestGetITemsByCategory(t *testing.T) {
-
 	repo, ctx := InitRepo(context.Background())
 
 	items, _ := repo.GetItems(ctx, model.OptionsGetItems{
@@ -25,7 +24,6 @@ func TestGetITemsByCategory(t *testing.T) {
 }
 
 func TestGetFiltersByCategory(t *testing.T) {
-
 	repo, ctx := InitRepo(context.Background())
 
 	items, _ := repo.GetFilters(ctx, model.OptionsGetItems{

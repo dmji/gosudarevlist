@@ -10,9 +10,7 @@ import (
 )
 
 func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) ([]model.FilterGroup, error) {
-
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
-		CheckedCategoryArray:  categoriesToAnimelayerCategories(opt.Categories, false),
 		CheckedStatusArray:    releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, false),
 		SelectedCategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
 		SelectedStatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
@@ -20,7 +18,6 @@ func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) 
 		SearchQuery:         opt.SearchQuery,
 		SimilarityThreshold: opt.SimilarityThreshold,
 	})
-
 	if err != nil {
 		logger.Errorw(ctx, "Pgx repo error | GetItems", "error", err)
 		return nil, err

@@ -5,6 +5,7 @@ import (
 
 	"github.com/dmji/gosudarevlist/lang"
 	"github.com/dmji/gosudarevlist/pkg/middleware"
+	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 )
 
@@ -33,14 +34,14 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 
 	HandleFunc("/", r.HomePageHandler)
 
-	HandleFunc("GET /animelayer/anime", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
-	HandleFunc("GET /animelayer/anime/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+	HandleFunc("GET /animelayer/anime", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler(model.CategoryAnime)))
+	HandleFunc("GET /animelayer/anime/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler(model.CategoryAnime)))
 
-	HandleFunc("GET /animelayer/anime_hentai", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
-	HandleFunc("GET /animelayer/anime_hentai/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+	HandleFunc("GET /animelayer/anime_hentai", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler(model.CategoryAnime)))
+	HandleFunc("GET /animelayer/anime_hentai/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler(model.CategoryAnime)))
 
-	HandleFunc("GET /animelayer/manga", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
-	HandleFunc("GET /animelayer/manga/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+	HandleFunc("GET /animelayer/manga", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler(model.CategoryAnime)))
+	HandleFunc("GET /animelayer/manga/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler(model.CategoryAnime)))
 
 	HandleFunc("GET /profile", r.ProfilePageHandler)
 }
@@ -48,9 +49,9 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(pattern string, handler func(http.ResponseWriter, *http.Request))) {
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
-	HandleFunc("GET /api/cards", middleware.HxPushUrlMiddleware(r.ApiCards))
-	HandleFunc("GET /api/filters", middleware.HxPushUrlMiddleware(r.ApiFilters))
-	HandleFunc("GET /api/updates", middleware.HxPushUrlMiddleware(r.ApiUpdates))
+	HandleFunc("GET /api/cards", r.ApiCards(model.CategoryAnime))
+	HandleFunc("GET /api/filters", middleware.HxPushUrlMiddleware(r.ApiFilters(model.CategoryAnime)))
+	HandleFunc("GET /api/updates", r.ApiUpdates(model.CategoryAnime))
 
 	HandleFunc("PUT /settings", r.SettingsHandler)
 }
