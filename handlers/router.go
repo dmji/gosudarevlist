@@ -13,8 +13,7 @@ type router struct {
 	l *lang.Storage
 }
 
-type Pager interface {
-}
+type Pager interface{}
 
 func New(s service.Service) *router {
 	return &router{
@@ -27,21 +26,26 @@ func (r *router) middlewareHandler(HandleFuncOriginal func(string, func(http.Res
 	return func(pattern string, handler http.HandlerFunc) {
 		HandleFuncOriginal(pattern, middleware.LangerToContextMiddleware(r.l, handler))
 	}
-
 }
 
 func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(http.ResponseWriter, *http.Request))) {
-
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
 	HandleFunc("/", r.HomePageHandler)
-	HandleFunc("GET /animelayer", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
-	HandleFunc("GET /animelayer/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+
+	HandleFunc("GET /animelayer/anime", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
+	HandleFunc("GET /animelayer/anime/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+
+	HandleFunc("GET /animelayer/anime_hentai", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
+	HandleFunc("GET /animelayer/anime_hentai/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+
+	HandleFunc("GET /animelayer/manga", middleware.HxPushUrlMiddleware(r.CollectionListingPageHandler))
+	HandleFunc("GET /animelayer/manga/updates", middleware.HxPushUrlMiddleware(r.CollectionUpdatesPageHandler))
+
 	HandleFunc("GET /profile", r.ProfilePageHandler)
 }
 
 func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(pattern string, handler func(http.ResponseWriter, *http.Request))) {
-
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
 	HandleFunc("GET /api/cards", middleware.HxPushUrlMiddleware(r.ApiCards))
@@ -49,5 +53,4 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(pattern string, ha
 	HandleFunc("GET /api/updates", middleware.HxPushUrlMiddleware(r.ApiUpdates))
 
 	HandleFunc("PUT /settings", r.SettingsHandler)
-
 }

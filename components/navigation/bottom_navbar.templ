@@ -35,28 +35,28 @@ templ Navbar() {
 	<div id="navbar" class="fixed z-50 bottom-0 center-absolute bg-opacity-85 bg-gray-700 p-2 rounded-t-[2rem] ease-in-out duration-1000">
 		<div class="flex flexflex-wrap-reverse h-14">
 			@navButtonItem(navButtonSingle) {
-				@clickableCollider("/home")
+				@clickableCollider("/")
 				@navButtonWithTooltip(svgHomeIcon(), "Home", "", standardButtonSizeStyle)
 			}
 			@navSeparator()
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonGroupBeg) {
-					@clickableCollider("/animelayer")
-					@navButtonWithTooltip(svgAnimeIcon(), "AnimeLayer", "", shiftedButtonSizeStyle)
+					@clickableCollider("/animelayer/anime")
+					@navButtonWithTooltip(svgAnimeIcon(), "AnimeLayer Anime", "", shiftedButtonSizeStyle)
 				}
 				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/animelayer/updates")
-					@navButtonWithTooltip(svgHistoryIcon(), "Updates", "", narrowButtonSizeStyle)
+					@clickableCollider("/animelayer/anime/updates")
+					@navButtonWithTooltip(svgHistoryIcon(), "Anime Updates", "", narrowButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonGroupBeg) {
-					@clickableCollider("/animelayer")
+					@clickableCollider("/animelayer/manga")
 					@navButtonWithTooltip(svgMangaIcon(), "AnimeLayer Manga", "", shiftedButtonSizeStyle)
 				}
 				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/animelayer/updates")
+					@clickableCollider("/animelayer/manga/updates")
 					@navButtonWithTooltip(svgHistoryIcon(), "Manga Updates", "", narrowButtonSizeStyle)
 				}
 			</div>

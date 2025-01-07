@@ -41,7 +41,6 @@ func init() {
 }
 
 func main() {
-
 	//
 	// Init logger
 	//
@@ -92,16 +91,11 @@ func main() {
 	r.InitMuxWithDefaultPages(mux.HandleFunc)
 	r.InitMuxWithDefaultApi(mux.HandleFunc)
 
-	//mux.HandleFunc("/api/parser/animelayer/category", r.ApiMyAnimeListParseCategory)
-	//mux.HandleFunc("/api/parser/animelayer/page", r.ApiMyAnimeListParsePage)
-
 	// static assets
 	mux.Handle("/assets/", http.StripPrefix("/assets/", assets.Handler()))
 
 	//
-	//
 	// starting
-	//
 	//
 	logger.Infow(ctx, "Server starting", "port", parameter.ListenPortTcp)
 
