@@ -12,5 +12,5 @@ script ResetFilters(target templ.JSExpression) {
 		form = input.form
 		}
 	});
-	target.form.requestSubmit(null)
+	htmx.trigger('body','custom-event-refresh-filters',{page:1})
 }

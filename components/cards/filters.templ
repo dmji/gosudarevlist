@@ -14,9 +14,14 @@ const filtersPanelId = "filtersPanel"
 templ Filters(nextPageEndpint, cardsTarget, searchField string) {
 	<form
 		id="filters"
+		class="group"
 		hx-boost="true"
-		hx-get={ nextPageEndpint }
-		hx-target={ cardsTarget }
+		hx-get="/api/filters"
+		hx-trigger="load once,custom-event-refresh-filters from:body"
+		hx-include="*"
+		hx-vals='js:{"page": (event?.detail?.page) ?? 1 }'
+		hx-target="#filters-categories"
+		hx-swap="innerHTML"
 		class="group"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
@@ -54,11 +59,6 @@ templ Filters(nextPageEndpint, cardsTarget, searchField string) {
 templ FilterFlags() {
 	<div
 		id="filters-categories"
-		hx-boost="true"
-		hx-get="/api/filters"
-		hx-trigger="load"
-		hx-target="this"
-		hx-swap="innerHTML"
 		class="space-y-2"
 	></div>
 }

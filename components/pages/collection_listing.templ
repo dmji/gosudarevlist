@@ -28,9 +28,16 @@ templ CollectionListing(nextPageEndpint, nextPageParams, searchField string) {
 			<div class="py-1">
 				<span></span>
 			</div>
-			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-4 px-4 items-stretch">
-				@cards.Trigger(nextPageEndpint, nextPageParams)
-			</div>
+			<div
+				id="card-container-loader"
+				hx-boost="true"
+				hx-get={ nextPageEndpint }
+				hx-include="*"
+				hx-trigger="revealed once,custom-event-refresh-pages from:body"
+				hx-on::before-request="console.log('test')"
+				hx-target="#card-container"
+			></div>
+			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-4 px-4 items-stretch"></div>
 		</div>
 	}
 }

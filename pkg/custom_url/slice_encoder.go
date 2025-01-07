@@ -39,7 +39,7 @@ func (p *sliceUnmarshaler) Unmarshal(v reflect.Value, a []string, opts *qs.Unmar
 
 	n := 0
 	for i := range a {
-		err := p.ElemUnmarshaler.Unmarshal(v.Index(i), a[i:i+1], opts)
+		err := p.ElemUnmarshaler.Unmarshal(v.Index(n), a[i:i+1], opts)
 		if err == nil {
 			n++
 		}

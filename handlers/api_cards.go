@@ -30,6 +30,7 @@ func (router *router) ApiCards(cat model.Category) func(w http.ResponseWriter, r
 			return
 		}
 
+		logger.Infow(ctx, "ApiCards reached", "params", params)
 		err = cards.CollectionListingBatch(
 			cardItems,
 			r.URL.Path,

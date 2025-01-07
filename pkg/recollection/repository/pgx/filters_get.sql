@@ -57,5 +57,7 @@ release_statuses AS (
 )
 -- Union filters tables
 SELECT a.name::text as "name", a.value::text as "value", a.count::bigint as "count", COALESCE(b.count, 0)::bigint as "count_filtered", a.selected::boolean as "selected" FROM release_statuses as a FULL JOIN release_statuses_filtered as b ON a.name = b.name AND a.value = b.value
---ORDER BY "value" DESC
+UNION
+SELECT a.name::text as "name", a.value::text as "value", a.count::bigint as "count", COALESCE(b.count, 0)::bigint as "count_filtered", a.selected::boolean as "selected" FROM release_statuses as a FULL JOIN release_statuses_filtered as b ON a.name = b.name AND a.value = b.value
+ORDER BY "value" DESC
 ;

@@ -6,7 +6,7 @@ templ Trigger(nextPageEndpint, nextPageParams string) {
 	<div
 		hx-boost="true"
 		hx-get={ nextPageEndpint + nextPageParams }
-		hx-trigger="revealed"
+		hx-trigger="revealed once"
 		hx-swap="outerHTML"
 		class="pt-96"
 	></div>

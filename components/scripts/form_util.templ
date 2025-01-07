@@ -5,11 +5,43 @@ script RequestSubmitParentForm(obj templ.JSExpression) {
 	{
 		return 
 	}
-	obj.srcElement.form.requestSubmit(null)
+/* 	let form = document.querySelector('form'); // выберите вашу форму
+	let formData = new FormData(form); // создайте объект FormData из формы
+	let formValues = {};
+
+	for (let pair of formData.entries()) {
+		formValues[pair[0]] = pair[1];
+	}
+	console.log('#', formValues);
+	
+	var values = htmx.values(form);
+	let formValues2 = {};
+	for (let pair of values.entries()) {
+		formValues2[pair[0]] = pair[1];
+	}
+	console.log('##', formValues2);
+ */
+	htmx.trigger('body','custom-event-refresh-filters',{page:1})
 }
 
 script InputTextboxLiveUpdate(target templ.JSExpression) {
-	target.form.requestSubmit(null)
+/* 	let form = document.querySelector('form'); // выберите вашу форму
+	let formData = new FormData(form); // создайте объект FormData из формы
+	let formValues = {};
+
+	for (let pair of formData.entries()) {
+		formValues[pair[0]] = pair[1];
+	}
+	console.log('$', formValues);
+	var values = htmx.values(form);
+
+	let formValues2 = {};
+	for (let pair of values.entries()) {
+		formValues2[pair[0]] = pair[1];
+	}
+	console.log('##', formValues2);
+ */
+	htmx.trigger('body','custom-event-refresh-filters',{page:1})
 
 	/* 
 	let inputValue = this.value.trim();
@@ -28,22 +60,15 @@ script InputTextboxLiveUpdate(target templ.JSExpression) {
 }
 
 script LazyLoadImage(target templ.JSExpression) {
-
-	// Создаем новый Image объект
 	const newImage = new Image();
 	const src = target.getAttribute('original_src')
 	newImage.src = src;
-
-	// После полной загрузки нового изображения заменяем старое
 	newImage.onload = () => {
 		target.src = src;
 	};
-
-	// Если загрузка изображения завершается ошибкой, показываем сообщение об этом
 	newImage.onerror = () => {
 		console.error(`Не удалось загрузить изображение ${src}`);
 	};
-
 }
 
 script InitFilterPanel(searchBarId, filtersPanelId string) {

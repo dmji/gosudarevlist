@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/dmji/gosudarevlist/pkg/custom_url"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
@@ -16,7 +17,7 @@ func PushQueryFromUrlMiddleware(handler func(w http.ResponseWriter, r *http.Requ
 			logger.Errorw(ctx, "Middleware Hx-Push-Url | Url Parse failed", "error", err)
 		}
 
-		r.URL.RawQuery = currentUrl.RawQuery
+		r.URL.RawQuery = custom_url.MergeQueryStringWithExtraQuery(ctx, currentUrl.RawQuery, r.URL.Query())
 		handler(w, r)
 	}
 }
