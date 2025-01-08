@@ -14,7 +14,7 @@ func PushQueryFromUrlMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 		currentUri := r.Header.Get("HX-Current-URL")
 		currentUrl, err := url.Parse(currentUri)
 		if err != nil {
-			logger.Errorw(ctx, "Middleware Hx-Push-Url | Url Parse failed", "error", err)
+			logger.Errorw(ctx, "Middleware Push Query From Url | Url Parse failed", "error", err)
 		}
 
 		r.URL.RawQuery = custom_url.MergeQueryStringWithExtraQuery(ctx, currentUrl.RawQuery, r.URL.Query())
