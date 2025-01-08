@@ -26,7 +26,7 @@ func (router *router) ApiFilters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	urlPushed, err := expose_header_utils.HxPushUrl(ctx, w, r, func(q string) (string, error) { return custom_url.Encode(&params) })
+	urlPushed, err := expose_header_utils.HxReplaceUrl(ctx, w, r, func(q string) (string, error) { return custom_url.Encode(&params) })
 	if err != nil {
 		logger.Errorw(ctx, "ApiFilters | Parameters push to url failed", "error", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

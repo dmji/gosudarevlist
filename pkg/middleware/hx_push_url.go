@@ -8,11 +8,11 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+func HxReplaceUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
-		newUrl, err := expose_header_utils.HxPushUrl(ctx, w, r, func(q string) (string, error) {
+		newUrl, err := expose_header_utils.HxReplaceUrl(ctx, w, r, func(q string) (string, error) {
 			return custom_url.MergeQueryStringWithExtraQuery(ctx, q, r.URL.Query()), nil
 		})
 		if err != nil {
@@ -21,7 +21,7 @@ func HxPushUrlMiddleware(handler func(w http.ResponseWriter, r *http.Request)) h
 			return
 		}
 
-		logger.Infow(ctx, "Middleware Hx-Push-Url | Pushed Url", "from", r.Header.Get("HX-Current-URL"), "to", newUrl.String())
+		logger.Infow(ctx, "Middleware Hx-Replace-Url | Pushed Url", "from", r.Header.Get("HX-Current-URL"), "to", newUrl.String())
 		handler(w, r)
 	}
 }
