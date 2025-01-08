@@ -16,7 +16,7 @@ templ Settings(ctx context.Context) {
 			</label>
 			<select
 				id="settings-language"
-				hx-put="/settings"
+				hx-put="/api/settings"
 				hx-vals='javascript:{language: document.getElementById("settings-language").value}'
 				hx-swap="none"
 				hx-on::after-request="location.reload()"
@@ -30,7 +30,7 @@ templ Settings(ctx context.Context) {
 			<label for="theme" class="block mb-2">Theme</label>
 			<select
 				id="settings-theme"
-				hx-put="/settings"
+				hx-put="/api/settings"
 				hx-vals='javascript:{theme: document.getElementById("settings-theme").value}'
 				hx-swap="none"
 				class="w-full p-2 border rounded"

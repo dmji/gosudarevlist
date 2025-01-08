@@ -1,5 +1,7 @@
 package lang
 
+//go:generate go-stringer -type=TagLang -trimprefix=TagLang -output enum_tag_lang_string.go -nametransform=snake_case_lower -fromstringgenfn -linecomment -marshaljson -marshalqs -marshalqspkg=github.com/dmji/qs -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
+
 import (
 	"context"
 
@@ -14,15 +16,11 @@ const (
 	langerCtxValue langerCtx = "langer"
 )
 
-type TagLang string
+type TagLang int8
 
-func (c *TagLang) String() string {
-	return string(*c)
-}
-
-var (
-	TagEnglish TagLang = "en"
-	TagRussian TagLang = "ru"
+const (
+	TagEnglish TagLang = iota // en
+	TagRussian                // ru
 )
 
 type Storage struct {
@@ -31,7 +29,6 @@ type Storage struct {
 }
 
 func New() *Storage {
-
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
 
@@ -46,7 +43,6 @@ func New() *Storage {
 }
 
 func (s *Storage) Get(tag TagLang) *Loader {
-
 	res, ok := s.instances[tag]
 	if !ok {
 		res = &Loader{

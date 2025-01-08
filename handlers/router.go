@@ -65,5 +65,5 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.
 
 	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
 
-	HandleFunc("PUT /settings", r.SettingsHandler)
+	HandleFunc("PUT /api/settings", r.SettingsHandler)
 }
