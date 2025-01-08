@@ -10,31 +10,35 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
-func (router *router) ApiFilters(cat model.Category) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+func (router *router) ApiFilters(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	cat, err := model.CategoryFromString(r.PathValue("category"))
+	if err != nil {
+		logger.Errorw(ctx, "PathValue parsing failed", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-		params, err := custom_url.Decode(r.URL.RawQuery, model.WithApiCardsParamsSetPage(1))
-		if err != nil {
-			logger.Errorw(ctx, "ApiFilters | Decode query failed", "error", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	params, err := custom_url.Decode(r.URL.RawQuery, model.WithApiCardsParamsSetPage(1))
+	if err != nil {
+		logger.Errorw(ctx, "ApiFilters | Decode query failed", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-		urlPushed, err := expose_header_utils.HxPushUrl(ctx, w, r, func(q string) (string, error) { return custom_url.Encode(&params) })
-		if err != nil {
-			logger.Errorw(ctx, "ApiFilters | Parameters push to url failed", "error", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	urlPushed, err := expose_header_utils.HxPushUrl(ctx, w, r, func(q string) (string, error) { return custom_url.Encode(&params) })
+	if err != nil {
+		logger.Errorw(ctx, "ApiFilters | Parameters push to url failed", "error", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-		logger.Infow(ctx, "ApiFilters | Decode query", "params", params, "query", urlPushed.String())
-		items := router.s.GetFilters(ctx, params, cat)
+	logger.Infow(ctx, "ApiFilters | Decode query", "params", params, "query", urlPushed.String())
+	items := router.s.GetFilters(ctx, params, cat)
 
-		err = cards.FilterFlagsPopulate(items).Render(r.Context(), w)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	err = cards.FilterFlagsPopulate(items).Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }

@@ -19,11 +19,11 @@ var t = navigation.PaginationOpt{
 	},
 }
 
-templ CollectionListing(nextPageEndpint, nextPageParams, searchField string) {
+templ CollectionListing(filtersEndpint, nextPageEndpint string) {
 	@components.Layout("AnimeLayer Collection") {
 		<div class="pt-3">
 			<div class="px-4">
-				@cards.Filters(nextPageEndpint, "#card-container", searchField)
+				@cards.Filters(filtersEndpint)
 			</div>
 			<div class="py-1">
 				<span></span>

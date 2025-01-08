@@ -10,23 +10,22 @@ import (
 const searchBarId = "searchBar"
 const filtersPanelId = "filtersPanel"
 
-//
-templ Filters(nextPageEndpint, cardsTarget, searchField string) {
+templ Filters(filtersEndpint string) {
 	<form
 		id="filters"
 		class="group"
 		hx-boost="true"
-		hx-get="/api/filters"
+		hx-get={ filtersEndpint }
 		hx-trigger="load once,custom-event-refresh-filters from:body"
 		hx-include="*"
-		hx-vals='js:{"page": (event?.detail?.page) ?? 1 }'
+		hx-vals="js:{ ...(event?.detail || {}) }"
 		hx-target="#filters-categories"
 		hx-swap="innerHTML"
 		class="group"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
 		<div class="flex items-center gap-1 relative">
-			@SearchBar(searchBarId, searchField)
+			@SearchBar(searchBarId)
 			<div class="top-1.5 right-2 absolute place-self-center fill-gray-500">
 				// Button Reset Value Filters
 				<button
@@ -83,13 +82,12 @@ templ FilterFlagsPopulate(filterData []model.FilterGroup) {
 	</div>
 }
 
-templ SearchBar(id, value string) {
+templ SearchBar(id string) {
 	<div class="relative flex-grow">
 		<input
 			id={ id }
 			name="query"
 			type="text"
-			value={ value }
 			placeholder="Search..."
 			hx-boost="true"
 			class="w-full p-3 pl-5 pr-4 border-gr	ay-300 

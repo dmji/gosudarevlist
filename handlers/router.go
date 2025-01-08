@@ -5,7 +5,6 @@ import (
 
 	"github.com/dmji/gosudarevlist/lang"
 	"github.com/dmji/gosudarevlist/pkg/middleware"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 )
 
@@ -41,20 +40,10 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 
 	HandleFunc("/", r.HomePageHandler)
 
-	HandleFunc("GET /animelayer/anime",
-		r.CollectionListingPageHandler(model.CategoryAnime))
-	HandleFunc("GET /animelayer/anime/updates",
-		r.CollectionUpdatesPageHandler(model.CategoryAnime))
-
-	HandleFunc("GET /animelayer/anime_hentai",
-		r.CollectionListingPageHandler(model.CategoryAnime))
-	HandleFunc("GET /animelayer/anime_hentai/updates",
-		r.CollectionUpdatesPageHandler(model.CategoryAnime))
-
-	HandleFunc("GET /animelayer/manga",
-		r.CollectionListingPageHandler(model.CategoryAnime))
-	HandleFunc("GET /animelayer/manga/updates",
-		r.CollectionUpdatesPageHandler(model.CategoryAnime))
+	HandleFunc("GET /animelayer/{category}",
+		r.CollectionListingPageHandler)
+	HandleFunc("GET /animelayer/{category}/updates",
+		r.CollectionUpdatesPageHandler)
 
 	HandleFunc("GET /profile",
 		r.ProfilePageHandler)
@@ -63,18 +52,18 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.ResponseWriter, *http.Request))) {
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
-	HandleFunc("GET /api/cards",
-		r.ApiCards(model.CategoryAnime),
+	HandleFunc("GET /api/cards/{category}",
+		r.ApiCards,
 		middleware.PushQueryFromUrlMiddleware,
 	)
 
-	HandleFunc("GET /api/filters",
-		r.ApiFilters(model.CategoryAnime),
+	HandleFunc("GET /api/filters/{category}",
+		r.ApiFilters,
 		middleware.PushQueryFromUrlMiddleware,
 		middleware.HxTriggerMiddleware("custom-event-refresh-pages"),
 	)
 
-	HandleFunc("GET /api/updates", r.ApiUpdates(model.CategoryAnime))
+	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
 
 	HandleFunc("PUT /settings", r.SettingsHandler)
 }

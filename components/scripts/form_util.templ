@@ -72,6 +72,7 @@ script LazyLoadImage(target templ.JSExpression) {
 }
 
 script InitFilterPanel(searchBarId, filtersPanelId string) {
+	document.querySelector('#searchBar').value = new URL(window.location.href).searchParams.get('query');
 	if(localStorage.getItem("show_filters") == 1) {
 		document.querySelector('#'+searchBarId).classList.toggle('rounded-b-none')
 		document.querySelector('#'+filtersPanelId).classList.toggle('hidden')
