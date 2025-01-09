@@ -41,8 +41,8 @@ func Format(t *time.Time) string {
 	}
 
 	if t.Year() == time.Now().Year() {
-		return fmt.Sprintf(t.Format("02 %s в 15:04"), monthToRussian(t.Month()))
+		return fmt.Sprintf(t.Format("02 %s %s 15:04"), monthToRussian(t.Month()), "в")
 	}
 
-	return fmt.Sprintf(t.Format("02 %s 2006 в 15:04"), monthToRussian(t.Month()))
+	return fmt.Sprintf(t.Format("02 %s 2006 %s 15:04"), monthToRussian(t.Month()), "в")
 }

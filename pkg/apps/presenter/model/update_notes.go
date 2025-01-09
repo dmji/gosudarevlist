@@ -17,7 +17,4 @@ type UpdateItem struct {
 	Title        string
 	UpdateStatus enums.UpdateStatus
 	Notes        []UpdateItemNote
-
-	ItemId     int64
-	Identifier string
 }
