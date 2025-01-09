@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 
 	"github.com/jackc/pgx/v5"
@@ -45,7 +46,7 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 
 	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
 		Date:         &now,
-		UpdateStatus: model.UpdateStatusUpdated,
+		UpdateStatus: enums.UpdateStatusUpdated,
 		Notes:        notes,
 		ItemId:       itemId,
 		// Identifier:   item.Identifier,
@@ -74,7 +75,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.Title, item.Title) {
 		itemUpdate.Title.Scan(item.Title)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldTitle,
+			ValueTitle: enums.UpdateableFieldTitle,
 			ValueOld:   oldItem.Title,
 			ValueNew:   item.Title,
 		})
@@ -83,7 +84,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.ReleaseStatus.String(), item.ReleaseStatus.String()) {
 		itemUpdate.ReleaseStatus.Scan(item.ReleaseStatus.String())
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldReleaseStatus,
+			ValueTitle: enums.UpdateableFieldReleaseStatus,
 			ValueOld:   oldItem.ReleaseStatus.Presentation(ctx),
 			ValueNew:   item.ReleaseStatus.Presentation(ctx),
 		})
@@ -92,7 +93,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffTimes(oldItem.CreatedDate, item.CreatedDate) {
 		itemUpdate.CreatedDate.Scan(*item.CreatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldCreatedDate,
+			ValueTitle: enums.UpdateableFieldCreatedDate,
 			ValueOld:   time_ru_format.Format(oldItem.CreatedDate),
 			ValueNew:   time_ru_format.Format(item.CreatedDate),
 		})
@@ -101,7 +102,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffTimes(oldItem.UpdatedDate, item.UpdatedDate) {
 		itemUpdate.UpdatedDate.Scan(*item.UpdatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldUpdatedDate,
+			ValueTitle: enums.UpdateableFieldUpdatedDate,
 			ValueOld:   time_ru_format.Format(oldItem.UpdatedDate),
 			ValueNew:   time_ru_format.Format(item.UpdatedDate),
 		})
@@ -130,7 +131,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.TorrentFilesSize, item.TorrentFilesSize) {
 		itemUpdate.TorrentFilesSize.Scan(item.TorrentFilesSize)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldTorrentFilesSize,
+			ValueTitle: enums.UpdateableFieldTorrentFilesSize,
 			ValueOld:   oldItem.TorrentFilesSize,
 			ValueNew:   item.TorrentFilesSize,
 		})
@@ -139,7 +140,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	if isDiffString(oldItem.Notes, item.Notes) {
 		itemUpdate.Notes.Scan(item.Notes)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
-			ValueTitle: model.UpdateableFieldNotes,
+			ValueTitle: enums.UpdateableFieldNotes,
 			ValueOld:   oldItem.Notes,
 			ValueNew:   item.Notes,
 		})

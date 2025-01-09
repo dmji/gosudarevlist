@@ -7,6 +7,7 @@ import (
 	"errors"
 
 	"github.com/dmji/gosudarevlist/lang"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
@@ -49,9 +50,9 @@ func childPresentationGraber[T presentationStringer](ctx context.Context, s stri
 func (c Filter) ChildsPresentation(ctx context.Context, s string) (string, error) {
 	switch c {
 	case FilterReleaseStatus:
-		return childPresentationGraber(ctx, s, ReleaseStatusFromString)
+		return childPresentationGraber(ctx, s, enums.ReleaseStatusFromString)
 	case FilterCategory:
-		return childPresentationGraber(ctx, s, CategoryFromString)
+		return childPresentationGraber(ctx, s, enums.CategoryFromString)
 	default:
 		return "", errors.New("wrong category or childs not implemented yet")
 	}

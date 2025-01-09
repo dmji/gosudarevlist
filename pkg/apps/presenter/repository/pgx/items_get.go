@@ -6,11 +6,13 @@ import (
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 )
 
-func categoryPresentation(ctx context.Context, s model.Category, bShow bool) string {
+func categoryPresentation(ctx context.Context, s enums.Category, bShow bool) string {
 	if bShow {
 		return s.Presentation(ctx)
 	}
@@ -41,8 +43,8 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 			Title:                item.Title,
 			Image:                item.RefImageCover,
 			Description:          item.Notes,
-			CreatedDate:          time_ru_format.Format(timeFromPgTimestamp(item.CreatedDate)),
-			UpdatedDate:          time_ru_format.Format(timeFromPgTimestamp(item.UpdatedDate)),
+			CreatedDate:          time_ru_format.Format(pgx_utils.TimeFromPgTimestamp(item.CreatedDate)),
+			UpdatedDate:          time_ru_format.Format(pgx_utils.TimeFromPgTimestamp(item.UpdatedDate)),
 			TorrentWeight:        item.TorrentFilesSize,
 			AnimeLayerRef:        fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),

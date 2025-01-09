@@ -5,6 +5,7 @@ import (
 	"github.com/dmji/gosudarevlist/components/svg"
 	"github.com/dmji/gosudarevlist/internal/util"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 	"time"
 )
@@ -14,7 +15,7 @@ templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, next
 		@putPageNumberResetTrigger(currentPage, i, len(items)) {
 			<li class="p-2">
 				<div class="flex items-center space-x-4 rounded-md">
-					@statusBadgeFromText(util.WCtx[model.UpdateStatus]{V: item.UpdateStatus, Ctx: ctx}, item.Date)
+					@statusBadgeFromText(util.WCtx[enums.UpdateStatus]{V: item.UpdateStatus, Ctx: ctx}, item.Date)
 					<span class="text-sm">{ item.Title }</span>
 					//<span class="text-sm text-gray-500 cursor-help" title={ item.Identifier }>ℹ️</span>
 				</div>
@@ -36,20 +37,20 @@ templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, next
 	}
 }
 
-func statusToColorClasses(status model.UpdateStatus) string {
+func statusToColorClasses(status enums.UpdateStatus) string {
 	switch status {
-	case model.UpdateStatusNew:
+	case enums.UpdateStatusNew:
 		return "bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border border-green-400"
-	case model.UpdateStatusRemoved:
+	case enums.UpdateStatusRemoved:
 		return "bg-red-100 text-red-800  dark:bg-gray-700 dark:text-red-400 border border-red-400"
-	case model.UpdateStatusUpdated:
+	case enums.UpdateStatusUpdated:
 		return "bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
 	default:
 		return ""
 	}
 }
 
-templ statusBadgeFromText(status util.WCtx[model.UpdateStatus], date *time.Time) {
+templ statusBadgeFromText(status util.WCtx[enums.UpdateStatus], date *time.Time) {
 	<div class={ "text-xs font-medium py-0.5 rounded w-20 justify-center text-center" + " " + statusToColorClasses(status.V) }>
 		<div>
 			{ status.V.Presentation(status.Ctx) }

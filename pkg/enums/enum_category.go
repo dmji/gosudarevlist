@@ -1,4 +1,4 @@
-package model
+package enums
 
 //go:generate go-stringer -type=Category -trimprefix=Category -output enum_category_string.go -nametransform=snake_case_lower -fromstringgenfn -marshaljson -marshalqs -marshalqspkg=github.com/dmji/qs -outputtransform=snake_case_lower -extraconstsnameprefix=_ -extraconstsnamesuffix=_i18n_ID -extraconstsvaluetransform=pascal_case -extraconstsvaluesuffix=Presentation
 

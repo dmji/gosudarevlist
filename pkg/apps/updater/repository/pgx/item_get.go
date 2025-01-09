@@ -5,8 +5,9 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 )
 
 func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error) {
@@ -25,10 +26,10 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 		Identifier:       identifier,
 		Title:            item.Title,
 		ReleaseStatus:    pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
-		LastCheckedDate:  timeFromPgTimestamp(item.LastCheckedDate),
-		FirstCheckedDate: timeFromPgTimestamp(item.FirstCheckedDate),
-		CreatedDate:      timeFromPgTimestamp(item.CreatedDate),
-		UpdatedDate:      timeFromPgTimestamp(item.UpdatedDate),
+		LastCheckedDate:  pgx_utils.TimeFromPgTimestamp(item.LastCheckedDate),
+		FirstCheckedDate: pgx_utils.TimeFromPgTimestamp(item.FirstCheckedDate),
+		CreatedDate:      pgx_utils.TimeFromPgTimestamp(item.CreatedDate),
+		UpdatedDate:      pgx_utils.TimeFromPgTimestamp(item.UpdatedDate),
 		RefImageCover:    item.RefImageCover,
 		RefImagePreview:  item.RefImagePreview,
 		BlobImageCover:   item.BlobImageCover,

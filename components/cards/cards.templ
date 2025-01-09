@@ -3,6 +3,7 @@ package cards
 import (
 	"github.com/dmji/gosudarevlist/components/scripts"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
 const noImagePlaceholder = "/assets/images/no_image.webp"
@@ -28,8 +29,8 @@ templ optionalLineMetaData(title, value string, bLast ...bool) {
 	}
 }
 
-templ onAirBadge(s model.ReleaseStatus) {
-	if s == model.ReleaseStatusOnAir {
+templ onAirBadge(s enums.ReleaseStatus) {
+	if s == enums.ReleaseStatusOnAir {
 		<label
 			class="absolute
 					top-[1%] right-[1%] px-[5%]

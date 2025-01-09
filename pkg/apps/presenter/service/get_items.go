@@ -4,17 +4,18 @@ import (
 	"context"
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.ItemCartData {
+func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.ItemCartData {
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),
 		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
-		Categories:  []model.Category{cat},
+		Categories:  []enums.Category{cat},
 		Statuses:    opt.Statuses,
 	})
 	if err != nil {
@@ -25,14 +26,14 @@ func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat 
 	return items
 }
 
-func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.UpdateItem {
+func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.UpdateItem {
 	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),
 		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
-		Categories:  []model.Category{cat},
+		Categories:  []enums.Category{cat},
 		Statuses:    opt.Statuses,
 	})
 	if err != nil {
@@ -43,14 +44,14 @@ func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, ca
 	return items
 }
 
-func (s *services) GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.FilterGroup {
+func (s *services) GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.FilterGroup {
 	items, err := s.AnimeLayerRepositoryDriver.GetFilters(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),
 		SimilarityThreshold: 0.05,
 
 		SearchQuery: opt.SearchQuery,
-		Categories:  []model.Category{cat},
+		Categories:  []enums.Category{cat},
 		Statuses:    opt.Statuses,
 	})
 	if err != nil {

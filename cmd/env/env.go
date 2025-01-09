@@ -1,7 +1,7 @@
 package env
 
 import (
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/joho/godotenv"
@@ -32,39 +32,29 @@ func StrToCategory(s string) animelayer.Category {
 	return e
 }
 
-func StrToCategoryModel(str string) model.Category {
-	switch str {
-	case "anime":
-		return model.CategoryAnime
-	case "anime_hentai":
-		return model.CategoryAnimeHentai
-	case "manga":
-		return model.CategoryManga
-	case "manga_hentai":
-		return model.CategoryMangaHentai
-	case "dorama":
-		return model.CategoryDorama
-	case "music":
-		return model.CategoryMusic
+func StrToCategoryModel(str string) enums.Category {
+	e, err := enums.CategoryFromString(str)
+	if err != nil {
+		panic("incorrect string")
 	}
-	panic("incorrect string")
+	return e
 }
 
-func AnimelayerCategoryToModelCategory(category animelayer.Category) model.Category {
+func AnimelayerCategoryToModelCategory(category animelayer.Category) enums.Category {
 	switch category {
 	case animelayer.CategoryAnime:
-		return model.CategoryAnime
+		return enums.CategoryAnime
 	case animelayer.CategoryAnimeHentai:
-		return model.CategoryAnimeHentai
+		return enums.CategoryAnimeHentai
 	case animelayer.CategoryManga:
-		return model.CategoryManga
+		return enums.CategoryManga
 	case animelayer.CategoryMangaHentai:
-		return model.CategoryMangaHentai
+		return enums.CategoryMangaHentai
 	case animelayer.CategoryMusic:
-		return model.CategoryMusic
+		return enums.CategoryMusic
 	case animelayer.CategoryDorama:
-		return model.CategoryDorama
+		return enums.CategoryDorama
 	default:
-		return model.CategoryAnime
+		return enums.CategoryAnime
 	}
 }

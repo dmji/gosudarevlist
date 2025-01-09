@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
 func TestGetITemsByCategory(t *testing.T) {
@@ -17,8 +18,8 @@ func TestGetITemsByCategory(t *testing.T) {
 		SearchQuery:         "",
 		SimilarityThreshold: 0.05,
 
-		Categories: []model.Category{},
-		Statuses:   []model.ReleaseStatus{},
+		Categories: []enums.Category{},
+		Statuses:   []enums.ReleaseStatus{},
 	})
 	println(items)
 }
@@ -33,9 +34,9 @@ func TestGetFiltersByCategory(t *testing.T) {
 		SearchQuery:         "",
 		SimilarityThreshold: 0.05,
 
-		Categories: []model.Category{
-			model.CategoryAnime,
-			model.CategoryAnimeHentai,
+		Categories: []enums.Category{
+			enums.CategoryAnime,
+			enums.CategoryAnimeHentai,
 		},
 	})
 

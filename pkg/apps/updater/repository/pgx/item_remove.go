@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -28,7 +29,7 @@ func (repo *repository) RemoveItem(ctx context.Context, identifier string) error
 
 	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
 		Date:         &now,
-		UpdateStatus: model.UpdateStatusRemoved,
+		UpdateStatus: enums.UpdateStatusRemoved,
 		Notes:        []model.UpdateItemNote{},
 		ItemId:       itemId,
 		// Identifier:   item.Identifier,

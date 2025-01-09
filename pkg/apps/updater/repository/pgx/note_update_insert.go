@@ -3,8 +3,9 @@ package repository_pgx
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -18,7 +19,7 @@ func (repo *repository) InsertUpdateNote(ctx context.Context, params model.Updat
 		itemId = item.Id
 	}
 
-	pgxDate, err := timeToPgTimestamp(params.Date)
+	pgxDate, err := pgx_utils.TimeToPgTimestamp(params.Date)
 	if err != nil {
 		return err
 	}

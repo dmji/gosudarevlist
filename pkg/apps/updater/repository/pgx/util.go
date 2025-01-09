@@ -3,7 +3,7 @@ package repository_pgx
 import (
 	"context"
 
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
@@ -68,19 +68,6 @@ func pgxCategoriesToCategory(category pgx_sqlc.CategoryAnimelayer) enums.Categor
 		return enums.CategoryDorama
 	default:
 		return enums.CategoryAnime
-	}
-}
-
-func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) enums.UpdateStatus {
-	switch status {
-	case pgx_sqlc.UpdateStatusNew:
-		return enums.UpdateStatusNew
-	case pgx_sqlc.UpdateStatusUpdate:
-		return enums.UpdateStatusUpdated
-	case pgx_sqlc.UpdateStatusRemoved:
-		return enums.UpdateStatusRemoved
-	default:
-		return enums.UpdateStatusUnknown
 	}
 }
 

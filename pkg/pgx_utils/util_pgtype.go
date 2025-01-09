@@ -1,4 +1,4 @@
-package repository_pgx
+package pgx_utils
 
 import (
 	"time"
@@ -6,8 +6,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func timeToPgTimestamp(t *time.Time) (pgtype.Timestamp, error) {
-
+func TimeToPgTimestamp(t *time.Time) (pgtype.Timestamp, error) {
 	pgTime := pgtype.Timestamp{}
 
 	if t != nil {
@@ -19,7 +18,7 @@ func timeToPgTimestamp(t *time.Time) (pgtype.Timestamp, error) {
 	return pgTime, nil
 }
 
-func timeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
+func TimeFromPgTimestamp(t pgtype.Timestamp) *time.Time {
 	if t.Valid {
 		return &t.Time
 	}

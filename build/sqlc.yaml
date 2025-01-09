@@ -20,3 +20,20 @@ sql:
         output_querier_file_name: "querier.sqlc_gen.go"
         output_copyfrom_file_name: "copyfrom.sqlc_gen.go"
         output_files_suffix: "c_gen"
+  - name: "updater-driver"
+    engine: "postgresql"
+    queries: "../pkg/apps/updater/repository/pgx"
+    database:
+      managed: true
+    schema: "../migrations"
+    gen:
+      go:
+        sql_package: "pgx/v5"
+        package: "pgx_sqlc"
+        out: "../pkg/apps/updater/repository/pgx/sqlc"
+        output_db_file_name: "db.sqlc_gen.go"
+        output_batch_file_name: "batch.sqlc_gen.go"
+        output_models_file_name: "models.sqlc_gen.go"
+        output_querier_file_name: "querier.sqlc_gen.go"
+        output_copyfrom_file_name: "copyfrom.sqlc_gen.go"
+        output_files_suffix: "c_gen"

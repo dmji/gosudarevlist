@@ -6,13 +6,14 @@ import (
 	"github.com/dmji/gosudarevlist/components/cards"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/expose_header_utils"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
 func (router *router) ApiFilters(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	cat, err := model.CategoryFromString(r.PathValue("category"))
+	cat, err := enums.CategoryFromString(r.PathValue("category"))
 	if err != nil {
 		logger.Errorw(ctx, "PathValue parsing failed", "error", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

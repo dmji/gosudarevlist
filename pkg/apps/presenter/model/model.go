@@ -1,6 +1,6 @@
 package model
 
-import "time"
+import "github.com/dmji/gosudarevlist/pkg/enums"
 
 type OptionsGetItems struct {
 	PageIndex       int64
@@ -9,8 +9,8 @@ type OptionsGetItems struct {
 	SimilarityThreshold float64
 	SearchQuery         string
 
-	Categories []Category
-	Statuses   []ReleaseStatus
+	Categories []enums.Category
+	Statuses   []enums.ReleaseStatus
 }
 
 type ItemCartData struct {
@@ -22,23 +22,5 @@ type ItemCartData struct {
 	Description          string
 	AnimeLayerRef        string
 	CategoryPresentation string
-	ReleaseStatus        ReleaseStatus
-}
-
-type AnimelayerItem struct {
-	Id               int64
-	Identifier       string
-	Title            string
-	ReleaseStatus    ReleaseStatus
-	LastCheckedDate  *time.Time
-	FirstCheckedDate *time.Time
-	CreatedDate      *time.Time
-	UpdatedDate      *time.Time
-	RefImageCover    string
-	RefImagePreview  string
-	BlobImageCover   string
-	BlobImagePreview string
-	TorrentFilesSize string
-	Notes            string
-	Category         Category
+	ReleaseStatus        enums.ReleaseStatus
 }

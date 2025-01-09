@@ -5,7 +5,9 @@ import (
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 )
 
 func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) ([]model.UpdateItem, error) {
@@ -36,7 +38,7 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 		notes := make([]model.UpdateItemNote, 0, len(pgxNotes))
 		for _, pgxNote := range pgxNotes {
 
-			field, err := model.UpdateableFieldFromString(pgxNote.Title)
+			field, err := enums.UpdateableFieldFromString(pgxNote.Title)
 			if err != nil {
 				logger.Errorw(ctx, "Pgx repo error | GetUpdateNotes string to field", "error", err)
 				return nil, err
@@ -52,23 +54,10 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 		cardItems = append(cardItems, model.UpdateItem{
 			Title:        item.ItemTitle,
 			UpdateStatus: pgxStatusToStatus(item.UpdateStatus),
-			Date:         timeFromPgTimestamp(item.UpdateDate),
+			Date:         pgx_utils.TimeFromPgTimestamp(item.UpdateDate),
 			Notes:        notes,
 		})
 	}
 
 	return cardItems, nil
-}
-
-func pgxStatusToStatus(status pgx_sqlc.UpdateStatus) model.UpdateStatus {
-	switch status {
-	case pgx_sqlc.UpdateStatusNew:
-		return model.UpdateStatusNew
-	case pgx_sqlc.UpdateStatusUpdate:
-		return model.UpdateStatusUpdated
-	case pgx_sqlc.UpdateStatusRemoved:
-		return model.UpdateStatusRemoved
-	default:
-		return model.UpdateStatusUnknown
-	}
 }

@@ -9,8 +9,9 @@ import (
 	"time"
 
 	"github.com/dmji/gosudarevlist/cmd/env"
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
-	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 
 	"github.com/dmji/go-animelayer-parser"
@@ -70,14 +71,14 @@ func main() {
 	}
 	lastCheckedDate := time.Now()
 
-	releaseStatus := model.ReleaseStatusOnAir
+	releaseStatus := enums.ReleaseStatusOnAir
 	if item.IsCompleted {
-		releaseStatus = model.ReleaseStatusCompleted
+		releaseStatus = enums.ReleaseStatusCompleted
 	} else {
 		year, _ := time.ParseDuration(" 1 year")
 		yearAfterUpdate := item.Updated.UpdatedDate.Add(year)
 		if lastCheckedDate.After(yearAfterUpdate) {
-			releaseStatus = model.ReleaseStatusIncompleted
+			releaseStatus = enums.ReleaseStatusIncompleted
 		}
 	}
 

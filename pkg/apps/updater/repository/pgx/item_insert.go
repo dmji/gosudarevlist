@@ -6,25 +6,27 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/enums"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 
 	"github.com/jackc/pgx/v5"
 )
 
-func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerItem, category model.Category) error {
+func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerItem, category enums.Category) error {
 	now := time.Now()
-	lastCheckedDate, err := timeToPgTimestamp(&now)
+	lastCheckedDate, err := pgx_utils.TimeToPgTimestamp(&now)
 	if err != nil {
 		return err
 	}
 
-	createdDate, err := timeToPgTimestamp(item.CreatedDate)
+	createdDate, err := pgx_utils.TimeToPgTimestamp(item.CreatedDate)
 	if err != nil {
 		return err
 	}
 
-	updatedDate, err := timeToPgTimestamp(item.UpdatedDate)
+	updatedDate, err := pgx_utils.TimeToPgTimestamp(item.UpdatedDate)
 	if err != nil {
 		return err
 	}
@@ -66,7 +68,7 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 
 	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
 		Date:         &now,
-		UpdateStatus: model.UpdateStatusNew,
+		UpdateStatus: enums.UpdateStatusNew,
 		Notes:        []model.UpdateItemNote{},
 		ItemId:       itemId,
 		// Identifier:   item.Identifier,
