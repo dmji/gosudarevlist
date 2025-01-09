@@ -16,11 +16,15 @@ func queryPosterFromItem(description *model.ItemCartData) string {
 	return noImagePlaceholder
 }
 
-templ optionalLineMetaData(title, value string) {
+templ optionalLineMetaData(title, value string, bLast ...bool) {
+	if len(value) > 0 && len(bLast) == 0 {
+		<div class="text-gray-400 text-sm">{ title }</div>
+	}
 	if len(value) > 0 {
-		<div class="text-gray-400">{ title }</div>
-		<div class="px-1">{ value }</div>
-		<span class="px-1">| </span>
+		<div class="px-1 text-sm">{ value }</div>
+	}
+	if len(value) > 0 && len(bLast) == 0 {
+		<span class="px-1 text-sm">| </span>
 	}
 }
 
@@ -73,16 +77,19 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 		<div class="flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
 			@putPageNumberResetTrigger(currentPage, i, len(cards)) {
 				// title
-				<div class="flex p-4 text-xl font-semibold place-self-stretch">
+				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
 					<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
 						{ card.Title }
 					</a>
 				</div>
 				// horizontal row with update datas
 				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
-					@optionalLineMetaData("Добавлен:", card.CreatedDate)
-					@optionalLineMetaData("Обновлен:", card.UpdatedDate)
-					<div class="px-1">{ card.TorrentWeight }</div>
+					if len(card.UpdatedDate) > 0 {
+						@optionalLineMetaData("Обновлен:", card.UpdatedDate)
+					} else {
+						@optionalLineMetaData("Добавлен:", card.CreatedDate)
+					}
+					@optionalLineMetaData("", card.TorrentWeight, true)
 				</div>
 				// horizontal row with image and description
 				<div class="grid grid-flow-col place-content-start">
