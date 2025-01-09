@@ -3,6 +3,7 @@ package cards
 import (
 	"context"
 	"github.com/dmji/gosudarevlist/components/svg"
+	"github.com/dmji/gosudarevlist/internal/util"
 	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 	"time"
@@ -13,7 +14,7 @@ templ CollectionUpdatesBatch(ctx context.Context, items []model.UpdateItem, next
 		@putPageNumberResetTrigger(currentPage, i, len(items)) {
 			<li class="p-2">
 				<div class="flex items-center space-x-4 rounded-md">
-					@statusBadgeFromText(ctx, item.UpdateStatus, item.Date)
+					@statusBadgeFromText(util.WCtx[model.UpdateStatus]{V: item.UpdateStatus, Ctx: ctx}, item.Date)
 					<span class="text-sm">{ item.Title }</span>
 					//<span class="text-sm text-gray-500 cursor-help" title={ item.Identifier }>ℹ️</span>
 				</div>
@@ -48,10 +49,10 @@ func statusToColorClasses(status model.UpdateStatus) string {
 	}
 }
 
-templ statusBadgeFromText(ctx context.Context, status model.UpdateStatus, date *time.Time) {
-	<div class={ "text-xs font-medium py-0.5 rounded w-20 justify-center text-center" + " " + statusToColorClasses(status) }>
+templ statusBadgeFromText(status util.WCtx[model.UpdateStatus], date *time.Time) {
+	<div class={ "text-xs font-medium py-0.5 rounded w-20 justify-center text-center" + " " + statusToColorClasses(status.V) }>
 		<div>
-			{  status.Presentation(ctx) }
+			{ status.V.Presentation(status.Ctx) }
 			<br/>
 		</div>
 		<div class="text-xxs">
