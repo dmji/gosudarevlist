@@ -1,12 +1,27 @@
 HelloPerson:
     description: Greeting message
     other: Привет {{.Name}}
+ModelCategoryAnimeHentaiPresentation: Аниме Хентай
+ModelCategoryAnimePresentation: Аниме
+ModelCategoryDoramaPresentation: Дорама
+ModelCategoryMangaHentaiPresentation: Манга Хентай
+ModelCategoryMangaPresentation: Манга
+ModelCategoryMusicPresentation: Музыка
+ModelFilterCategoryPresentation: Категория
+ModelFilterReleaseStatusPresentation: Статус выпуска
 ModelReleaseStatusCompletedPresentation: Завершено
 ModelReleaseStatusIncompletedPresentation: Незавершено
 ModelReleaseStatusOnAirPresentation: Выпускается
-QueryCardsFilterCategoriesPresentation: Категория
-QueryCardsFilterStatusesPresentation: Статус
-ModelUpdateableFieldTitlePresentation: Название
+ModelUpdateStatusNewPresentation: Добавлено
+ModelUpdateStatusRemovedPresentation: Удалено
+ModelUpdateStatusUpdatedPresentation: Обновлено
+ModelUpdateableFieldCreatedDatePresentation: Дата создания
+ModelUpdateableFieldIdentifierPresentation: Идентификатор
+ModelUpdateableFieldLastCheckedDatePresentation: Дата синхронизации
+ModelUpdateableFieldNotesPresentation: Описание
 ModelUpdateableFieldReleaseStatusPresentation: Статус Релиза
-TemplProfileSettingsTitle: Настройки
+ModelUpdateableFieldTitlePresentation: Название
+ModelUpdateableFieldTorrentFilesSizePresentation: Размер торрент файлов
+ModelUpdateableFieldUpdatedDatePresentation: Дата обновления
 TemplProfileSettingsLanguageSelect: Язык
+TemplProfileSettingsTitle: Настройки

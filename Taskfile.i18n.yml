@@ -16,11 +16,11 @@ tasks:
     cmds:
       - task langs:refresh
       - touch lang/translations/translate.{{.CLI_ARGS}}.yaml 
-      - goi18n merge -format yaml -outdir=lang lang/translations/active.{{.CLI_ARGS}}.yaml lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang/translations lang/translations/active.{{.CLI_ARGS}}.yaml lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
 
   merge:
     cmds:
-      - goi18n merge -format yaml -outdir=lang -sourceLanguage {{.CLI_ARGS}} lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
+      - goi18n merge -format yaml -outdir=lang/translations -sourceLanguage {{.CLI_ARGS}} lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
       - rm lang/translations/translate.{{.CLI_ARGS}}.yaml
 
 
