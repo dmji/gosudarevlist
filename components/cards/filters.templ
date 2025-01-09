@@ -13,7 +13,7 @@ const filtersPanelId = "filtersPanel"
 templ Filters(filtersEndpint string) {
 	<form
 		id="filters"
-		class="group"
+		class="group border-none"
 		hx-boost="true"
 		hx-get={ filtersEndpint }
 		hx-trigger="load once,custom-event-refresh-filters from:body"
@@ -21,7 +21,6 @@ templ Filters(filtersEndpint string) {
 		hx-vals="js:{ ...(event?.detail || {}) }"
 		hx-target="#filters-categories"
 		hx-swap="innerHTML"
-		class="group"
 		onclick={ scripts.RequestSubmitParentForm(templ.JSExpression("event")) }
 	>
 		<div class="flex items-center gap-1 relative">
@@ -47,7 +46,7 @@ templ Filters(filtersEndpint string) {
 			</div>
 		</div>
 		<div id={ filtersPanelId } class="hidden rounded-b-lg border-x-2 border-b-2">
-			<div class="w-auto px-4 gap-1 bg-white rounded-b-lg shadow-md p-6">
+			<div class="w-auto px-4 -z-10 bg-white shadow-md p-6 rounded-b-md">
 				@FilterFlags()
 			</div>
 		</div>
@@ -63,7 +62,7 @@ templ FilterFlags() {
 }
 
 templ FilterFlagsPopulate(filterData []model.FilterGroup) {
-	<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(180px,1fr))] max-sm:grid-cols-1">
+	<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(220px,1fr))] max-sm:grid-cols-1">
 		for _, category := range filterData {
 			<div>
 				if len(category.DisplayTitle) > 0 {
