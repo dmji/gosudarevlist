@@ -13,8 +13,8 @@ import (
 var content embed.FS
 
 func (s *Storage) Reload(ctx context.Context) {
-	_, err := s.bundle.LoadMessageFileFS(content, "active.ru.yaml")
+	_, err := s.bundle.LoadMessageFileFS(content, "translations/active.ru.yaml")
 	if err != nil {
-		logger.Errorw(ctx, "String Multilang Storage refresh failed", "path", "active.ru.yaml", "err", err)
+		logger.Errorw(ctx, "String Multilang Storage refresh failed", "path", "translations/active.ru.yaml", "err", err)
 	}
 }

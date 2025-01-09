@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/dmji/gosudarevlist/lang"
@@ -15,10 +16,10 @@ type router struct {
 
 type Pager interface{}
 
-func New(s service.Service) *router {
+func New(ctx context.Context, s service.Service) *router {
 	return &router{
 		s: s,
-		l: lang.New(),
+		l: lang.New(ctx),
 	}
 }
 

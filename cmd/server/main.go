@@ -81,7 +81,7 @@ func main() {
 
 	repo := repository_pgx.New(connPgx)
 	s := service.New(repo, animelayer_parser)
-	r := handlers.New(s)
+	r := handlers.New(ctx, s)
 
 	//
 	// Init Router
