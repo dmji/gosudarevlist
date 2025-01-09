@@ -23,6 +23,6 @@ func (s *router) SettingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if newValue := settings.Language; newValue != nil {
-		expose_header_utils.SetCookiePreferedLanguage(w, *newValue)
+		expose_header_utils.SetCookiePreferedLanguage(r.Context(), w, *newValue)
 	}
 }

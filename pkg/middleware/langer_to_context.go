@@ -18,6 +18,7 @@ func LangerToContextMiddleware(storage *lang.Storage) func(http.HandlerFunc) htt
 				l = lang.TagEnglish
 			}
 			ctx := storage.ToContext(r.Context(), l)
+			logger.Errorw(r.Context(), "Middleware Langer To Context | Lang loaded to context", "lang", l.String())
 
 			handler(w, r.WithContext(ctx))
 		}
