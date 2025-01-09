@@ -37,7 +37,6 @@ func (s *router) ApiUpdates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = cards.CollectionUpdatesBatch(
-		ctx,
 		items,
 		r.URL.Path,
 		custom_url.QueryOrEmpty(nextPageParams),
