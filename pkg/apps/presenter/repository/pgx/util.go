@@ -3,9 +3,9 @@ package repository_pgx
 import (
 	"context"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
 
 var allCategories = []pgx_sqlc.CategoryAnimelayer{
@@ -125,7 +125,6 @@ var allReleaseStatus = []pgx_sqlc.ReleaseStatusAnimelayer{
 }
 
 func releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx context.Context, statuses []model.ReleaseStatus, AppendAllOnEmpty bool) []pgx_sqlc.ReleaseStatusAnimelayer {
-
 	res := make([]pgx_sqlc.ReleaseStatusAnimelayer, 0, len(statuses))
 
 	for _, status := range statuses {

@@ -6,14 +6,13 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 
 	"github.com/jackc/pgx/v5"
 )
 
 func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerItem, category model.Category) error {
-
 	now := time.Now()
 	lastCheckedDate, err := timeToPgTimestamp(&now)
 	if err != nil {
@@ -70,9 +69,8 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 		UpdateStatus: model.UpdateStatusNew,
 		Notes:        []model.UpdateItemNote{},
 		ItemId:       itemId,
-		//Identifier:   item.Identifier,
+		// Identifier:   item.Identifier,
 	})
-
 	if err != nil {
 		return err
 	}

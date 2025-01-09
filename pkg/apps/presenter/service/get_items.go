@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.ItemCartData {

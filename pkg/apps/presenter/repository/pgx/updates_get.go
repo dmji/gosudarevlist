@@ -3,13 +3,12 @@ package repository_pgx
 import (
 	"context"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 )
 
 func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) ([]model.UpdateItem, error) {
-
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetUpdates(ctx, pgx_sqlc.GetUpdatesParams{
@@ -21,7 +20,6 @@ func (r *repository) GetUpdates(ctx context.Context, opt model.OptionsGetItems) 
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
 		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
 	})
-
 	if err != nil {
 		logger.Errorw(ctx, "Pgx repo error | GetUpdates", "error", err)
 		return nil, err

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 )
 
 func TestGetITemsByCategory(t *testing.T) {

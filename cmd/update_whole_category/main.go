@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5"

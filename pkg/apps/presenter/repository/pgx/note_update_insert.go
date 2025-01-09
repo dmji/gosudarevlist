@@ -3,13 +3,12 @@ package repository_pgx
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/jackc/pgx/v5"
 )
 
 func (repo *repository) InsertUpdateNote(ctx context.Context, params model.UpdateItem) error {
-
 	itemId := params.ItemId
 	if itemId == 0 {
 		item, err := repo.GetItemByIdentifier(ctx, params.Identifier)
@@ -69,5 +68,4 @@ func (repo *repository) InsertUpdateNote(ctx context.Context, params model.Updat
 	}
 
 	return nil
-
 }

@@ -3,7 +3,7 @@ package repository_pgx
 import (
 	"context"
 
-	sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -30,7 +30,6 @@ func New(db sqlDriver) *repository {
 }
 
 func loadType(ctx context.Context, conn *pgx.Conn, typeName string, bArray bool) error {
-
 	dt, err := conn.LoadType(ctx, typeName)
 	if err != nil {
 		return err
@@ -52,7 +51,6 @@ func loadType(ctx context.Context, conn *pgx.Conn, typeName string, bArray bool)
 
 func AfterConnectFunction() func(ctx context.Context, conn *pgx.Conn) error {
 	return func(ctx context.Context, conn *pgx.Conn) error {
-
 		err := loadType(ctx, conn, "CATEGORY_ANIMELAYER", true)
 		if err != nil {
 			return err

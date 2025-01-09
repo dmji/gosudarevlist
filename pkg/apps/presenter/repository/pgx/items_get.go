@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 )
 
@@ -19,7 +19,6 @@ func categoryPresentation(ctx context.Context, s model.Category, bShow bool) str
 }
 
 func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([]model.ItemCartData, error) {
-
 	startID := (opt.PageIndex - 1) * opt.CountForOnePage
 
 	items, err := r.query.GetItems(ctx, pgx_sqlc.GetItemsParams{
@@ -31,7 +30,6 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 		CategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
 		StatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
 	})
-
 	if err != nil {
 		logger.Errorw(ctx, "Pgx repo error | GetItems", "error", err)
 		return nil, err

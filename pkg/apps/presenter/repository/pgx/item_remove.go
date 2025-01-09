@@ -4,12 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/jackc/pgx/v5"
 )
 
 func (repo *repository) RemoveItem(ctx context.Context, identifier string) error {
-
 	now := time.Now()
 
 	//
@@ -32,9 +31,8 @@ func (repo *repository) RemoveItem(ctx context.Context, identifier string) error
 		UpdateStatus: model.UpdateStatusRemoved,
 		Notes:        []model.UpdateItemNote{},
 		ItemId:       itemId,
-		//Identifier:   item.Identifier,
+		// Identifier:   item.Identifier,
 	})
-
 	if err != nil {
 		return err
 	}

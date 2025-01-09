@@ -4,15 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx/sqlc"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
 
 	"github.com/jackc/pgx/v5"
 )
 
 func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerItem) error {
-
 	now := time.Now()
 	oldItem, err := repo.GetItemByIdentifier(ctx, item.Identifier)
 	if err != nil {
@@ -36,7 +35,6 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	r := repo.query.WithTx(tx)
 
 	itemId, err := r.UpdateItem(ctx, *arg)
-
 	if err != nil {
 		return err
 	}
@@ -50,9 +48,8 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 		UpdateStatus: model.UpdateStatusUpdated,
 		Notes:        notes,
 		ItemId:       itemId,
-		//Identifier:   item.Identifier,
+		// Identifier:   item.Identifier,
 	})
-
 	if err != nil {
 		return err
 	}
@@ -69,7 +66,6 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 }
 
 func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pgx_sqlc.UpdateItemParams, []model.UpdateItemNote) {
-
 	itemUpdate := &pgx_sqlc.UpdateItemParams{
 		Identifier: oldItem.Identifier,
 	}

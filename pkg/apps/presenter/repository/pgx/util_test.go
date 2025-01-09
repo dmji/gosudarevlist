@@ -5,16 +5,15 @@ import (
 	"os"
 
 	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/repository"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
-	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func InitRepo(ctx context.Context) (repository.AnimeLayerRepositoryDriver, context.Context) {
-
 	sugaredLogger, err := logger.New()
 	if err != nil {
 		panic(err)

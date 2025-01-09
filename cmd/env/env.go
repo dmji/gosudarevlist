@@ -1,7 +1,7 @@
 package env
 
 import (
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/joho/godotenv"
@@ -51,7 +51,6 @@ func StrToCategoryModel(str string) model.Category {
 }
 
 func AnimelayerCategoryToModelCategory(category animelayer.Category) model.Category {
-
 	switch category {
 	case animelayer.CategoryAnime:
 		return model.CategoryAnime

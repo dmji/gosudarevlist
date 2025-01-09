@@ -11,9 +11,9 @@ import (
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/cmd/env"
 	"github.com/dmji/gosudarevlist/handlers"
+	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	repository_pgx "github.com/dmji/gosudarevlist/pkg/recollection/repository/pgx"
-	"github.com/dmji/gosudarevlist/pkg/recollection/service"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -64,6 +64,7 @@ func main() {
 	}
 
 	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayer_client))
+	_ = animelayer_parser
 	//
 	// Init Service
 	//
@@ -80,7 +81,7 @@ func main() {
 	}
 
 	repo := repository_pgx.New(connPgx)
-	s := service.New(repo, animelayer_parser)
+	s := service.New(repo)
 	r := handlers.New(ctx, s)
 
 	//

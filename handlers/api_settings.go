@@ -4,10 +4,10 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
 	"github.com/dmji/gosudarevlist/pkg/expose_header_utils"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (s *router) SettingsHandler(w http.ResponseWriter, r *http.Request) {

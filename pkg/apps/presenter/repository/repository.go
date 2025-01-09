@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 )
 
 type AnimeLayerRepositoryDriver interface {

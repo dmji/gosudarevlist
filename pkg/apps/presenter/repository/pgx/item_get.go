@@ -5,12 +5,11 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
 )
 
 func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error) {
-
 	item, err := r.query.GetItemByIdentifier(ctx, identifier)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, err

@@ -3,15 +3,12 @@ package service
 import (
 	"context"
 
-	"github.com/dmji/gosudarevlist/pkg/recollection/model"
-	"github.com/dmji/gosudarevlist/pkg/recollection/repository"
-
-	"github.com/dmji/go-animelayer-parser"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/repository"
 )
 
 type services struct {
 	repository.AnimeLayerRepositoryDriver
-	animelayerParser animelayer.ItemProvider
 }
 
 type Service interface {
@@ -20,9 +17,8 @@ type Service interface {
 	GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat model.Category) []model.FilterGroup
 }
 
-func New(repo repository.AnimeLayerRepositoryDriver, animelayerParser animelayer.ItemProvider) *services {
+func New(repo repository.AnimeLayerRepositoryDriver) *services {
 	return &services{
 		AnimeLayerRepositoryDriver: repo,
-		animelayerParser:           animelayerParser,
 	}
 }
