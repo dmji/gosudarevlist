@@ -28,7 +28,7 @@ type Storage struct {
 	instances map[TagLang]*Loader
 }
 
-func New() *Storage {
+func New(ctx context.Context) *Storage {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
 
@@ -37,7 +37,7 @@ func New() *Storage {
 		instances: make(map[TagLang]*Loader),
 	}
 
-	s.Reload()
+	s.Reload(ctx)
 
 	return s
 }
