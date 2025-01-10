@@ -7,7 +7,7 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/enums"
-	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
+	"github.com/dmji/gosudarevlist/pkg/time_formater.go"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -94,8 +94,8 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 		itemUpdate.CreatedDate.Scan(*item.CreatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
 			ValueTitle: enums.UpdateableFieldCreatedDate,
-			ValueOld:   time_ru_format.Format(oldItem.CreatedDate),
-			ValueNew:   time_ru_format.Format(item.CreatedDate),
+			ValueOld:   time_formater.Format(ctx, oldItem.CreatedDate),
+			ValueNew:   time_formater.Format(ctx, item.CreatedDate),
 		})
 	}
 
@@ -103,8 +103,8 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 		itemUpdate.UpdatedDate.Scan(*item.UpdatedDate)
 		itemNotes = append(itemNotes, model.UpdateItemNote{
 			ValueTitle: enums.UpdateableFieldUpdatedDate,
-			ValueOld:   time_ru_format.Format(oldItem.UpdatedDate),
-			ValueNew:   time_ru_format.Format(item.UpdatedDate),
+			ValueOld:   time_formater.Format(ctx, oldItem.UpdatedDate),
+			ValueNew:   time_formater.Format(ctx, item.UpdatedDate),
 		})
 	}
 

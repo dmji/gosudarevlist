@@ -1,27 +1,40 @@
+EnumsCategoryAnimeHentaiPresentation: Аниме Хентай
+EnumsCategoryAnimePresentation: Аниме
+EnumsCategoryDoramaPresentation: Дорама
+EnumsCategoryMangaHentaiPresentation: Манга Хентай
+EnumsCategoryMangaPresentation: Манга
+EnumsCategoryMusicPresentation: Музыка
+EnumsReleaseStatusCompletedPresentation: Завершено
+EnumsReleaseStatusIncompletedPresentation: Незавершено
+EnumsReleaseStatusOnAirPresentation: Выпускается
+EnumsUpdateStatusNewPresentation: Добавлено
+EnumsUpdateStatusRemovedPresentation: Удалено
+EnumsUpdateStatusUpdatedPresentation: Обновлено
+EnumsUpdateableFieldCreatedDatePresentation: Дата создания
+EnumsUpdateableFieldIdentifierPresentation: Идентификатор
+EnumsUpdateableFieldLastCheckedDatePresentation: Дата синхронизации
+EnumsUpdateableFieldNotesPresentation: Описание
+EnumsUpdateableFieldReleaseStatusPresentation: Статус Релиза
+EnumsUpdateableFieldTitlePresentation: Название
+EnumsUpdateableFieldTorrentFilesSizePresentation: Размер торрент файлов
+EnumsUpdateableFieldUpdatedDatePresentation: Дата обновления
 HelloPerson:
     description: Greeting message
     other: Привет {{.Name}}
-ModelCategoryAnimeHentaiPresentation: Аниме Хентай
-ModelCategoryAnimePresentation: Аниме
-ModelCategoryDoramaPresentation: Дорама
-ModelCategoryMangaHentaiPresentation: Манга Хентай
-ModelCategoryMangaPresentation: Манга
-ModelCategoryMusicPresentation: Музыка
 ModelFilterCategoryPresentation: Категория
 ModelFilterReleaseStatusPresentation: Статус выпуска
-ModelReleaseStatusCompletedPresentation: Завершено
-ModelReleaseStatusIncompletedPresentation: Незавершено
-ModelReleaseStatusOnAirPresentation: Выпускается
-ModelUpdateStatusNewPresentation: Добавлено
-ModelUpdateStatusRemovedPresentation: Удалено
-ModelUpdateStatusUpdatedPresentation: Обновлено
-ModelUpdateableFieldCreatedDatePresentation: Дата создания
-ModelUpdateableFieldIdentifierPresentation: Идентификатор
-ModelUpdateableFieldLastCheckedDatePresentation: Дата синхронизации
-ModelUpdateableFieldNotesPresentation: Описание
-ModelUpdateableFieldReleaseStatusPresentation: Статус Релиза
-ModelUpdateableFieldTitlePresentation: Название
-ModelUpdateableFieldTorrentFilesSizePresentation: Размер торрент файлов
-ModelUpdateableFieldUpdatedDatePresentation: Дата обновления
 TemplProfileSettingsLanguageSelect: Язык
 TemplProfileSettingsTitle: Настройки
+TimeFormatInWord: в
+TimeFormatMonthApril: Апреля
+TimeFormatMonthAugust: Августа
+TimeFormatMonthDecember: Декабря
+TimeFormatMonthFebruary: Февраля
+TimeFormatMonthJanuary: Января
+TimeFormatMonthJuly: Июля
+TimeFormatMonthJune: Июня
+TimeFormatMonthMarch: Марта
+TimeFormatMonthMay: Мая
+TimeFormatMonthNovember: Ноября
+TimeFormatMonthOctober: Октября
+TimeFormatMonthSeptember: Сентября

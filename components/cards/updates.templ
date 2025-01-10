@@ -4,7 +4,7 @@ import (
 	"github.com/dmji/gosudarevlist/components/svg"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
-	"github.com/dmji/gosudarevlist/pkg/time_ru_format.go"
+	"github.com/dmji/gosudarevlist/pkg/time_formater.go"
 	"time"
 )
 
@@ -55,7 +55,7 @@ templ statusBadgeFromText(status enums.UpdateStatus, date *time.Time) {
 			<br/>
 		</div>
 		<div class="text-xxs">
-			{ time_ru_format.Format(ctx, date) }
+			{ time_formater.Format(ctx, date) }
 		</div>
 	</div>
 }
