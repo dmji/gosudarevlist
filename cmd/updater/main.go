@@ -3,19 +3,15 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
-	"net"
-	"net/http"
 	"os"
 
-	"github.com/dmji/gosudarevlist/assets"
-	"github.com/dmji/gosudarevlist/handlers"
 	"github.com/dmji/gosudarevlist/internal/animelayer_client"
 	"github.com/dmji/gosudarevlist/internal/env"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
-	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 
 	"github.com/dmji/go-animelayer-parser"
@@ -81,38 +77,13 @@ func main() {
 		panic(err)
 	}
 
-	repoPresenter := repository_presenter_pgx.New(connPgx)
 	repoUpdater := repository_updater_pgx.New(connPgx)
 	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser))
-	presentService := service_presenter.New(repoPresenter)
 
-	//
-	// Init Router
-	//
-	r := handlers.New(ctx, presentService, updaterService, updaterService.WsHandlerProvider())
-	mux := http.NewServeMux()
-
-	r.InitMuxWithDefaultPages(mux.HandleFunc)
-	r.InitMuxWithDefaultApi(mux.HandleFunc)
-
-	// static assets
-	mux.Handle("/assets/", http.StripPrefix("/assets/", assets.Handler()))
-
-	//
-	// starting
-	//
-	logger.Infow(ctx, "Server starting", "port", parameter.ListenPortTcp)
-
-	conn, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", parameter.ListenPortTcp))
-	if err != nil {
-		logger.Fatalw(ctx, "announces listen", "error", err)
-	}
-
-	srv := &http.Server{
-		Handler:     mux,
-		BaseContext: func(l net.Listener) context.Context { return ctx },
-	}
-	if err := srv.Serve(conn); err != nil {
-		logger.Fatalw(ctx, "serve", "error", err)
-	}
+	// cat := enums.CategoryAnime
+	// cat := enums.CategoryManga
+	// cat := enums.CategoryDorama
+	// cat := enums.CategoryMusic
+	cat := enums.CategoryAll
+	updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeAll)
 }

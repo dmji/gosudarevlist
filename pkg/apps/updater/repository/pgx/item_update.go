@@ -75,6 +75,8 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 	itemUpdate := &pgx_sqlc.UpdateItemParams{
 		Identifier: oldItem.Identifier,
 	}
+	itemUpdate.LastCheckedDate.Scan(*item.LastCheckedDate)
+
 	itemNotes := make([]model.UpdateItemNote, 0, 10)
 
 	if isDiffString(oldItem.Title, item.Title) {
@@ -114,11 +116,6 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   time_formater.Format(ctx, oldItem.UpdatedDate),
 			ValueNew:   time_formater.Format(ctx, item.UpdatedDate),
 		})
-		bUpdateRequied = true
-	}
-
-	if isDiffTimes(oldItem.LastCheckedDate, item.LastCheckedDate) {
-		itemUpdate.LastCheckedDate.Scan(*item.LastCheckedDate)
 		bUpdateRequied = true
 	}
 
@@ -169,7 +166,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 }
 
 func isDiffString(oldItem, item string) bool {
-	if len(oldItem) == 0 {
+	if len(oldItem) == 0 && len(item) > 0 {
 		return true
 	}
 

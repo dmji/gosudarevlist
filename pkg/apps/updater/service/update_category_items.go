@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/dmji/go-animelayer-parser"
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/repository"
 	"github.com/dmji/gosudarevlist/pkg/enums"
@@ -14,9 +15,15 @@ import (
 func (s *service) UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error {
 	logger.Infow(ctx, "Update Target Category | Pipe started", "category", category, "mode", mode)
 
+	updatedIdentifiers := make(map[string]interface{})
+
 loop_pages:
 	for iPage := 1; ; iPage++ {
 		items, err := s.animelayerApi.GetItemsFromCategoryPages(ctx, category, iPage)
+		if errors.Is(err, animelayer.ErrorEmptyPage) {
+			break loop_pages
+		}
+
 		if err != nil {
 			logger.Infow(ctx, "Update Target Category | Items getting failed", "category", category, "page", iPage, "error", err)
 			return err
@@ -25,9 +32,15 @@ loop_pages:
 		if len(items) == 0 {
 			break
 		}
+		logger.Infow(ctx, "Update Target Category | Pipe in-progress", "category", category, "mode", mode, "page", iPage)
 
 	loop_items:
 		for _, item := range items {
+
+			if _, ok := updatedIdentifiers[item.Identifier]; ok {
+				break loop_pages
+			}
+			updatedIdentifiers[item.Identifier] = nil
 
 			_, err = s.repo.GetItemByIdentifier(ctx, item.Identifier)
 			bInsert := errors.Is(err, sql.ErrNoRows)

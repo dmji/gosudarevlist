@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
@@ -16,5 +17,12 @@ func (s *router) RunUpdaterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.Infow(r.Context(), "RunUpdaterHandler recived", "category", cat, "rurl", r.RequestURI, "url", r.URL, "header", r.Header)
+	if ip := r.Header.Get("X-Real-Ip"); ip != "188.68.240.160" {
+		http.Error(w, "inacceptable caller", http.StatusNotAcceptable)
+		return
+	}
+
+	logger.Infow(r.Context(), "RunUpdaterHandler executed", "category", cat, "url", r.URL, "header", r.Header)
+	s.updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeWhileNew)
+	logger.Infow(r.Context(), "RunUpdaterHandler finished", "category", cat, "url", r.URL)
 }

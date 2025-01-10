@@ -48,10 +48,15 @@ func conv(item *animelayer.Item) *model.AnimelayerItem {
 	if item.IsCompleted {
 		releaseStatus = enums.ReleaseStatusCompleted
 	} else {
-		year, _ := time.ParseDuration(" 1 year")
-		yearAfterUpdate := item.Updated.UpdatedDate.Add(year)
-		if lastCheckedDate.After(yearAfterUpdate) {
-			releaseStatus = enums.ReleaseStatusIncompleted
+		data := item.Updated.UpdatedDate
+		if data == nil {
+			data = item.Updated.CreatedDate
+		}
+		if data != nil {
+			yearAfterUpdate := data.Add(time.Hour * 8760 /*year*/)
+			if lastCheckedDate.After(yearAfterUpdate) {
+				releaseStatus = enums.ReleaseStatusIncompleted
+			}
 		}
 	}
 
@@ -105,6 +110,8 @@ func modelCategoryToAnimelayerCategory(category enums.Category) animelayer.Categ
 		return animelayer.CategoryMusic
 	case enums.CategoryDorama:
 		return animelayer.CategoryDorama
+	case enums.CategoryAll:
+		return animelayer.CategoryAll
 	default:
 		return animelayer.CategoryAnime
 	}

@@ -18,6 +18,7 @@ const (
 	CategoryMangaHentai
 	CategoryMusic
 	CategoryDorama
+	CategoryAll
 )
 
 func (c Category) Presentation(ctx context.Context) string {
@@ -51,6 +52,11 @@ func (c Category) Presentation(ctx context.Context) string {
 		return lang.Message(ctx, &i18n.Message{
 			ID:    _CategoryDorama_i18n_ID,
 			Other: "Dorama",
+		})
+	case CategoryAll:
+		return lang.Message(ctx, &i18n.Message{
+			ID:    _CategoryAll_i18n_ID,
+			Other: "All",
 		})
 	default:
 		return ""
