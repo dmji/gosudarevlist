@@ -5,30 +5,40 @@ import (
 	"net/http"
 
 	"github.com/dmji/gosudarevlist/lang"
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	model_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	model_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/middleware"
 )
 
 type router struct {
-	presentService   presentService
+	presentService presentService
+	updaterService updaterService
+
 	multilangManager *lang.Storage
 	updaterManagerWs updaterManagerWs
 }
 
+type updaterService interface {
+	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model_updater.CategoryUpdateMode) error
+	UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error
+}
+
 type presentService interface {
-	GetItems(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.ItemCartData
-	GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.UpdateItem
-	GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.FilterGroup
+	GetItems(ctx context.Context, opt *model_presenter.ApiCardsParams, cat enums.Category) []model_presenter.ItemCartData
+	GetUpdates(ctx context.Context, opt *model_presenter.ApiCardsParams, cat enums.Category) []model_presenter.UpdateItem
+	GetFilters(ctx context.Context, opt *model_presenter.ApiCardsParams, cat enums.Category) []model_presenter.FilterGroup
 }
 
 type updaterManagerWs interface {
 	SubscribeHandler(w http.ResponseWriter, r *http.Request)
 }
 
-func New(ctx context.Context, presentService presentService, updaterManagerWs updaterManagerWs) *router {
+func New(ctx context.Context, presentService presentService, updaterService updaterService, updaterManagerWs updaterManagerWs) *router {
 	return &router{
-		presentService:   presentService,
+		presentService: presentService,
+		updaterService: updaterService,
+
 		multilangManager: lang.New(ctx),
 		updaterManagerWs: updaterManagerWs,
 	}
@@ -81,4 +91,6 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.
 	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
 
 	HandleFunc("PUT /settings", r.SettingsHandler)
+
+	HandleFunc("POST /api/updater/{category}", r.RunUpdaterHandler)
 }

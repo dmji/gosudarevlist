@@ -11,14 +11,32 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string) 
 			<div class="py-1">
 				<span></span>
 			</div>
-			<div class="divide-y h-96 bg-yellow-50 rounded-lg">
+			<div class="divide-y py-4 bg-yellow-50 rounded-lg">
 				<div hx-ext="ws" ws-connect="/animelayer/anime/updates/ws">
-					<div class="h-96 flex items-center justify-center">
-						<div class="bg-white p-8 rounded-lg shadow-md text-center">
-							<h1 class="text-2xl font-bold mb-4">Anime List Updated</h1>
-							<p id="timer" class="text-4xl font-mono">loading...</p>
-							<p id="timer_creted" class="mt-4 text-sm text-gray-600">loading...</p>
-							<p id="timer_creted_js" class="hidden">loading...</p>
+					<div class="py-4 flex items-center justify-center">
+						<div class="flex flex-row max-sm:flex-col">
+							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<h1 class="text-2xl font-bold mb-4">Anime List Updated</h1>
+								<p id="timer" class="text-4xl font-mono">loading...</p>
+								<p id="timer_creted" class="mt-4 text-sm text-gray-600">loading...</p>
+								<p id="timer_creted_js" class="hidden">loading...</p>
+							</div>
+							<div class="p-4"></div>
+							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<h1 class="text-2xl font-bold mb-4">Grab Updates</h1>
+							</div>
+							<div class="p-4"></div>
+							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<h1 class="text-2xl font-bold mb-4">Grab All</h1>
+							</div>
+							<div class="p-4"></div>
+							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<h1 class="text-2xl font-bold mb-4">Update All</h1>
+							</div>
+							<div class="p-4"></div>
+							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<h1 class="text-2xl font-bold mb-4">Update Target</h1>
+							</div>
 						</div>
 					</div>
 					@Interval()
