@@ -1,0 +1,12 @@
+package websocket_patches
+
+type Field struct {
+	ClassName string
+	Value     string
+}
+
+templ TimerTick(fields []Field) {
+	for _, f:= range fields {
+		<div hx-swap-oob={ "innerHTML:#" + f.ClassName }>{ f.Value } </div>
+	}
+}

@@ -59,6 +59,10 @@ func (s *Storage) ToContext(ctx context.Context, tag TagLang) context.Context {
 	return context.WithValue(ctx, langerCtxValue, s.Get(tag))
 }
 
+func ToContext(ctx context.Context, l *Loader) context.Context {
+	return context.WithValue(ctx, langerCtxValue, l)
+}
+
 func FromContext(ctx context.Context) *Loader {
 	if loggerC, ok := ctx.Value(langerCtxValue).(*Loader); ok {
 		return loggerC

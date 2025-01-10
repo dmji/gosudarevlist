@@ -66,6 +66,12 @@ func main() {
 
 	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayer_client))
 	_ = animelayer_parser
+
+	//
+	// Init Websocket Manager for Updater
+	//
+	updaterManagerWs := websocket.NewManager("Updater", 10)
+
 	//
 	// Init Service
 	//
@@ -82,12 +88,7 @@ func main() {
 	}
 
 	repo := repository_pgx.New(connPgx)
-	presentService := service.New(repo)
-
-	//
-	// Init Websocket Manager for Updater
-	//
-	updaterManagerWs := websocket.NewManager("Updater", 10)
+	presentService := service.New(repo, updaterManagerWs)
 
 	//
 	// Init Router

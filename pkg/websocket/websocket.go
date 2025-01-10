@@ -1,20 +1,25 @@
 package websocket
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"sync"
 	"time"
 
 	"github.com/coder/websocket"
+	"github.com/dmji/gosudarevlist/lang"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
+
+type subscriberMap map[*subscriber]struct{}
 
 func NewManager(name string, messageBufferSize int) *manager {
 	return &manager{
 		subscriberMessageBuffer: messageBufferSize,
-		subscribers:             make(map[*subscriber]struct{}),
+		subscribers:             make(map[*lang.Loader]map[*subscriber]struct{}),
 		name:                    name,
 	}
 }
@@ -22,7 +27,7 @@ func NewManager(name string, messageBufferSize int) *manager {
 type manager struct {
 	subscriberMessageBuffer int
 	subscribersMu           sync.Mutex
-	subscribers             map[*subscriber]struct{}
+	subscribers             map[*lang.Loader]map[*subscriber]struct{}
 
 	name string
 }
@@ -48,16 +53,21 @@ func (s *manager) SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *manager) addSubscriber(ctx context.Context, subscriber *subscriber) {
+func (s *manager) addSubscriber(ctx context.Context, user *subscriber) {
+	langer := lang.FromContext(ctx)
 	s.subscribersMu.Lock()
-	s.subscribers[subscriber] = struct{}{}
+	if _, ok := s.subscribers[langer]; !ok {
+		s.subscribers[langer] = make(map[*subscriber]struct{})
+	}
+	s.subscribers[langer][user] = struct{}{}
 	s.subscribersMu.Unlock()
-	logger.Infow(ctx, s.loggerMsg("Register subscriber"), "subscriber", subscriber)
+	logger.Infow(ctx, s.loggerMsg("Register subscriber"), "subscriber", user)
 }
 
 func (s *manager) removeSubscriber(ctx context.Context, subscriber *subscriber) {
+	langer := lang.FromContext(ctx)
 	s.subscribersMu.Lock()
-	delete(s.subscribers, subscriber)
+	delete(s.subscribers[langer], subscriber)
 	s.subscribersMu.Unlock()
 	logger.Infow(ctx, s.loggerMsg("Unregister subscriber"), "subscriber", subscriber)
 }
@@ -98,8 +108,10 @@ func (cs *manager) PublishMsg(msg []byte) {
 	cs.subscribersMu.Lock()
 	defer cs.subscribersMu.Unlock()
 
-	for s := range cs.subscribers {
-		s.msgs <- &message{data: msg, messageType: websocket.MessageText}
+	for _, ls := range cs.subscribers {
+		for s := range ls {
+			s.msgs <- &message{data: msg, messageType: websocket.MessageText}
+		}
 	}
 }
 
@@ -107,7 +119,30 @@ func (cs *manager) PublishMsgBinary(msg []byte) {
 	cs.subscribersMu.Lock()
 	defer cs.subscribersMu.Unlock()
 
-	for s := range cs.subscribers {
-		s.msgs <- &message{data: msg, messageType: websocket.MessageBinary}
+	for _, ls := range cs.subscribers {
+		for s := range ls {
+			s.msgs <- &message{data: msg, messageType: websocket.MessageBinary}
+		}
+	}
+}
+
+func (cs *manager) PublishTempl(Render func(ctx context.Context, w io.Writer) error) {
+	cs.subscribersMu.Lock()
+	defer cs.subscribersMu.Unlock()
+
+	if len(cs.subscribers) == 0 {
+		return
+	}
+
+	for l, ls := range cs.subscribers {
+
+		ctx := lang.ToContext(context.Background(), l)
+		buf := &bytes.Buffer{}
+		Render(ctx, buf)
+		b := buf.Bytes()
+
+		for s := range ls {
+			s.msgs <- &message{data: b, messageType: websocket.MessageText}
+		}
 	}
 }

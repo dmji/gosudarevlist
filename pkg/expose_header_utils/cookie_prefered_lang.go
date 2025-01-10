@@ -9,7 +9,9 @@ import (
 )
 
 func SetCookiePreferedLanguage(ctx context.Context, w http.ResponseWriter, value lang.TagLang) *http.Cookie {
-	logger.Errorw(ctx, "SetCookiePreferedLanguage | Cookie updating", "value", value.String())
+	if false {
+		logger.Errorw(ctx, "SetCookiePreferedLanguage | Cookie updating", "value", value.String())
+	}
 	cookie := &http.Cookie{
 		Name:   "prefered-language",
 		Value:  value.String(),
@@ -26,7 +28,9 @@ func SetCookiePreferedLanguage(ctx context.Context, w http.ResponseWriter, value
 func GetCookiePreferedLanguage(w http.ResponseWriter, r *http.Request) *http.Cookie {
 	cookie, err := r.Cookie("prefered-language")
 	if err != nil {
-		logger.Errorw(r.Context(), "GetCookiePreferedLanguage | Cookie not found, create new value")
+		if false {
+			logger.Errorw(r.Context(), "GetCookiePreferedLanguage | Cookie not found, create new value")
+		}
 		cookie = SetCookiePreferedLanguage(r.Context(), w, lang.TagEnglish)
 	}
 	return cookie

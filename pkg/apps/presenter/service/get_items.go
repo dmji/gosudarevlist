@@ -8,7 +8,7 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.ItemCartData {
+func (s *service) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.ItemCartData {
 	items, err := s.AnimeLayerRepositoryDriver.GetItems(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),
@@ -26,7 +26,7 @@ func (s *services) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat 
 	return items
 }
 
-func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.UpdateItem {
+func (s *service) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.UpdateItem {
 	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),
@@ -44,7 +44,7 @@ func (s *services) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, ca
 	return items
 }
 
-func (s *services) GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.FilterGroup {
+func (s *service) GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.FilterGroup {
 	items, err := s.AnimeLayerRepositoryDriver.GetFilters(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,
 		PageIndex:           int64(opt.Page),

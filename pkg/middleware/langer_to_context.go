@@ -14,12 +14,15 @@ func LangerToContextMiddleware(storage *lang.Storage) func(http.HandlerFunc) htt
 			langStr := expose_header_utils.GetCookiePreferedLanguage(w, r).Value
 			l, err := lang.TagLangFromString(langStr)
 			if err != nil {
-				logger.Errorw(r.Context(), "Middleware Langer To Context | Lang tag parsing failed", "string", langStr, "error", err)
+				if false {
+					logger.Errorw(r.Context(), "Middleware Langer To Context | Lang tag parsing failed", "string", langStr, "error", err)
+				}
 				l = lang.TagEnglish
 			}
 			ctx := storage.ToContext(r.Context(), l)
-			logger.Errorw(r.Context(), "Middleware Langer To Context | Lang loaded to context", "lang", l.String())
-
+			if false {
+				logger.Errorw(r.Context(), "Middleware Langer To Context | Lang loaded to context", "lang", l.String())
+			}
 			handler(w, r.WithContext(ctx))
 		}
 	}
