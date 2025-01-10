@@ -35,7 +35,7 @@ func (router *router) ApiFilters(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.Infow(ctx, "ApiFilters | Decode query", "params", params, "query", urlPushed.String())
-	items := router.s.GetFilters(ctx, params, cat)
+	items := router.presentService.GetFilters(ctx, params, cat)
 
 	err = cards.FilterFlagsPopulate(items).Render(r.Context(), w)
 	if err != nil {

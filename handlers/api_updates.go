@@ -26,7 +26,7 @@ func (s *router) ApiUpdates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items := s.s.GetUpdates(ctx, params, cat)
+	items := s.presentService.GetUpdates(ctx, params, cat)
 
 	params.Page += 1
 	nextPageParams, err := custom_url.Encode(params)

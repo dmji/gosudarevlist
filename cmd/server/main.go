@@ -14,6 +14,7 @@ import (
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/websocket"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -81,12 +82,17 @@ func main() {
 	}
 
 	repo := repository_pgx.New(connPgx)
-	s := service.New(repo)
-	r := handlers.New(ctx, s)
+	presentService := service.New(repo)
+
+	//
+	// Init Websocket Manager for Updater
+	//
+	updaterManagerWs := websocket.NewManager("Updater", 10)
 
 	//
 	// Init Router
 	//
+	r := handlers.New(ctx, presentService, updaterManagerWs)
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)

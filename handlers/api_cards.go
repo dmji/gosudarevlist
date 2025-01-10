@@ -26,7 +26,7 @@ func (router *router) ApiCards(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cardItems := router.s.GetItems(ctx, params, cat)
+	cardItems := router.presentService.GetItems(ctx, params, cat)
 
 	params.Page += 1
 	nextPageParams, err := custom_url.Encode(params)
