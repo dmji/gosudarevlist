@@ -9,8 +9,8 @@ import (
 	"os"
 
 	"github.com/dmji/gosudarevlist/assets"
-	"github.com/dmji/gosudarevlist/cmd/env"
 	"github.com/dmji/gosudarevlist/handlers"
+	"github.com/dmji/gosudarevlist/internal/env"
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"

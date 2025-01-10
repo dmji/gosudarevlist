@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	r "github.com/dmji/gosudarevlist/pkg/apps/updater/repository"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/time_formater.go"
@@ -22,8 +23,10 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	//
 	// Collect updated notes
 	//
-
 	arg, notes := compareItems(ctx, oldItem, item)
+	if arg == nil {
+		return r.NewErrorItemNotChanged(item.Identifier)
+	}
 
 	//
 	// Start transaction
@@ -43,16 +46,17 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	//
 	// Push updated notes
 	//
-
-	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
-		Date:         &now,
-		UpdateStatus: enums.UpdateStatusUpdated,
-		Notes:        notes,
-		ItemId:       itemId,
-		// Identifier:   item.Identifier,
-	})
-	if err != nil {
-		return err
+	if len(notes) > 0 {
+		err = repo.InsertUpdateNote(ctx, model.UpdateItem{
+			Date:         &now,
+			UpdateStatus: enums.UpdateStatusUpdated,
+			Notes:        notes,
+			ItemId:       itemId,
+			// Identifier:   item.Identifier,
+		})
+		if err != nil {
+			return err
+		}
 	}
 
 	//
@@ -67,6 +71,7 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 }
 
 func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pgx_sqlc.UpdateItemParams, []model.UpdateItemNote) {
+	bUpdateRequied := false
 	itemUpdate := &pgx_sqlc.UpdateItemParams{
 		Identifier: oldItem.Identifier,
 	}
@@ -79,6 +84,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   oldItem.Title,
 			ValueNew:   item.Title,
 		})
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.ReleaseStatus.String(), item.ReleaseStatus.String()) {
@@ -88,6 +94,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   oldItem.ReleaseStatus.Presentation(ctx),
 			ValueNew:   item.ReleaseStatus.Presentation(ctx),
 		})
+		bUpdateRequied = true
 	}
 
 	if isDiffTimes(oldItem.CreatedDate, item.CreatedDate) {
@@ -97,6 +104,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   time_formater.Format(ctx, oldItem.CreatedDate),
 			ValueNew:   time_formater.Format(ctx, item.CreatedDate),
 		})
+		bUpdateRequied = true
 	}
 
 	if isDiffTimes(oldItem.UpdatedDate, item.UpdatedDate) {
@@ -106,26 +114,32 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   time_formater.Format(ctx, oldItem.UpdatedDate),
 			ValueNew:   time_formater.Format(ctx, item.UpdatedDate),
 		})
+		bUpdateRequied = true
 	}
 
 	if isDiffTimes(oldItem.LastCheckedDate, item.LastCheckedDate) {
 		itemUpdate.LastCheckedDate.Scan(*item.LastCheckedDate)
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.RefImageCover, item.RefImageCover) {
 		itemUpdate.RefImageCover.Scan(item.RefImageCover)
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.RefImagePreview, item.RefImagePreview) {
 		itemUpdate.RefImagePreview.Scan(item.RefImagePreview)
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.BlobImageCover, item.BlobImageCover) {
 		itemUpdate.BlobImageCover.Scan(item.BlobImageCover)
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.BlobImagePreview, item.BlobImagePreview) {
 		itemUpdate.BlobImagePreview.Scan(item.BlobImagePreview)
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.TorrentFilesSize, item.TorrentFilesSize) {
@@ -135,6 +149,7 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   oldItem.TorrentFilesSize,
 			ValueNew:   item.TorrentFilesSize,
 		})
+		bUpdateRequied = true
 	}
 
 	if isDiffString(oldItem.Notes, item.Notes) {
@@ -144,8 +159,12 @@ func compareItems(ctx context.Context, oldItem, item *model.AnimelayerItem) (*pg
 			ValueOld:   oldItem.Notes,
 			ValueNew:   item.Notes,
 		})
+		bUpdateRequied = true
 	}
 
+	if bUpdateRequied == false {
+		return nil, nil
+	}
 	return itemUpdate, itemNotes
 }
 

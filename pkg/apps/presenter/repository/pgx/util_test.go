@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/dmji/gosudarevlist/cmd/env"
+	"github.com/dmji/gosudarevlist/internal/env"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/repository"
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/logger"

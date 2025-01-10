@@ -8,20 +8,24 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
-type services struct {
-	repository.AnimeLayerRepositoryDriver
+type ItemProvider interface {
+	GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error)
+	GetItemsFromCategoryPages(ctx context.Context, category enums.Category, iPage int) ([]*model.AnimelayerItem, error)
+}
+
+type service struct {
+	repo          repository.AnimeLayerRepositoryDriver
+	animelayerApi ItemProvider
 }
 
 type Service interface {
-	InsertItem(ctx context.Context, item *model.AnimelayerItem, category enums.Category) error
-	GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error)
-	RemoveItem(ctx context.Context, identifier string) error
-	UpdateItem(ctx context.Context, item *model.AnimelayerItem) error
-	InsertUpdateNote(ctx context.Context, params model.UpdateItem) error
+	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error
+	UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error
 }
 
-func New(repo repository.AnimeLayerRepositoryDriver) *services {
-	return &services{
-		AnimeLayerRepositoryDriver: repo,
+func New(repo repository.AnimeLayerRepositoryDriver, animelayerApi ItemProvider) *service {
+	return &service{
+		repo:          repo,
+		animelayerApi: animelayerApi,
 	}
 }
