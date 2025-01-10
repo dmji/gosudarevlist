@@ -9,6 +9,12 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
+func New(i animelayer.ItemProvider) *client {
+	return &client{
+		client: i,
+	}
+}
+
 type client struct {
 	client animelayer.ItemProvider
 }

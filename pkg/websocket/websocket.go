@@ -14,30 +14,32 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-type subscriberMap map[*subscriber]struct{}
-
-func NewManager(name string, messageBufferSize int) *manager {
-	return &manager{
+func NewManager[T comparable](name string, messageBufferSize int, userDataInitializer func(ctx context.Context, d *T)) *Manager[T] {
+	return &Manager[T]{
 		subscriberMessageBuffer: messageBufferSize,
-		subscribers:             make(map[*lang.Loader]map[*subscriber]struct{}),
+		subscribers:             make(map[*lang.Loader]map[*subscriber[T]]struct{}),
 		name:                    name,
+		userDataInitializer:     userDataInitializer,
 	}
 }
 
-type manager struct {
+type Manager[T comparable] struct {
 	subscriberMessageBuffer int
 	subscribersMu           sync.Mutex
-	subscribers             map[*lang.Loader]map[*subscriber]struct{}
+	subscribers             map[*lang.Loader]map[*subscriber[T]]struct{}
 
-	name string
+	name                        string
+	fnMsgTextAfterRegisterEvent func(context.Context, *T) []byte
+	userDataInitializer         func(ctx context.Context, d *T)
 }
 
-func (s *manager) loggerMsg(body string) string {
+func (s *Manager[T]) loggerMsg(body string) string {
 	return fmt.Sprintf("WebSocket %s Manager | %s", s.name, body)
 }
 
-type subscriber struct {
-	msgs chan *message
+type subscriber[T comparable] struct {
+	userData T
+	msgs     chan *message
 }
 
 type message struct {
@@ -45,7 +47,11 @@ type message struct {
 	messageType websocket.MessageType
 }
 
-func (s *manager) SubscribeHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Manager[T]) SetAfterRegisterEvent(fn func(context.Context, *T) []byte) {
+	s.fnMsgTextAfterRegisterEvent = fn
+}
+
+func (s *Manager[T]) SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	err := s.subscribe(w, r)
 	if err != nil {
 		logger.Errorw(r.Context(), s.loggerMsg("Handler closed with error"), "error", err)
@@ -53,18 +59,18 @@ func (s *manager) SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *manager) addSubscriber(ctx context.Context, user *subscriber) {
+func (s *Manager[T]) addSubscriber(ctx context.Context, user *subscriber[T]) {
 	langer := lang.FromContext(ctx)
 	s.subscribersMu.Lock()
 	if _, ok := s.subscribers[langer]; !ok {
-		s.subscribers[langer] = make(map[*subscriber]struct{})
+		s.subscribers[langer] = make(map[*subscriber[T]]struct{})
 	}
 	s.subscribers[langer][user] = struct{}{}
 	s.subscribersMu.Unlock()
 	logger.Infow(ctx, s.loggerMsg("Register subscriber"), "subscriber", user)
 }
 
-func (s *manager) removeSubscriber(ctx context.Context, subscriber *subscriber) {
+func (s *Manager[T]) removeSubscriber(ctx context.Context, subscriber *subscriber[T]) {
 	langer := lang.FromContext(ctx)
 	s.subscribersMu.Lock()
 	delete(s.subscribers[langer], subscriber)
@@ -72,13 +78,14 @@ func (s *manager) removeSubscriber(ctx context.Context, subscriber *subscriber) 
 	logger.Infow(ctx, s.loggerMsg("Unregister subscriber"), "subscriber", subscriber)
 }
 
-func (s *manager) subscribe(w http.ResponseWriter, r *http.Request) error {
+func (s *Manager[T]) subscribe(w http.ResponseWriter, r *http.Request) error {
 	ctx := r.Context()
 
 	var c *websocket.Conn
-	subscriber := &subscriber{
+	subscriber := &subscriber[T]{
 		msgs: make(chan *message, s.subscriberMessageBuffer),
 	}
+	s.userDataInitializer(ctx, &subscriber.userData)
 	s.addSubscriber(ctx, subscriber)
 	defer s.removeSubscriber(ctx, subscriber)
 
@@ -89,6 +96,9 @@ func (s *manager) subscribe(w http.ResponseWriter, r *http.Request) error {
 	defer c.CloseNow()
 
 	ctx = c.CloseRead(ctx)
+	if s.fnMsgTextAfterRegisterEvent != nil {
+		subscriber.msgs <- &message{data: s.fnMsgTextAfterRegisterEvent(ctx, &subscriber.userData), messageType: websocket.MessageText}
+	}
 	for {
 		select {
 		case msg := <-subscriber.msgs:
@@ -104,7 +114,7 @@ func (s *manager) subscribe(w http.ResponseWriter, r *http.Request) error {
 	}
 }
 
-func (cs *manager) PublishMsg(msg []byte) {
+func (cs *Manager[T]) PublishMsg(msg []byte) {
 	cs.subscribersMu.Lock()
 	defer cs.subscribersMu.Unlock()
 
@@ -115,7 +125,7 @@ func (cs *manager) PublishMsg(msg []byte) {
 	}
 }
 
-func (cs *manager) PublishMsgBinary(msg []byte) {
+func (cs *Manager[T]) PublishMsgBinary(msg []byte) {
 	cs.subscribersMu.Lock()
 	defer cs.subscribersMu.Unlock()
 
@@ -126,7 +136,7 @@ func (cs *manager) PublishMsgBinary(msg []byte) {
 	}
 }
 
-func (cs *manager) PublishTempl(Render func(ctx context.Context, w io.Writer) error) {
+func (cs *Manager[T]) PublishTempl(Render func(ctx context.Context, w io.Writer) error) {
 	cs.subscribersMu.Lock()
 	defer cs.subscribersMu.Unlock()
 

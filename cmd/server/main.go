@@ -10,11 +10,13 @@ import (
 
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/handlers"
+	"github.com/dmji/gosudarevlist/internal/animelayer_client"
 	"github.com/dmji/gosudarevlist/internal/env"
-	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
+	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
+	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
+	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
+	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/websocket"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -59,18 +61,13 @@ func main() {
 		Login:    os.Getenv("ANIMELAYER_LOGIN"),
 		Password: os.Getenv("ANIMELAYER_PASSWORD"),
 	}
-	animelayer_client, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
+	animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
 	if err != nil {
 		panic(err)
 	}
 
-	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayer_client))
+	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
 	_ = animelayer_parser
-
-	//
-	// Init Websocket Manager for Updater
-	//
-	updaterManagerWs := websocket.NewManager("Updater", 10)
 
 	//
 	// Init Service
@@ -80,20 +77,22 @@ func main() {
 		logger.Panicw(ctx, "unable to parse connString", "error", err)
 	}
 
-	dbConfig.AfterConnect = repository_pgx.AfterConnectFunction()
+	dbConfig.AfterConnect = repository_presenter_pgx.AfterConnectFunction()
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
 		panic(err)
 	}
 
-	repo := repository_pgx.New(connPgx)
-	presentService := service.New(repo, updaterManagerWs)
+	repoPresenter := repository_presenter_pgx.New(connPgx)
+	repoUpdater := repository_updater_pgx.New(connPgx)
+	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser))
+	presentService := service_presenter.New(repoPresenter)
 
 	//
 	// Init Router
 	//
-	r := handlers.New(ctx, presentService, updaterManagerWs)
+	r := handlers.New(ctx, presentService, updaterService.WsHandlerProvider())
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)
