@@ -110,6 +110,7 @@ func main() {
 	if err != nil {
 		logger.Fatalw(ctx, "announces listen", "error", err)
 	}
+
 	srv := &http.Server{
 		Handler:     mux,
 		BaseContext: func(l net.Listener) context.Context { return ctx },
