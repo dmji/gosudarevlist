@@ -3,6 +3,7 @@ package websocket
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -53,10 +54,15 @@ func (s *Manager[T]) SetAfterRegisterEvent(fn func(context.Context, *T) []byte) 
 
 func (s *Manager[T]) SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	err := s.subscribe(w, r)
-	if err != nil {
-		logger.Errorw(r.Context(), s.loggerMsg("Handler closed with error"), "error", err)
+	if err == nil {
 		return
 	}
+
+	if errors.Is(err, context.Canceled) {
+		return
+	}
+
+	logger.Errorw(r.Context(), s.loggerMsg("Handler closed with error"), "error", err)
 }
 
 func (s *Manager[T]) addSubscriber(ctx context.Context, user *subscriber[T]) {
