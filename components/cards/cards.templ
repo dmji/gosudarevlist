@@ -103,7 +103,7 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 								src={ noImagePlaceholder }
 								alt={ card.Title }
 								hx-trigger="intersect once"
-								hx-on::trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+								hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
 								class="w-[240px] h-[360px] object-scale-down object-top"
 							/>
 						</div>

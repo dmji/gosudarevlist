@@ -19,7 +19,7 @@ templ Settings(ctx context.Context) {
 				hx-put="/settings"
 				hx-vals='javascript:{language: document.getElementById("settings-language").value}'
 				hx-swap="none"
-				hx-on::after-request="location.reload()"
+				hx-on:htmx:after-request="location.reload()"
 				class="w-full p-2 border rounded"
 			>
 				<option value="en" selected>English</option>

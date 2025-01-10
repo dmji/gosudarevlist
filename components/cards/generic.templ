@@ -17,7 +17,7 @@ templ putPageNumberResetTrigger(currentPage, i, n int) {
 		<div
 			class="group"
 			hx-trigger="intersect"
-			hx-on::trigger={ scripts.QueryUpdatePage(currentPage) }
+			hx-on:htmx:trigger={ scripts.QueryUpdatePage(currentPage) }
 		>
 			{ children... }
 		</div>
