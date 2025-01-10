@@ -9,7 +9,7 @@ import (
 var generationTime = time.Now().Add(time.Duration(1221313133123)).Format("2006-01-02:15:04:05")
 
 templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string) {
-	@components.Layout("AnimeLayer Updates") {
+	@components.Layout("AnimeLayer Updates", &components.LayoutParams{ImportHtmxWsExt: true}) {
 		<div class="max-w-[2000px] mx-auto">
 			<div class="py-1">
 				<span></span>

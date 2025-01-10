@@ -118,7 +118,7 @@ templ profile() {
 }
 
 templ Profile(ctx context.Context) {
-	@components.Layout("Profile") {
+	@components.Layout("Profile", &components.LayoutParams{}) {
 		<div class="max-w-6xl mx-auto pt-3 pb-20">
 			<div class="bg-white shadow-md rounded-lg px-6 py-1 pb-6">
 				if false {

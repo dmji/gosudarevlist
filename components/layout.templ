@@ -5,8 +5,12 @@ import (
 	"github.com/dmji/gosudarevlist/components/scripts"
 )
 
+type LayoutParams struct {
+	ImportHtmxWsExt bool
+}
+
 //<script src="https://unpkg.com/intercooler@1.2.3"></script>
-templ Layout(title string) {
+templ Layout(title string, params *LayoutParams) {
 	<!DOCTYPE html>
 	<html lang="en" class="scroll-smooth">
 		<head>
@@ -14,6 +18,9 @@ templ Layout(title string) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{ title }</title>
 			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+			if params.ImportHtmxWsExt {
+				<script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+			}
 			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
 			<link href="/assets/images/favicon.ico" rel="icon" type="image/x-icon"/>
 			@scripts.SelectTheme(templ.JSExpression("null"))
