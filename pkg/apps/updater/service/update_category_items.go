@@ -44,7 +44,7 @@ loop_pages:
 		}
 		logger.Infow(ctx, "Update Target Category | Pipe in-progress", "category", category, "mode", mode, "page", iPage)
 
-	loop_items:
+		nItemWasSame := 0
 		for _, item := range items {
 
 			if _, ok := updatedIdentifiers[item.Identifier]; ok {
@@ -61,15 +61,7 @@ loop_pages:
 			}
 
 			if _, ok := repository.IsErrorItemNotChanged(err); ok {
-				switch mode {
-
-				case model.CategoryUpdateModeAll:
-					continue loop_items
-				case model.CategoryUpdateModeWhileNew:
-					fallthrough
-				default:
-					break loop_pages
-				}
+				nItemWasSame++
 			}
 
 			if err != nil {
@@ -85,6 +77,17 @@ loop_pages:
 				logger.Infow(ctx, "Update Target Category | Item inserted as new", "identifier", item.Identifier)
 			} else {
 				logger.Infow(ctx, "Update Target Category | Item has being updated", "identifier", item.Identifier)
+			}
+		}
+
+		if nItemWasSame == len(items) {
+			switch mode {
+			case model.CategoryUpdateModeAll:
+				continue
+			case model.CategoryUpdateModeWhileNew:
+				fallthrough
+			default:
+				break loop_pages
 			}
 		}
 	}
