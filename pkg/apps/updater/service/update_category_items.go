@@ -62,6 +62,7 @@ loop_pages:
 
 			if _, ok := repository.IsErrorItemNotChanged(err); ok {
 				nItemWasSame++
+				continue
 			}
 
 			if err != nil {
