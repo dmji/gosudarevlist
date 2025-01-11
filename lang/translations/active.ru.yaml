@@ -39,3 +39,4 @@ TimeFormatMonthMay: Мая
 TimeFormatMonthNovember: Ноября
 TimeFormatMonthOctober: Октября
 TimeFormatMonthSeptember: Сентября
+UpdaterPageTimerTitle: '{{.Category}} Список Обновлен'

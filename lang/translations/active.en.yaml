@@ -39,3 +39,4 @@ TimeFormatMonthMay: May
 TimeFormatMonthNovember: November
 TimeFormatMonthOctober: October
 TimeFormatMonthSeptember: September
+UpdaterPageTimerTitle: '{{.Category}} List Updated'

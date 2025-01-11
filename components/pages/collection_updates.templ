@@ -12,31 +12,33 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string) 
 				<span></span>
 			</div>
 			<div class="divide-y py-4 bg-yellow-50 rounded-lg">
-				<div hx-ext="ws" ws-connect="/animelayer/anime/updates/ws">
+				<div hx-ext="ws" ws-connect={ nextPageEndpint + "/ws" }>
 					<div class="py-4 flex items-center justify-center">
 						<div class="flex flex-row max-sm:flex-col">
 							<div class="bg-white p-8 rounded-lg shadow-md text-center">
-								<h1 class="text-2xl font-bold mb-4">Anime List Updated</h1>
+								<h1 id="timer_title" class="text-2xl font-bold mb-4">loading...</h1>
 								<p id="timer" class="text-4xl font-mono">loading...</p>
 								<p id="timer_creted" class="mt-4 text-sm text-gray-600">loading...</p>
 								<p id="timer_creted_js" class="hidden">loading...</p>
 							</div>
-							<div class="p-4"></div>
-							<div class="bg-white p-8 rounded-lg shadow-md text-center">
-								<h1 class="text-2xl font-bold mb-4">Grab Updates</h1>
-							</div>
-							<div class="p-4"></div>
-							<div class="bg-white p-8 rounded-lg shadow-md text-center">
-								<h1 class="text-2xl font-bold mb-4">Grab All</h1>
-							</div>
-							<div class="p-4"></div>
-							<div class="bg-white p-8 rounded-lg shadow-md text-center">
-								<h1 class="text-2xl font-bold mb-4">Update All</h1>
-							</div>
-							<div class="p-4"></div>
-							<div class="bg-white p-8 rounded-lg shadow-md text-center">
-								<h1 class="text-2xl font-bold mb-4">Update Target</h1>
-							</div>
+							if false {
+								<div class="p-4"></div>
+								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+									<h1 class="text-2xl font-bold mb-4">Grab Updates</h1>
+								</div>
+								<div class="p-4"></div>
+								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+									<h1 class="text-2xl font-bold mb-4">Grab All</h1>
+								</div>
+								<div class="p-4"></div>
+								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+									<h1 class="text-2xl font-bold mb-4">Update All</h1>
+								</div>
+								<div class="p-4"></div>
+								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+									<h1 class="text-2xl font-bold mb-4">Update Target</h1>
+								</div>
+							}
 						</div>
 					</div>
 					@Interval()
@@ -70,9 +72,11 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string) 
 
 script Interval() {
     function updateTimer() {
-		const countDownDate = new Date(document.getElementById('timer_creted_js').textContent).getTime();
-		var now = new Date().getTime();
-        var distance = now - countDownDate;
+		var js_text = document.getElementById('timer_creted_js').textContent;
+		if (js_text === 'loading...') {
+			return
+		}
+        var distance = new Date().getTime()/*now*/ - /*countDownDate*/new Date(js_text).getTime();
 
 		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

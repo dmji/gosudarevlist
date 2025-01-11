@@ -63,9 +63,6 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 	HandleFunc("GET /animelayer/{category}/updates",
 		r.CollectionUpdatesPageHandler)
 
-	HandleFunc("GET /animelayer/{category}/updates/ws",
-		r.WsUpdaterHandler)
-
 	HandleFunc("GET /profile",
 		r.ProfilePageHandler)
 }
@@ -73,6 +70,7 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.ResponseWriter, *http.Request))) {
 	HandleFunc := r.middlewareHandler(HandleFunOriginal)
 
+	HandleFunc("PUT /settings", r.SettingsHandler)
 	HandleFunc("GET /api/cards/{category}",
 		r.ApiCards,
 		middleware.PushQueryFromUrlMiddleware,
@@ -85,8 +83,6 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.
 	)
 
 	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
-
-	HandleFunc("PUT /settings", r.SettingsHandler)
-
 	HandleFunc("POST /api/updater/{category}", r.RunUpdaterHandler)
+	HandleFunc("GET /api/updates/{category}/ws", r.WsUpdaterHandler)
 }
