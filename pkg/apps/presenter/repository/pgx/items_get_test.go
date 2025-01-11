@@ -2,11 +2,8 @@ package repository_pgx_test
 
 import (
 	"context"
-	"encoding/json"
-	"os"
 	"testing"
 
-	"github.com/dmji/go-animelayer-parser"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 )
@@ -14,9 +11,9 @@ import (
 func TestGetITemsByCategory(t *testing.T) {
 	repo, ctx := InitRepo(context.Background())
 
-	items, err := repo.GetItems(ctx, model.OptionsGetItems{
+	items, _ := repo.GetItems(ctx, model.OptionsGetItems{
 		PageIndex:       1,
-		CountForOnePage: 20000,
+		CountForOnePage: 20,
 
 		SearchQuery:         "",
 		SimilarityThreshold: 0.05,
@@ -24,38 +21,7 @@ func TestGetITemsByCategory(t *testing.T) {
 		Categories: []enums.Category{},
 		Statuses:   []enums.ReleaseStatus{},
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	identifiers := make(map[string]string)
-	for _, item := range items {
-		m := animelayer.TryGetSomthingSemantizedFromNotes(item.Description)
-		s := traverseMapNotesSemantized("Разрешение", m)
-		if s == "" {
-			identifiers[item.Title] = item.CategoryPresentation
-		}
-	}
-
-	s, err := json.Marshal(&identifiers)
-	if err != nil {
-		t.Fatal(err)
-	}
-	os.WriteFile("result.json", s, 0o644)
-}
-
-func traverseMapNotesSemantized(tag string, m *animelayer.NotesSematizied) string {
-	for _, t := range m.Taged {
-		if t.Tag == tag {
-			return t.Text
-		}
-		if t.Childs != nil {
-			s := traverseMapNotesSemantized(tag, t.Childs)
-			if s != "" {
-				return s
-			}
-		}
-	}
-	return ""
+	println(items)
 }
 
 func TestGetFiltersByCategory(t *testing.T) {
