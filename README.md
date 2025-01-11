@@ -20,11 +20,14 @@ Full-Stack Web-App тти AnimeLayer.ru
 * goose
 * taskfiles
 
+#### DevOps
+
+* Host on free serv00 with auto-deploy via github actions
+* Chron (scheduler configuration serv00 web panel) auto-update with parsing AnimeLayer each hour
+
 ### Work-In-Progress TODO
 
-* [X] Host on free serv00 with auto-deploy via github actions
-* [ ] Implement auto-update vith chron
-* [ ] Improve filtering
+* [ ] Add connection to MyAnimeList
 * [ ] Profile page
 * [ ] OAuth with Telegram
 
@@ -41,8 +44,6 @@ Full-Stack Web-App тти AnimeLayer.ru
 `internal` - inheret from clean architure folder
 
 `pkg` - inheret from clean architure folder
-
-`cmd/env (TODO: merge all into one and remove that package)` - util package for updaters apps
 
 `components` - folder with a-h/templ template files
 
