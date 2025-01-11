@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
@@ -20,6 +21,8 @@ func (s *service) UpdateItemsFromCategory(ctx context.Context, category enums.Ca
 	}
 	defer data.mx.Unlock()
 
+	data.lastUpdateTimer = time.Now()
+	data.ws.PublishTempl(data.publishUpdate())
 	logger.Infow(ctx, "Update Target Category | Pipe started", "category", category, "mode", mode)
 
 	updatedIdentifiers := make(map[string]interface{})

@@ -20,7 +20,7 @@ type WsUserData struct{}
 
 type categoryUpdaterData struct {
 	ws              *websocket.Manager[WsUserData]
-	lastUpdateTimer *time.Time
+	lastUpdateTimer time.Time
 	mx              sync.Mutex
 	category        enums.Category
 }
@@ -33,7 +33,7 @@ func (s *categoryUpdaterData) publishUpdate() func(context.Context, io.Writer) e
 		return websocket_patches.TimerTick([]websocket_patches.Field{
 			{
 				ClassName: "timer_creted",
-				Value:     time_formater.Format(ctx, s.lastUpdateTimer),
+				Value:     time_formater.Format(ctx, &s.lastUpdateTimer),
 			},
 			{
 				ClassName: "timer_creted_js",
@@ -60,10 +60,9 @@ func (s *categoryUpdaterData) publishUpdate() func(context.Context, io.Writer) e
 func (s *service) updaterDataByCategory(category enums.Category) *categoryUpdaterData {
 	dataPtr, ok := s.data.Load(category)
 	if !ok {
-		t := time.Now().Add(-10 * time.Second)
 		data := &categoryUpdaterData{
 			ws:              websocket.NewManager(category.String()+" Updater", 10, userDataInitializer),
-			lastUpdateTimer: &t,
+			lastUpdateTimer: time.Now().Add(-10 * time.Second),
 			category:        category,
 		}
 		data.ws.SetAfterRegisterEvent(
