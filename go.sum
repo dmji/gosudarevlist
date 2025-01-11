@@ -11,6 +11,8 @@ github.com/dmji/go-animelayer-parser v0.1.3 h1:1t7hR0lIcj7nfgMkoXTzigUsW3zdnoq6r
 github.com/dmji/go-animelayer-parser v0.1.3/go.mod h1:ST13BpxbvRU4Q9zGFAw8ysg1R+ozP2dMaNnp3P5aWVo=
 github.com/dmji/go-animelayer-parser v0.1.4-0.20250110195030-f7a0e99e0c94 h1:zrx6OQdBb7jrDt5An10xM3h+03VZJ866rc6IKn+dqz4=
 github.com/dmji/go-animelayer-parser v0.1.4-0.20250110195030-f7a0e99e0c94/go.mod h1:ST13BpxbvRU4Q9zGFAw8ysg1R+ozP2dMaNnp3P5aWVo=
+github.com/dmji/go-animelayer-parser v0.1.4-0.20250111224747-3c3d47580937 h1:xE6pcj4eKHobsh0MNO/tilusDsJBVSu0/V9TrrVk6h4=
+github.com/dmji/go-animelayer-parser v0.1.4-0.20250111224747-3c3d47580937/go.mod h1:ST13BpxbvRU4Q9zGFAw8ysg1R+ozP2dMaNnp3P5aWVo=
 github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf h1:C9F1v6PM9R711l2u6uLKal/Idh4mTnsq5ZN2uNfJZ7Y=
 github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf/go.mod h1:vANTmZfg1aJtMWXDOylJqReQDpY9gy7x2tXgj4+pKeo=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=

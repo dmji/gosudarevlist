@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/a-h/templ v0.3.819
 	github.com/coder/websocket v1.8.12
-	github.com/dmji/go-animelayer-parser v0.1.4-0.20250110195030-f7a0e99e0c94
+	github.com/dmji/go-animelayer-parser v0.1.4-0.20250111224747-3c3d47580937
 	github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1

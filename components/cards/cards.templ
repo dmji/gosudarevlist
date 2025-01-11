@@ -6,7 +6,10 @@ import (
 	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
-const noImagePlaceholder = "/assets/images/no_image.webp"
+const (
+	noImagePlaceholder = "/assets/images/no_image.webp"
+	animeLayerLogo     = "/assets/images/animelayer_logo.webp"
+)
 
 func queryPosterFromItem(description *model.ItemCartData) string {
 
@@ -79,9 +82,9 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 			@putPageNumberResetTrigger(currentPage, i, len(cards)) {
 				// title
 				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
-					<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
-						{ card.Title }
-					</a>
+					//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
+					{ card.Title }
+					//</a>
 				</div>
 				// horizontal row with update datas
 				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
@@ -106,6 +109,22 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 								hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
 								class="w-[240px] h-[360px] object-scale-down object-top"
 							/>
+							<div class="flex flex-col">
+								for _, animeLayerRef := range card.AnimeLayerRefs {
+									<a
+										href={ templ.URL(animeLayerRef.Href) }
+										rel="noopener noreferrer"
+										class="mt-2 flex flex-row"
+									>
+										<img
+											src={ animeLayerLogo }
+											alt={ card.Title }
+											class="w-[51px] h-[18px] object-scale-down object-top"
+										/>
+										<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty">{ animeLayerRef.Text }</span>
+									</a>
+								}
+							</div>
 						</div>
 					</div>
 					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">

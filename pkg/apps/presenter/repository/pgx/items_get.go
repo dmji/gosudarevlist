@@ -3,6 +3,7 @@ package repository_pgx
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
@@ -39,14 +40,27 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 	cardItems := make([]model.ItemCartData, 0, len(items))
 	for _, item := range items {
+		if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
+			cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, model.ItemCartHrefData{
+				Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+				Text: "",
+			})
+			continue
+		}
+
 		cardItems = append(cardItems, model.ItemCartData{
-			Title:                item.Title,
-			Image:                item.RefImageCover,
-			Description:          item.Notes,
-			CreatedDate:          time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.CreatedDate)),
-			UpdatedDate:          time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.UpdatedDate)),
-			TorrentWeight:        item.TorrentFilesSize,
-			AnimeLayerRef:        fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+			Title:         item.Title,
+			Image:         item.RefImageCover,
+			Description:   item.Notes,
+			CreatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.CreatedDate)),
+			UpdatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.UpdatedDate)),
+			TorrentWeight: item.TorrentFilesSize,
+			AnimeLayerRefs: []model.ItemCartHrefData{
+				{
+					Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+					Text: "",
+				},
+			},
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
 			ReleaseStatus:        pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
 		})
