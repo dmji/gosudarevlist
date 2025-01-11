@@ -28,6 +28,21 @@ Full-Stack Web-App тти AnimeLayer.ru
 
 ### Work-In-Progress TODO
 
+* [X] Add presentation with htmx based on v0.dev generation
+* [X] Implement AnimeLayer parser in separate [repository](https://github.com/dmji/go-animelayer-parser)
+* [X] Initialize postgresql with goose migrations
+* [X] Make endless scroll pages with filtering via query parameters
+* [X] Add string russian translation with goi18n
+* [X] Add ([created fork](https://github.com/dmji/go-stringer)) tool to generate enums with stringer, parser and consts as id for goi18n
+* [X] Improve goi18n to correctly lookup consts in other files ([fork](https://github.com/dmji/go-i18n/tree/main), [pull request](https://github.com/nicksnyder/go-i18n/pull/355))
+* [X] Host on free serv00 with auto-deploy via github actions
+* [X] Add settings page with lang and theme selection
+* [ ] Add colors for dark theme
+  * [X] Init dark theme detectable from the light
+  * [ ] Align all colors for dark-contrasts
+* [X] Implement auto-update from AnimeLayer vith chron
+* [ ] Add notification with tg bot api
+* [ ] Improve filtering to use some key words from notes (genre, year etc)
 * [ ] Add connection to MyAnimeList
 * [ ] Profile page
 * [ ] OAuth with Telegram
