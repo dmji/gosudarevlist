@@ -13,6 +13,13 @@ import (
 )
 
 func (s *service) UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error {
+	data := s.updaterDataByCategory(category)
+	bOk := data.mx.TryLock()
+	if !bOk {
+		return NewRrrorInProcess(category, data.lastUpdateTimer)
+	}
+	defer data.mx.Unlock()
+
 	logger.Infow(ctx, "Update Target Category | Pipe started", "category", category, "mode", mode)
 
 	updatedIdentifiers := make(map[string]interface{})

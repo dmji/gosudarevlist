@@ -16,12 +16,13 @@ type router struct {
 	updaterService updaterService
 
 	multilangManager *lang.Storage
-	updaterManagerWs updaterManagerWs
 }
 
 type updaterService interface {
 	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model_updater.CategoryUpdateMode) error
 	UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error
+
+	SubscribeHandler(cat enums.Category) func(w http.ResponseWriter, r *http.Request)
 }
 
 type presentService interface {
@@ -30,17 +31,12 @@ type presentService interface {
 	GetFilters(ctx context.Context, opt *model_presenter.ApiCardsParams, cat enums.Category) []model_presenter.FilterGroup
 }
 
-type updaterManagerWs interface {
-	SubscribeHandler(w http.ResponseWriter, r *http.Request)
-}
-
-func New(ctx context.Context, presentService presentService, updaterService updaterService, updaterManagerWs updaterManagerWs) *router {
+func New(ctx context.Context, presentService presentService, updaterService updaterService) *router {
 	return &router{
 		presentService: presentService,
 		updaterService: updaterService,
 
 		multilangManager: lang.New(ctx),
-		updaterManagerWs: updaterManagerWs,
 	}
 }
 
@@ -68,7 +64,7 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 		r.CollectionUpdatesPageHandler)
 
 	HandleFunc("GET /animelayer/{category}/updates/ws",
-		r.updaterManagerWs.SubscribeHandler)
+		r.WsUpdaterHandler)
 
 	HandleFunc("GET /profile",
 		r.ProfilePageHandler)

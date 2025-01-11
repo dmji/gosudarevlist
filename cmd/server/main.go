@@ -89,7 +89,7 @@ func main() {
 	//
 	// Init Router
 	//
-	r := handlers.New(ctx, presentService, updaterService, updaterService.WsHandlerProvider())
+	r := handlers.New(ctx, presentService, updaterService)
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)

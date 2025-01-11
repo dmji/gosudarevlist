@@ -8,7 +8,7 @@ EnumsCategoryMusicPresentation: Music
 EnumsReleaseStatusCompletedPresentation: Completed
 EnumsReleaseStatusIncompletedPresentation: Incompleted
 EnumsReleaseStatusOnAirPresentation: On Air
-EnumsUpdateStatusNewPresentation: On Air
+EnumsUpdateStatusNewPresentation: New
 EnumsUpdateStatusRemovedPresentation: Removed
 EnumsUpdateStatusUpdatedPresentation: Updated
 EnumsUpdateableFieldCreatedDatePresentation: CreatedDate
