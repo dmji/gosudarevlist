@@ -5,11 +5,12 @@ import (
 	"os"
 
 	"github.com/dmji/gosudarevlist/internal/env"
+	"github.com/dmji/gosudarevlist/lang"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/repository"
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -27,22 +28,7 @@ func InitRepo(ctx context.Context) (repository.AnimeLayerRepositoryDriver, conte
 		logger.Panicw(ctx, "unable to parse connString", "error", err)
 	}
 
-	dbConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
-		dt, err := conn.LoadType(ctx, "CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
-
-		conn.TypeMap().RegisterType(dt)
-
-		dt, err = conn.LoadType(ctx, "_CATEGORY_ANIMELAYER")
-		if err != nil {
-			return err
-		}
-		conn.TypeMap().RegisterType(dt)
-
-		return nil
-	}
+	dbConfig.AfterConnect = pgx_utils.AnimelayerPostgresAfterConnectFunction()
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
@@ -50,5 +36,7 @@ func InitRepo(ctx context.Context) (repository.AnimeLayerRepositoryDriver, conte
 	}
 
 	repo := repository_pgx.New(connPgx)
+
+	ctx = lang.New(ctx).ToContext(ctx, lang.TagEnglish)
 	return repo, ctx
 }

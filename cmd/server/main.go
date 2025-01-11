@@ -17,6 +17,7 @@ import (
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"
+	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -74,7 +75,7 @@ func main() {
 		logger.Panicw(ctx, "unable to parse connString", "error", err)
 	}
 
-	dbConfig.AfterConnect = repository_presenter_pgx.AfterConnectFunction()
+	dbConfig.AfterConnect = pgx_utils.AnimelayerPostgresAfterConnectFunction()
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {

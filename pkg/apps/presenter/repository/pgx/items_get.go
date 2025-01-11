@@ -3,7 +3,6 @@ package repository_pgx
 import (
 	"context"
 	"fmt"
-	"slices"
 
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
@@ -40,13 +39,13 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 	cardItems := make([]model.ItemCartData, 0, len(items))
 	for _, item := range items {
-		if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
+		/* 		if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
 			cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, model.ItemCartHrefData{
 				Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
 				Text: "",
 			})
 			continue
-		}
+		} */
 
 		cardItems = append(cardItems, model.ItemCartData{
 			Title:         item.Title,
