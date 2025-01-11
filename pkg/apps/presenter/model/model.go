@@ -27,5 +27,5 @@ type ItemCartData struct {
 
 type ItemCartHrefData struct {
 	Href string
-	Text string
+	Text []string
 }

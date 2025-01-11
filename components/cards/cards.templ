@@ -97,7 +97,7 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 				</div>
 				// horizontal row with image and description
 				<div class="grid grid-flow-col place-content-start">
-					<div class="w-fit py-4 pl-4">
+					<div class="w-fit py-4 pl-4 max-w-[240px]">
 						<div class="relative">
 							@categoryBadge(card.CategoryPresentation)
 							@onAirBadge(card.ReleaseStatus)
@@ -121,7 +121,11 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 											alt={ card.Title }
 											class="w-[51px] h-[18px] object-scale-down object-top"
 										/>
-										<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty">{ animeLayerRef.Text }</span>
+										<div class="flex flex-col">
+											for _, text := range animeLayerRef.Text {
+												<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
+											}
+										</div>
 									</a>
 								}
 							</div>

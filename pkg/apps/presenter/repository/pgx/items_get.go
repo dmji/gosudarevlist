@@ -3,7 +3,10 @@ package repository_pgx
 import (
 	"context"
 	"fmt"
+	"slices"
+	"strings"
 
+	"github.com/dmji/go-animelayer-parser"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	pgx_sqlc "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx/sqlc"
 	"github.com/dmji/gosudarevlist/pkg/enums"
@@ -39,13 +42,15 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 	cardItems := make([]model.ItemCartData, 0, len(items))
 	for _, item := range items {
-		/* 		if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
-			cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, model.ItemCartHrefData{
-				Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-				Text: "",
-			})
-			continue
-		} */
+		if item.Category == pgx_sqlc.CategoryAnimelayerAnime {
+			if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
+				cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, model.ItemCartHrefData{
+					Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+					Text: itemNotesToHrefText(len(cardItems[i].AnimeLayerRefs)+1, &item),
+				})
+				continue
+			}
+		}
 
 		cardItems = append(cardItems, model.ItemCartData{
 			Title:         item.Title,
@@ -57,7 +62,7 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 			AnimeLayerRefs: []model.ItemCartHrefData{
 				{
 					Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-					Text: "",
+					Text: itemNotesToHrefText(1, &item),
 				},
 			},
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
@@ -66,4 +71,38 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	}
 
 	return cardItems, nil
+}
+
+func itemNotesToHrefText(i int, item *pgx_sqlc.AnimelayerItem) []string {
+	baseText := fmt.Sprintf("Torrent №%d", i)
+	if item.Category != pgx_sqlc.CategoryAnimelayerAnime {
+		return []string{baseText}
+	}
+
+	m := animelayer.TryGetSomthingSemantizedFromNotes(item.Notes)
+
+	resolution := traverseMapNotesSemantized("Разрешение", m)
+	if resolution == "" {
+		resolution = traverseMapNotesSemantized("Видео", m)
+	}
+	resolution += " " + item.TorrentFilesSize
+	subs := traverseMapNotesSemantized("Субтитры", m)
+
+	baseText = strings.Join([]string{baseText, resolution}, ": ")
+	return []string{baseText, "Субтитры: " + subs}
+}
+
+func traverseMapNotesSemantized(tag string, m *animelayer.NotesSematizied) string {
+	for _, t := range m.Taged {
+		if t.Tag == tag && len(t.Text) != 0 {
+			return t.Text
+		}
+		if t.Childs != nil {
+			s := traverseMapNotesSemantized(tag, t.Childs)
+			if s != "" {
+				return s
+			}
+		}
+	}
+	return ""
 }
