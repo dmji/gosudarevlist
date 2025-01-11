@@ -23,7 +23,7 @@ func (c UpdateStatus) Presentation(ctx context.Context) string {
 	case UpdateStatusNew:
 		return lang.Message(ctx, &i18n.Message{
 			ID:    _UpdateStatusNew_i18n_ID,
-			Other: "On Air",
+			Other: "New",
 		})
 	case UpdateStatusRemoved:
 		return lang.Message(ctx, &i18n.Message{
