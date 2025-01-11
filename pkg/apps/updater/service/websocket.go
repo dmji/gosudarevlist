@@ -57,12 +57,19 @@ func (s *categoryUpdaterData) publishUpdate() func(context.Context, io.Writer) e
 	}
 }
 
-func (s *service) updaterDataByCategory(category enums.Category) *categoryUpdaterData {
+func (s *service) updaterDataByCategory(ctx context.Context, category enums.Category) *categoryUpdaterData {
 	dataPtr, ok := s.data.Load(category)
 	if !ok {
+
+		timeLastUpdate, err := s.repo.GetLastCategoryUpdateItem(ctx, category)
+		if err != nil {
+			t := time.Now().Add(-10 * time.Second)
+			timeLastUpdate = &t
+		}
+
 		data := &categoryUpdaterData{
 			ws:              websocket.NewManager(category.String()+" Updater", 10, userDataInitializer),
-			lastUpdateTimer: time.Now().Add(-10 * time.Second),
+			lastUpdateTimer: *timeLastUpdate,
 			category:        category,
 		}
 		data.ws.SetAfterRegisterEvent(
@@ -80,6 +87,6 @@ func (s *service) updaterDataByCategory(category enums.Category) *categoryUpdate
 	return dataPtr.(*categoryUpdaterData)
 }
 
-func (s *service) SubscribeHandler(category enums.Category) func(w http.ResponseWriter, r *http.Request) {
-	return s.updaterDataByCategory(category).ws.SubscribeHandler
+func (s *service) SubscribeHandler(ctx context.Context, category enums.Category) func(w http.ResponseWriter, r *http.Request) {
+	return s.updaterDataByCategory(ctx, category).ws.SubscribeHandler
 }

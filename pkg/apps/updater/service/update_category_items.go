@@ -14,7 +14,7 @@ import (
 )
 
 func (s *service) UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error {
-	data := s.updaterDataByCategory(category)
+	data := s.updaterDataByCategory(ctx, category)
 	bOk := data.mx.TryLock()
 	if !bOk {
 		return NewRrrorInProcess(category, data.lastUpdateTimer)

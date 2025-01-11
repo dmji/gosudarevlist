@@ -16,6 +16,6 @@ func (s *router) WsUpdaterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h := s.updaterService.SubscribeHandler(cat)
+	h := s.updaterService.SubscribeHandler(ctx, cat)
 	h(w, r)
 }

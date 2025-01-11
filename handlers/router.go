@@ -22,7 +22,7 @@ type updaterService interface {
 	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model_updater.CategoryUpdateMode) error
 	UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error
 
-	SubscribeHandler(cat enums.Category) func(w http.ResponseWriter, r *http.Request)
+	SubscribeHandler(ctx context.Context, category enums.Category) func(w http.ResponseWriter, r *http.Request)
 }
 
 type presentService interface {
