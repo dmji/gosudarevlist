@@ -9,7 +9,7 @@ Full-Stack Web-App тти AnimeLayer.ru
 #### Stack:
 
 * go
-* a-h/templ + htmx
+* a-h/templ + htmx + htmx websocket + tailwind
 * postgresql + sqlc
 * go-i18n
 
@@ -19,6 +19,7 @@ Full-Stack Web-App тти AnimeLayer.ru
 * tailwind cli
 * goose
 * taskfiles
+* [go-stringer](https://github.com/dmji/go-stringer "stringer fork for enums")
 
 #### DevOps
 
