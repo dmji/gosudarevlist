@@ -84,5 +84,6 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.
 
 	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
 	HandleFunc("POST /api/updater/{category}", r.RunUpdaterHandler)
+	HandleFunc("POST /api/updater/{category}/{identifier}", r.RunItemUpdaterHandler)
 	HandleFunc("GET /api/updates/{category}/ws", r.WsUpdaterHandler)
 }

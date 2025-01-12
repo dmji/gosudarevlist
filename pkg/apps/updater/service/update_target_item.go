@@ -10,6 +10,13 @@ import (
 )
 
 func (s *service) UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error {
+	data := s.updaterDataByCategory(ctx, category)
+	bOk := data.mx.TryLock()
+	if !bOk {
+		return NewRrrorInProcess(category, data.lastUpdateTimer)
+	}
+	defer data.mx.Unlock()
+
 	item, err := s.animelayerApi.GetItemByIdentifier(ctx, identifier)
 	if err != nil {
 		logger.Infow(ctx, "Update Target Item | Item getting failed", "category", category, "identifier", identifier, "error", err)
