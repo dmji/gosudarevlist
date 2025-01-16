@@ -5,6 +5,7 @@ tmp_dir = "~builds"
 bin = "./~builds/air_server"
 cmd = "go build -o ./~builds/air_server ./cmd/server/"
 delay = 1000
+rerun_delay = 1000
 exclude_dir = ["assets", "~builds", "vendor"]
 exclude_file = []
 exclude_regex = ["*_templ.txt", "*_templ.go", "*_string.go"]

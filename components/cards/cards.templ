@@ -81,7 +81,7 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 		<div class="flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
 			@putPageNumberResetTrigger(currentPage, i, len(cards)) {
 				// title
-				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
+				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch">
 					//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
 					{ card.Title }
 					//</a>

@@ -81,7 +81,7 @@ const narrowButtonSizeStyle class = "pt-4 px-2"
 templ navButtonWithTooltip(icon templ.Component, tooltipText string, text string, style class) {
 	@textTooptip(tooltipText)
 	<div class={ style.String() }>
-		<button type="button">
+		<button type="button" class="border-none">
 			<div class="flex">
 				@icon
 				if len(text) > 0 {

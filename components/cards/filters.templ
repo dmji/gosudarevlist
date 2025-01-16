@@ -30,8 +30,7 @@ templ Filters(filtersEndpint string) {
 				<button
 					type="button"
 					onclick={ scripts.ResetFilters(templ.JSExpression("this")) }
-					class="text-gray-500 pb-3 font-light
-					py-2 rounded"
+					class="text-gray-500 font-light py-2 rounded border-none"
 				>
 					@svg.ClearFilters()
 				</button>
@@ -39,7 +38,7 @@ templ Filters(filtersEndpint string) {
 				<button
 					type="button"
 					onclick={ scripts.ToggleFilterPanel(searchBarId, filtersPanelId) }
-					class="py-2 px-3 rounded"
+					class="py-2 px-3 rounded border-none"
 				>
 					@svg.ShowFilters()
 				</button>
