@@ -87,7 +87,7 @@ TODO
 ```bash
 task update-apps
 task tailwind:prod
-task pre-build
+task pre-build-prod
 task build-freebsd-amd64
 ```
 

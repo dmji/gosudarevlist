@@ -3,11 +3,11 @@ tmp_dir = "~builds"
 
 [build]
 bin = "./~builds/air_server"
-cmd = "task air-rebuild-cmd"
+cmd = "go build -o ./~builds/air_server ./cmd/server/"
 delay = 1000
 exclude_dir = ["assets", "~builds", "vendor"]
 exclude_file = []
-exclude_regex = [".*_templ.txt", ".*_string.go"]
+exclude_regex = ["*_templ.txt", "*_templ.go", "*_string.go"]
 exclude_unchanged = true
 follow_symlink = false
 full_bin = ""

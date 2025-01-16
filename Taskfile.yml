@@ -12,23 +12,13 @@ includes:
 
 tasks:
   dev:
-    deps: [tailwind:dev, templ, air]
+    cmds:
+      - air
+    deps: [tailwind:dev, templ]
 
   templ:
     cmds:
-      - templ generate --watch --proxy="http://localhost:8080"  --proxybind="0.0.0.0" --proxyport="54321" --open-browser=false
-
-  air:
-    cmds:
-      - air
-      
-  air-rebuild-cmd:
-    cmds:
-      - go generate ./...
-      - task sqlc-gen
-      - task langs:refresh
-      - templ generate
-      - go build -o ./~builds/air_server ./cmd/server/
+      - templ generate --watch
 
   update-apps:
     cmds:
@@ -49,13 +39,18 @@ tasks:
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
       - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
 
-  pre-build:
+  pre-build-dev:
+    cmds:
+      - go generate ./...
+    deps: [langs:refresh, sqlc-gen-dev]
+
+  pre-build-prod:
     cmds:
       - go generate ./...
       - templ generate 
-      - task sqlc-gen-prod
+    deps: [langs:refresh, sqlc-gen-prod]
 
-  sqlc-gen:
+  sqlc-gen-dev:
     cmds:
       - set -a
       - source .env 
@@ -65,11 +60,3 @@ tasks:
   sqlc-gen-prod:
     cmds:
       - sqlc generate -f ./build/sqlc_prod.yaml
-
-  build-current:
-    cmds:
-      - go build -trimpath -tags embed -o ./~builds/server ./cmd/server/.
-      
-  build-freebsd-amd64:
-    cmds:
-      - env GOOS=freebsd GOARCH=amd64 go build -trimpath -tags embed -o ./~builds/freebsd/amd64/server ./cmd/server/.
