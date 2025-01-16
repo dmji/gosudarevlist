@@ -13,7 +13,7 @@ tasks:
 
   download:
     cmds:
-      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.12/tailwindcss-linux-x64
+      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.0-beta.1/tailwindcss-linux-x64
       - chmod +x tailwindcss-linux-x64
       - mv tailwindcss-linux-x64 ~tailwindcss
     status:
