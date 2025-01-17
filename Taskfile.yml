@@ -29,7 +29,7 @@ tasks:
 
   regen:
       - go generate ./...
-      - task sqlc-gen
+      - task sqlc-gen-dev
       - task langs:refresh
 
   pre-build-prod:
@@ -37,18 +37,12 @@ tasks:
       - go run {{.templ}} generate 
       - task sqlc-gen-prod
 
-  sqlc-gen:
+  sqlc-gen-prod: go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+  sqlc-gen-dev:
       - set -a
       - source .env 
       - set +a 
-      - go run {{.sqlc}} generate -f ./build/sqlc.yaml
+      - go run {{.sqlc}} generate -f ./build/sqlc_dev.yaml
 
-  sqlc-gen-prod: go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
-
-  build-current:
-    cmds:
-      - go build -trimpath -tags embed -o ./~builds/server ./cmd/server/.
-      
-  build-freebsd-amd64:
-    cmds:
-      - env GOOS=freebsd GOARCH=amd64 go build -trimpath -tags embed -o ./~builds/freebsd/amd64/server ./cmd/server/.
+  build-current: go build -trimpath -tags embed -o ./~builds/server ./cmd/server/.
+  build-freebsd-amd64: env GOOS=freebsd GOARCH=amd64 go build -trimpath -tags embed -o ./~builds/freebsd/amd64/server ./cmd/server/.

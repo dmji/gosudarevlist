@@ -1,23 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./components/**/*.templ", "./components/*.templ"],
-  safelist: [
-    'w-64',
-    'w-1/2',
-    'rounded-l-lg',
-    'rounded-r-lg',
-    'bg-gray-200',
-    'grid-cols-4',
-    'grid-cols-7',
-    'h-6',
-    'leading-6',
-    'h-9',
-    'leading-9',
-    'shadow-lg'
-  ],
   darkMode: 'selector',
   theme: {
-    extend: {},
     fontSize: {
       xxs: ['0.5rem',  { lineHeight: '0.75rem' }],
       xs: ['0.75rem', { lineHeight: '1rem' }],
@@ -35,6 +20,5 @@ module.exports = {
       '9xl': ['8rem', { lineHeight: '1' }],
     }
   },
-  plugins: [],
 }
 
