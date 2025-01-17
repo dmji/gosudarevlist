@@ -1,5 +1,9 @@
 version: "3"
 
+vars:
+  templ: go run github.com/a-h/templ/cmd/templ@latest
+  sqlc: go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
 env:
   ENV: ./
 
@@ -16,32 +20,21 @@ tasks:
 
   templ:
     cmds:
-      - templ generate --watch --proxy="http://localhost:8080"  --proxybind="0.0.0.0" --proxyport="54321" --open-browser=false
+      - {{.templ}} generate --watch --open-browser=false -v
 
   air:
     cmds:
-      - air
+      - go run github.com/air-verse/air@latest
       
   air-rebuild-cmd:
     cmds:
       - go generate ./...
       - task sqlc-gen
       - task langs:refresh
-      - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
-      - go build -o ./~builds/air_server ./cmd/server/
-
-  update-apps:
-    cmds:
-      - task update-build-apps
-      - go install github.com/air-verse/air@latest
-      - go install github.com/pressly/goose/v3/cmd/goose@latest
-      - go install github.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
 
   update-build-apps:
     cmds:
-      - go install github.com/a-h/templ/cmd/templ@latest
-      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-      - go install github.com/dmji/go-stringer@latest
+      - go run github.com/dmji/go-stringer@latest
     
   update-refactoring-tools:
     cmds:
@@ -52,7 +45,7 @@ tasks:
   pre-build:
     cmds:
       - go generate ./...
-      - templ generate 
+      - {{.templ}} generate 
       - task sqlc-gen-prod
 
   sqlc-gen:
@@ -60,11 +53,11 @@ tasks:
       - set -a
       - source .env 
       - set +a 
-      - sqlc generate -f ./build/sqlc.yaml
+      - {{.sqlc}} generate -f ./build/sqlc.yaml
 
   sqlc-gen-prod:
     cmds:
-      - sqlc generate -f ./build/sqlc_prod.yaml
+      - {{.sqlc}} generate -f ./build/sqlc_prod.yaml
 
   build-current:
     cmds:

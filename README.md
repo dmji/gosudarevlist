@@ -72,7 +72,6 @@ Full-Stack Web-App тти AnimeLayer.ru
 ### For AIR developing without docker
 
 ```bash
-task update-apps
 task dev
 ```
 
@@ -85,7 +84,6 @@ TODO
 ### For serv00 deployment
 
 ```bash
-task update-apps
 task tailwind:prod
 task pre-build
 task build-freebsd-amd64
