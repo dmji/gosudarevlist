@@ -11,13 +11,19 @@ env:
 dotenv: ['.env', '{{.ENV}}/.env.', '{{.HOME}}/.env']
 
 includes:
-  goose: ./Taskfile.Goose.yml
+  goose:    ./Taskfile.Goose.yml
   tailwind: ./Taskfile.Tailwind.yml
-  langs: ./Taskfile.i18n.yml
+  langs:    ./Taskfile.i18n.yml
 
 tasks:
+  default:
+    cmds:
+      - task --list-all
+
   dev:
     deps: [tailwind:dev, templ, air]
+
+  templ-fmt: go run {{.templ}} fmt .
 
   templ: go run {{.templ}} generate --watch --open-browser=false -v
   air: go run {{.air}}

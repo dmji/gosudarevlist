@@ -1,10 +1,11 @@
 root = "."
-tmp_dir = "~tmp"
+tmp_dir = "tmp"
 
 [build]
-bin = "./~tmp/air_server"
-cmd = " go build -o ./~tmp/air_server ./cmd/server/"
-exclude_dir = ["assets", "~builds", "~tmp", "vendor"]
+bin = "./tmp/main"
+pre_cmd = ["task templ-fmt"]
+cmd = "go build -o ./tmp/main ./cmd/server/"
+exclude_dir = ["assets", "~builds", "tmp", "vendor"]
 exclude_file = []
 exclude_regex = [".*_templ.txt", ".*_string.go"]
 exclude_unchanged = true
