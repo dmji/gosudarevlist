@@ -20,6 +20,7 @@ send_interrupt = false
 stop_on_error = true
 
 [color]
+app = ""
 build = "yellow"
 main = "magenta"
 runner = "green"
@@ -30,9 +31,3 @@ time = false
 
 [misc]
 clean_on_exit = false
-
-[proxy]
-# Enable live-reloading on the browser.
-enabled = true
-proxy_port = 54321
-app_port = 8080

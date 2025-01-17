@@ -18,7 +18,23 @@ tasks:
 
   templ:
     cmds:
+<<<<<<< HEAD
       - templ generate --watch
+=======
+      - templ generate --watch --proxy="http://localhost:8080"  --proxybind="0.0.0.0" --proxyport="54321" --open-browser=false
+
+  air:
+    cmds:
+      - air
+      
+  air-rebuild-cmd:
+    cmds:
+      - go generate ./...
+      - task sqlc-gen
+      - task langs:refresh
+      - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
+      - go build -o ./~builds/air_server ./cmd/server/
+>>>>>>> 332ecda (Revert "replaced templ proxy with air proxy")
 
   update-apps:
     cmds:
