@@ -1,8 +1,9 @@
 version: "3"
 
 vars:
-  templ: go run github.com/a-h/templ/cmd/templ@latest
-  sqlc: go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+  templ:  github.com/a-h/templ/cmd/templ@latest
+  sqlc:   github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+  air:    github.com/air-verse/air@latest
 
 env:
   ENV: ./
@@ -21,6 +22,7 @@ tasks:
     deps: [tailwind:dev, templ]
 
   templ:
+<<<<<<< HEAD
     cmds:
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -30,16 +32,21 @@ tasks:
 =======
       - {{.templ}} generate --watch --open-browser=false -v
 >>>>>>> 41f451c (clean taskfiles from install, fixed air long rebuild)
+=======
+    cmds: 
+      - go run {{.templ}} generate --watch --open-browser=false -v
+>>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
 
   air:
     cmds:
-      - go run github.com/air-verse/air@latest
+      - go run {{.air}}
       
-  air-rebuild-cmd:
+  regen:
     cmds:
       - go generate ./...
       - task sqlc-gen
       - task langs:refresh
+<<<<<<< HEAD
 <<<<<<< HEAD
       - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
       - go build -o ./~builds/air_server ./cmd/server/
@@ -57,6 +64,8 @@ tasks:
   update-build-apps:
     cmds:
       - go run github.com/dmji/go-stringer@latest
+=======
+>>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
     
   update-refactoring-tools:
     cmds:
@@ -64,6 +73,7 @@ tasks:
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
       - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
 
+<<<<<<< HEAD
   pre-build-dev:
     cmds:
       - go generate ./...
@@ -77,6 +87,12 @@ tasks:
     deps: [langs:refresh, sqlc-gen-prod]
 =======
       - {{.templ}} generate 
+=======
+  pre-build-prod:
+    cmds:
+      - go generate ./...
+      - go run {{.templ}} generate 
+>>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
       - task sqlc-gen-prod
 >>>>>>> 41f451c (clean taskfiles from install, fixed air long rebuild)
 
@@ -85,14 +101,18 @@ tasks:
       - set -a
       - source .env 
       - set +a 
-      - {{.sqlc}} generate -f ./build/sqlc.yaml
+      - go run {{.sqlc}} generate -f ./build/sqlc.yaml
 
   sqlc-gen-prod:
     cmds:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - sqlc generate -f ./build/sqlc_prod.yaml
 =======
       - {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+=======
+      - go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+>>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
 
   build-current:
     cmds:

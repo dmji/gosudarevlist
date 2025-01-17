@@ -24,9 +24,6 @@ jobs:
     - name: Install Taskfile
       run: sudo snap install task --classic
 
-    - name: Set up tools
-      run: task update-build-apps
-
     - name: Generate tailwind
       run: task tailwind:prod
 
