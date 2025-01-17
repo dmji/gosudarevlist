@@ -19,42 +19,31 @@ tasks:
   dev:
     deps: [tailwind:dev, templ, air]
 
-  templ:
-    cmds: 
-      - go run {{.templ}} generate --watch --open-browser=false -v
-
-  air:
-    cmds:
-      - go run {{.air}}
-      
-  regen:
-    cmds:
-      - go generate ./...
-      - task sqlc-gen
-      - task langs:refresh
+  templ: go run {{.templ}} generate --watch --open-browser=false -v
+  air: go run {{.air}}
     
   update-refactoring-tools:
-    cmds:
       - go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
       - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
 
+  regen:
+      - go generate ./...
+      - task sqlc-gen
+      - task langs:refresh
+
   pre-build-prod:
-    cmds:
       - go generate ./...
       - go run {{.templ}} generate 
       - task sqlc-gen-prod
 
   sqlc-gen:
-    cmds:
       - set -a
       - source .env 
       - set +a 
       - go run {{.sqlc}} generate -f ./build/sqlc.yaml
 
-  sqlc-gen-prod:
-    cmds:
-      - go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+  sqlc-gen-prod: go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
 
   build-current:
     cmds:
