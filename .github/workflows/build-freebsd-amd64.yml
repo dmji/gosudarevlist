@@ -50,4 +50,9 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         command_timeout: 30s
         script: |
-          nohup ./restart.bash > nohup.out 2> nohup.err < /dev/null &
+          pkill -f ./server
+          rm -f repo/gosudarevlist/server
+          mv server repo/gosudarevlist/server
+          cd repo/gosudarevlist
+          chmod 777 server
+          nohup ./server -port=54320 > nohup.out 2> nohup.err < /dev/null &
