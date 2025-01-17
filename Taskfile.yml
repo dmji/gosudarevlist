@@ -1,8 +1,9 @@
 version: "3"
 
 vars:
-  templ: go run github.com/a-h/templ/cmd/templ@latest
-  sqlc: go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+  templ:  github.com/a-h/templ/cmd/templ@latest
+  sqlc:   github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+  air:    github.com/air-verse/air@latest
 
 env:
   ENV: ./
@@ -19,22 +20,18 @@ tasks:
     deps: [tailwind:dev, templ, air]
 
   templ:
-    cmds:
-      - {{.templ}} generate --watch --open-browser=false -v
+    cmds: 
+      - go run {{.templ}} generate --watch --open-browser=false -v
 
   air:
     cmds:
-      - go run github.com/air-verse/air@latest
+      - go run {{.air}}
       
-  air-rebuild-cmd:
+  regen:
     cmds:
       - go generate ./...
       - task sqlc-gen
       - task langs:refresh
-
-  update-build-apps:
-    cmds:
-      - go run github.com/dmji/go-stringer@latest
     
   update-refactoring-tools:
     cmds:
@@ -42,10 +39,10 @@ tasks:
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
       - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
 
-  pre-build:
+  pre-build-prod:
     cmds:
       - go generate ./...
-      - {{.templ}} generate 
+      - go run {{.templ}} generate 
       - task sqlc-gen-prod
 
   sqlc-gen:
@@ -53,11 +50,11 @@ tasks:
       - set -a
       - source .env 
       - set +a 
-      - {{.sqlc}} generate -f ./build/sqlc.yaml
+      - go run {{.sqlc}} generate -f ./build/sqlc.yaml
 
   sqlc-gen-prod:
     cmds:
-      - {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+      - go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
 
   build-current:
     cmds:

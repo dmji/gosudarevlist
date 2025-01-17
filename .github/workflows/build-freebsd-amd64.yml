@@ -24,14 +24,11 @@ jobs:
     - name: Install Taskfile
       run: sudo snap install task --classic
 
-    - name: Set up tools
-      run: task update-build-apps
-
     - name: Generate tailwind
       run: task tailwind:prod
 
     - name: Pre-Build
-      run: task pre-build
+      run: task pre-build-prod
 
     - name: Build
       run: task build-freebsd-amd64
