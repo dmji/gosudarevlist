@@ -4,18 +4,7 @@ vars:
   goose: g1ithub.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
 
 tasks:
-  do:
-    cmds:
-      - go run {{.goose}} -dir ./migrations {{.CLI_ARGS}}
-
-  up:
-    cmds:
-      - go run {{.goose}} -dir ./migrations up-by-one
-
-  down:
-    cmds:
-      - go run {{.goose}} -dir ./migrations down
-
-  create:
-    cmds:
-      - go run {{.goose}} -dir ./migrations create {{.CLI_ARGS}} sql
+  do: go run {{.goose}} -dir ./migrations {{.CLI_ARGS}}
+  up: go run {{.goose}} -dir ./migrations up-by-one
+  down: go run {{.goose}} -dir ./migrations down
+  create: go run {{.goose}} -dir ./migrations create {{.CLI_ARGS}} sql

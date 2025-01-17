@@ -4,25 +4,20 @@ vars:
   goi18n: github.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
 
 tasks:
-  refresh:
-    cmds:
-      - go run {{.goi18n}} extract -outdir lang/translations -format yaml
+  refresh: go run {{.goi18n}} extract -outdir lang/translations -format yaml
   
   init:
-    cmds:
       - task langs:refresh
       - touch lang/translations/translate.{{.CLI_ARGS}}.yaml 
       - go run {{.goi18n}} merge -format yaml -outdir=lang lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
       - mv lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
 
   diff:
-    cmds:
       - task langs:refresh
       - touch lang/translations/translate.{{.CLI_ARGS}}.yaml 
       - go run {{.goi18n}} merge -format yaml -outdir=lang/translations lang/translations/active.{{.CLI_ARGS}}.yaml lang/translations/active.en.yaml lang/translations/translate.{{.CLI_ARGS}}.yaml
 
   merge:
-    cmds:
       - go run {{.goi18n}} merge -format yaml -outdir=lang/translations -sourceLanguage {{.CLI_ARGS}} lang/translations/translate.{{.CLI_ARGS}}.yaml lang/translations/active.{{.CLI_ARGS}}.yaml
       - rm lang/translations/translate.{{.CLI_ARGS}}.yaml
 

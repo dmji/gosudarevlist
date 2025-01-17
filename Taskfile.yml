@@ -21,6 +21,7 @@ tasks:
       - air
     deps: [tailwind:dev, templ]
 
+<<<<<<< HEAD
   templ:
 <<<<<<< HEAD
     cmds:
@@ -66,13 +67,17 @@ tasks:
       - go run github.com/dmji/go-stringer@latest
 =======
 >>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
+=======
+  templ: go run {{.templ}} generate --watch --open-browser=false -v
+  air: go run {{.air}}
+>>>>>>> 445d38e (++taskfiles)
     
   update-refactoring-tools:
-    cmds:
       - go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest
       - go install github.com/davidrjenni/reftools/cmd/fixplurals@latest
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   pre-build-dev:
     cmds:
@@ -88,21 +93,32 @@ tasks:
 =======
       - {{.templ}} generate 
 =======
+=======
+  regen:
+      - go generate ./...
+      - task sqlc-gen
+      - task langs:refresh
+
+>>>>>>> 445d38e (++taskfiles)
   pre-build-prod:
-    cmds:
       - go generate ./...
       - go run {{.templ}} generate 
 >>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
       - task sqlc-gen-prod
 >>>>>>> 41f451c (clean taskfiles from install, fixed air long rebuild)
 
+<<<<<<< HEAD
   sqlc-gen-dev:
     cmds:
+=======
+  sqlc-gen:
+>>>>>>> 445d38e (++taskfiles)
       - set -a
       - source .env 
       - set +a 
       - go run {{.sqlc}} generate -f ./build/sqlc.yaml
 
+<<<<<<< HEAD
   sqlc-gen-prod:
     cmds:
 <<<<<<< HEAD
@@ -113,6 +129,9 @@ tasks:
 =======
       - go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
 >>>>>>> f6eaba0 (++clean taskfiles from install, fixed air long rebuild)
+=======
+  sqlc-gen-prod: go run {{.sqlc}} generate -f ./build/sqlc_prod.yaml
+>>>>>>> 445d38e (++taskfiles)
 
   build-current:
     cmds:
