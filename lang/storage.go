@@ -39,6 +39,9 @@ func New(ctx context.Context) *Storage {
 
 	s.Reload(ctx)
 
+	s.Get(TagRussian)
+	s.Get(TagEnglish)
+
 	return s
 }
 
@@ -56,7 +59,7 @@ func (s *Storage) Get(tag TagLang) *Loader {
 }
 
 func (s *Storage) ToContext(ctx context.Context, tag TagLang) context.Context {
-	return context.WithValue(ctx, langerCtxValue, s.Get(tag))
+	return ToContext(ctx, s.Get(tag))
 }
 
 func ToContext(ctx context.Context, l *Loader) context.Context {
