@@ -27,7 +27,7 @@ tasks:
       - go generate ./...
       - task sqlc-gen
       - task langs:refresh
-      - templ generate
+      - templ generate --notify-proxy --proxybind='localhost' --proxyport='54321'
       - go build -o ./~builds/air_server ./cmd/server/
 
   update-apps:
