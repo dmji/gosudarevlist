@@ -1,18 +1,21 @@
 version: "3"
 
+vars:
+  goose: go run g1ithub.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
+
 tasks:
   do:
     cmds:
-      - goose -dir ./migrations {{.CLI_ARGS}}
+      - {{.goose}} -dir ./migrations {{.CLI_ARGS}}
 
   up:
     cmds:
-      - goose -dir ./migrations up-by-one
+      - {{.goose}} -dir ./migrations up-by-one
 
   down:
     cmds:
-      - goose -dir ./migrations down
+      - {{.goose}} -dir ./migrations down
 
   create:
     cmds:
-      - goose -dir ./migrations create {{.CLI_ARGS}} sql
+      - {{.goose}} -dir ./migrations create {{.CLI_ARGS}} sql

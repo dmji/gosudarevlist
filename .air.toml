@@ -1,12 +1,18 @@
 root = "."
-tmp_dir = "~builds"
+tmp_dir = "~tmp"
 
 [build]
+<<<<<<< HEAD
 bin = "./~builds/air_server"
 cmd = "go build -o ./~builds/air_server ./cmd/server/"
 delay = 1000
 rerun_delay = 1000
 exclude_dir = ["assets", "~builds", "vendor"]
+=======
+bin = "./~tmp/air_server"
+cmd = " go build -o ./~tmp/air_server ./cmd/server/"
+exclude_dir = ["assets", "~builds", "~tmp", "vendor"]
+>>>>>>> 41f451c (clean taskfiles from install, fixed air long rebuild)
 exclude_file = []
 exclude_regex = ["*_templ.txt", "*_templ.go", "*_string.go"]
 exclude_unchanged = true
@@ -14,13 +20,12 @@ follow_symlink = false
 full_bin = ""
 include_dir = []
 include_ext = ["go", "tpl", "tmpl", "html", "sql", "yaml", "css"]
-kill_delay = "2s"
+kill_delay = "0s"
 log = "build-errors.log"
-send_interrupt = false
+send_interrupt = true
 stop_on_error = true
 
 [color]
-app = ""
 build = "yellow"
 main = "magenta"
 runner = "green"
@@ -30,4 +35,9 @@ watcher = "cyan"
 time = false
 
 [misc]
-clean_on_exit = false
+clean_on_exit = true
+
+[proxy]
+enabled = true
+proxy_port = 54321
+app_port = 8080
