@@ -7,6 +7,7 @@ import (
 
 type LayoutParams struct {
 	ImportHtmxWsExt bool
+	ImportFlickity  bool
 }
 
 //<script src="https://unpkg.com/intercooler@1.2.3"></script>
@@ -20,6 +21,10 @@ templ Layout(title string, params *LayoutParams) {
 			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 			if params.ImportHtmxWsExt {
 				<script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+			}
+			if params.ImportFlickity {
+				<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css"/>
+				<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 			}
 			<link href="/assets/css/tailwind.css" rel="stylesheet"/>
 			<link href="/assets/images/favicon.ico" rel="icon" type="image/x-icon"/>

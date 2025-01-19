@@ -18,14 +18,14 @@ type ItemCartData struct {
 	CreatedDate          string
 	UpdatedDate          string
 	TorrentWeight        string
-	Image                string
 	Description          string
-	AnimeLayerRefs       []ItemCartHrefData
+	AnimeLayerRefs       []*ItemCartHrefData
 	CategoryPresentation string
 	ReleaseStatus        enums.ReleaseStatus
 }
 
 type ItemCartHrefData struct {
-	Href string
-	Text []string
+	Href  string
+	Text  []string
+	Image string
 }

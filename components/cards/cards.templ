@@ -11,7 +11,7 @@ const (
 	animeLayerLogo     = "/assets/images/animelayer_logo.webp"
 )
 
-func queryPosterFromItem(description *model.ItemCartData) string {
+func queryPosterFromItem(description *model.ItemCartHrefData) string {
 
 	if img := description.Image; len(img) > 0 {
 		return img
@@ -35,7 +35,7 @@ templ optionalLineMetaData(title, value string, bLast ...bool) {
 templ onAirBadge(s enums.ReleaseStatus) {
 	if s == enums.ReleaseStatusOnAir {
 		<label
-			class="absolute
+			class="absolute z-10
 					top-[1%] right-[1%] px-[5%]
 					text-white font-bold text-base max-sm:text-xs
 					bg-[#ef6d6d] shadow-[0_2px_4px_rgba(0,0,0,0.1)]
@@ -80,11 +80,33 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 	for i, card := range cards {
 		<div class="flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
 			@putPageNumberResetTrigger(currentPage, i, len(cards)) {
-				// title
-				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
-					//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
-					{ card.Title }
-					//</a>
+				// gallery with images
+				<div
+					class="box-border p-4"
+					hx-trigger="intersect once threshold:0"
+					hx-on:htmx:trigger={ loadGallery(templ.JSExpression("this")) }
+				>
+					<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
+						@categoryBadge(card.CategoryPresentation)
+						@onAirBadge(card.ReleaseStatus)
+						{{
+							targetN := 3
+							n := len(card.AnimeLayerRefs)
+							if n > targetN {
+								targetN = n
+							}
+						}}
+						for i := 0; i < targetN;i++ {
+							<img
+								original_src={ queryPosterFromItem(card.AnimeLayerRefs[i%n]) }
+								src={ noImagePlaceholder }
+								alt={ card.Title }
+								hx-trigger="intersect once"
+								hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+								class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
+							/>
+						}
+					</div>
 				</div>
 				// horizontal row with update datas
 				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
@@ -95,45 +117,36 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 					}
 					@optionalLineMetaData("", card.TorrentWeight, true)
 				</div>
+				// title
+				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
+					//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
+					{ card.Title }
+					//</a>
+				</div>
+				// Description
+				<div class="p-4 text-sm font-sans font-normal overflow-hidden ">
+					@templ.Raw(card.Description, nil)
+				</div>
 				// horizontal row with image and description
-				<div class="grid grid-flow-col place-content-start">
-					<div class="w-fit py-4 pl-4 max-w-[240px]">
-						<div class="relative">
-							@categoryBadge(card.CategoryPresentation)
-							@onAirBadge(card.ReleaseStatus)
+				<div class="p-4 flex flex-col">
+					for _, animeLayerRef := range card.AnimeLayerRefs {
+						<a
+							href={ templ.URL(animeLayerRef.Href) }
+							rel="noopener noreferrer"
+							class="mt-2 flex flex-row"
+						>
 							<img
-								original_src={ queryPosterFromItem(&card) }
-								src={ noImagePlaceholder }
+								src={ animeLayerLogo }
 								alt={ card.Title }
-								hx-trigger="intersect once"
-								hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
-								class="w-[240px] h-[360px] object-scale-down object-top"
+								class="w-[51px] h-[18px] object-scale-down object-top"
 							/>
 							<div class="flex flex-col">
-								for _, animeLayerRef := range card.AnimeLayerRefs {
-									<a
-										href={ templ.URL(animeLayerRef.Href) }
-										rel="noopener noreferrer"
-										class="mt-2 flex flex-row"
-									>
-										<img
-											src={ animeLayerLogo }
-											alt={ card.Title }
-											class="w-[51px] h-[18px] object-scale-down object-top"
-										/>
-										<div class="flex flex-col">
-											for _, text := range animeLayerRef.Text {
-												<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
-											}
-										</div>
-									</a>
+								for _, text := range animeLayerRef.Text {
+									<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
 								}
 							</div>
-						</div>
-					</div>
-					<div class="p-4 text-sm font-sans font-normal inline-block whitespace-pre truncate">
-						@templ.Raw(card.Description, nil)
-					</div>
+						</a>
+					}
 				</div>
 			}
 		</div>
@@ -141,4 +154,19 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 	if len(cards) > 0 && bAutoloadNextPage {
 		@Trigger(nextPageEndpint, nextPageParams)
 	}
+}
+
+script loadGallery(parentNode templ.JSExpression) {
+	new Flickity(parentNode.firstChild, {
+		initialIndex: 2,
+		contain: true,
+		wrapAround: true,
+		autoPlay: 1500,
+		selectedAttraction: 0.01,
+		friction: 0.15,
+		prevNextButtons: false,
+		pageDots: false,
+		setGallerySize: false,
+		cellSelector: ".object-top"
+	});
 }

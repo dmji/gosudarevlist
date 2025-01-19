@@ -20,7 +20,7 @@ var t = navigation.PaginationOpt{
 }
 
 templ CollectionListing(filtersEndpint, nextPageEndpint string) {
-	@components.Layout("AnimeLayer Collection", &components.LayoutParams{}) {
+	@components.Layout("AnimeLayer Collection", &components.LayoutParams{ImportFlickity: true}) {
 		<div class="pt-3">
 			<div class="px-4">
 				@cards.Filters(filtersEndpint)

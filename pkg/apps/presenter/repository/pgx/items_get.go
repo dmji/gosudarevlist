@@ -44,9 +44,10 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 	for _, item := range items {
 		if item.Category == pgx_sqlc.CategoryAnimelayerAnime {
 			if i := slices.IndexFunc(cardItems, func(e model.ItemCartData) bool { return e.Title == item.Title }); i != -1 {
-				cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, model.ItemCartHrefData{
-					Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-					Text: itemNotesToHrefText(len(cardItems[i].AnimeLayerRefs)+1, &item),
+				cardItems[i].AnimeLayerRefs = append(cardItems[i].AnimeLayerRefs, &model.ItemCartHrefData{
+					Href:  fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+					Text:  itemNotesToHrefText(len(cardItems[i].AnimeLayerRefs)+1, &item),
+					Image: item.RefImageCover,
 				})
 				continue
 			}
@@ -54,15 +55,15 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 		cardItems = append(cardItems, model.ItemCartData{
 			Title:         item.Title,
-			Image:         item.RefImageCover,
 			Description:   item.Notes,
 			CreatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.CreatedDate)),
 			UpdatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.UpdatedDate)),
 			TorrentWeight: item.TorrentFilesSize,
-			AnimeLayerRefs: []model.ItemCartHrefData{
+			AnimeLayerRefs: []*model.ItemCartHrefData{
 				{
-					Href: fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-					Text: itemNotesToHrefText(1, &item),
+					Href:  fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+					Text:  itemNotesToHrefText(1, &item),
+					Image: item.RefImageCover,
 				},
 			},
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
