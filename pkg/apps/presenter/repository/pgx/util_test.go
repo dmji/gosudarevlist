@@ -32,7 +32,7 @@ func InitRepo(ctx context.Context) (repository.AnimeLayerRepositoryDriver, conte
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
-		panic(err)
+		logger.Panicw(ctx, "Initialization Postgres Pool Config", "error", err)
 	}
 
 	repo := repository_pgx.New(connPgx)

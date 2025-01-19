@@ -62,7 +62,7 @@ func main() {
 	}
 	animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
 	if err != nil {
-		panic(err)
+		logger.Panicw(ctx, "Initialization AnimeLayer Parser", "error", err)
 	}
 
 	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
@@ -79,7 +79,7 @@ func main() {
 
 	connPgx, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
 	if err != nil {
-		panic(err)
+		logger.Panicw(ctx, "Initialization Postgres Pool Config", "error", err)
 	}
 
 	repoPresenter := repository_presenter_pgx.New(connPgx)
