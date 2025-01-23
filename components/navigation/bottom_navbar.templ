@@ -40,24 +40,16 @@ templ Navbar() {
 			}
 			@navSeparator()
 			<div class="flex rounded-full">
-				@navButtonItem(navButtonGroupBeg) {
+				@navButtonItem(navButtonSingle) {
 					@clickableCollider("/animelayer/anime")
-					@navButtonWithTooltip(svgAnimeIcon(), "AnimeLayer Anime", "", shiftedButtonSizeStyle)
-				}
-				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/animelayer/anime/updates")
-					@navButtonWithTooltip(svgHistoryIcon(), "Anime Updates", "", narrowButtonSizeStyle)
+					@navButtonWithTooltip(svgTorrentIcon(), "AnimeLayer and etc", "Torrents", standardButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
 			<div class="flex rounded-full">
-				@navButtonItem(navButtonGroupBeg) {
-					@clickableCollider("/animelayer/manga")
-					@navButtonWithTooltip(svgMangaIcon(), "AnimeLayer Manga", "", shiftedButtonSizeStyle)
-				}
-				@navButtonItem(navButtonGroupEnd) {
-					@clickableCollider("/animelayer/manga/updates")
-					@navButtonWithTooltip(svgHistoryIcon(), "Manga Updates", "", narrowButtonSizeStyle)
+				@navButtonItem(navButtonSingle) {
+					@clickableCollider("/mal/anime")
+					@navButtonWithTooltip(svgMangaIcon(), "MyAnimeList", "MAL", standardButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
@@ -85,7 +77,7 @@ templ navButtonWithTooltip(icon templ.Component, tooltipText string, text string
 			<div class="flex">
 				@icon
 				if len(text) > 0 {
-					<span class="-translate-y-1">{ text }</span>
+					<span class="px-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">{ text }</span>
 				}
 				<span class="sr-only">{ tooltipText }</span>
 			</div>

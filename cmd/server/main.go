@@ -8,10 +8,12 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/dmji/go-myanimelist/mal"
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/handlers"
 	"github.com/dmji/gosudarevlist/internal/animelayer_client"
 	"github.com/dmji/gosudarevlist/internal/env"
+	service_mal "github.com/dmji/gosudarevlist/pkg/apps/mal/service"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
@@ -88,9 +90,23 @@ func main() {
 	presentService := service_presenter.New(repoPresenter)
 
 	//
+	// Init MAL Api Client
+	//
+	publicInfoClient := &http.Client{
+		// Create client ID from https://myanimelist.net/apiconfig.
+		Transport: &clientIDTransport{ClientID: os.Getenv("MAL_CLIENT_ID")},
+	}
+	malApiClient, err := mal.NewSite(publicInfoClient, nil)
+	if err != nil {
+		logger.Panicw(ctx, "Initialization MAL Api Client", "error", err)
+	}
+
+	malService := service_mal.New(malApiClient)
+
+	//
 	// Init Router
 	//
-	r := handlers.New(ctx, presentService, updaterService)
+	r := handlers.New(ctx, presentService, updaterService, malService)
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)
@@ -116,4 +132,17 @@ func main() {
 	if err := srv.Serve(conn); err != nil {
 		logger.Fatalw(ctx, "serve", "error", err)
 	}
+}
+
+type clientIDTransport struct {
+	Transport http.RoundTripper
+	ClientID  string
+}
+
+func (c *clientIDTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	if c.Transport == nil {
+		c.Transport = http.DefaultTransport
+	}
+	req.Header.Add("X-MAL-CLIENT-ID", c.ClientID)
+	return c.Transport.RoundTrip(req)
 }

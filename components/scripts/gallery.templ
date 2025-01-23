@@ -1,0 +1,16 @@
+package scripts
+
+script LoadGallery(parentNode templ.JSExpression) {
+	new Flickity(parentNode.firstChild, {
+		initialIndex: 2,
+		contain: true,
+		wrapAround: true,
+		autoPlay: 1500,
+		selectedAttraction: 0.01,
+		friction: 0.15,
+		prevNextButtons: false,
+		pageDots: false,
+		setGallerySize: false,
+		cellSelector: ".object-top"
+	});
+}

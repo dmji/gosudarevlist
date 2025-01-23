@@ -6,7 +6,8 @@ require (
 	github.com/a-h/templ v0.3.819
 	github.com/coder/websocket v1.8.12
 	github.com/dmji/go-animelayer-parser v0.1.4-0.20250111224747-3c3d47580937
-	github.com/dmji/qs v0.0.0-20250106213028-5164d56f02cf
+	github.com/dmji/go-myanimelist v0.9.5-fork
+	github.com/dmji/qs v0.0.0-20250121125841-fd973e8ae793
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1
 	github.com/kolesa-team/go-webp v1.0.4

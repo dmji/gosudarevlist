@@ -16,7 +16,7 @@ func newSliceUnmarshaler(t reflect.Type, opts *qs.UnmarshalOptions) (qs.Unmarsha
 		return nil, &qs.WrongKindError{Expected: reflect.Slice, Actual: t}
 	}
 
-	eu, err := opts.UnmarshalerFactory.Unmarshaler(t.Elem(), opts)
+	eu, err := opts.UnmarshalerOptions.UnmarshalerFactory.Unmarshaler(t.Elem(), opts)
 	if err != nil {
 		return nil, err
 	}

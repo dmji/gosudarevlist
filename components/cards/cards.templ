@@ -84,7 +84,7 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 				<div
 					class="box-border p-4"
 					hx-trigger="intersect once threshold:0"
-					hx-on:htmx:trigger={ loadGallery(templ.JSExpression("this")) }
+					hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
 				>
 					<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
 						@categoryBadge(card.CategoryPresentation)
@@ -154,19 +154,4 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 	if len(cards) > 0 && bAutoloadNextPage {
 		@Trigger(nextPageEndpint, nextPageParams)
 	}
-}
-
-script loadGallery(parentNode templ.JSExpression) {
-	new Flickity(parentNode.firstChild, {
-		initialIndex: 2,
-		contain: true,
-		wrapAround: true,
-		autoPlay: 1500,
-		selectedAttraction: 0.01,
-		friction: 0.15,
-		prevNextButtons: false,
-		pageDots: false,
-		setGallerySize: false,
-		cellSelector: ".object-top"
-	});
 }

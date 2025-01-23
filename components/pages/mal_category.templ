@@ -1,0 +1,214 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/dmji/go-myanimelist/mal/maltype"
+	"github.com/dmji/gosudarevlist/components"
+	"github.com/dmji/gosudarevlist/components/scripts"
+)
+
+const (
+	noImagePlaceholder = "/assets/images/no_image.webp"
+)
+
+templ MalAnimeList(datas []maltype.Anime) {
+	@components.Layout("Home", &components.LayoutParams{ImportFlickity: true}) {
+		for _, data := range datas {
+			<div class="bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto my-8">
+				<div class="md:flex">
+					<div class="md:flex-shrink-0">
+						<img class="w-full object-cover md:w-64" src={ data.MainPicture.Large } alt={ data.Title }/>
+					</div>
+					<div class="p-8">
+						<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{ data.Status }</div>
+						<h1 class="mt-2 text-3xl leading-8 font-bold text-gray-900">{ data.Title }</h1>
+						if data.AlternativeTitles.En != "" {
+							<h2 class="text-lg text-gray-600">English: { data.AlternativeTitles.En }</h2>
+						}
+						if data.AlternativeTitles.Ja != "" {
+							<h3 class="text-lg text-gray-500">Japan: { data.AlternativeTitles.Ja }</h3>
+						}
+						for i, s := range data.AlternativeTitles.Synonyms {
+							if s != "" {
+								<h2 class="text-lg text-gray-600">{ fmt.Sprintf("Alter#%d: %s", i, s) }</h2>
+							}
+						}
+						<div class="mt-4 space-y-2">
+							<p><span class="font-semibold">Rating:</span> { fmt.Sprintf("%.2f", data.Mean) } (Ranked #{ fmt.Sprintf("%d", data.Rank) })</p>
+							<p><span class="font-semibold">Popularity:</span> #{ fmt.Sprintf("%d", data.Popularity) }</p>
+							<p><span class="font-semibold">Episodes:</span> { fmt.Sprintf("%d", data.NumEpisodes) }</p>
+							<p><span class="font-semibold">Duration:</span> { fmt.Sprintf("%d", data.AverageEpisodeDuration/60) } minutes</p>
+							<p><span class="font-semibold">Aired:</span> { data.StartDate } to { data.EndDate }</p>
+							<p><span class="font-semibold">Source:</span> { data.Source }</p>
+							<p><span class="font-semibold">Rating:</span> { data.Rating }</p>
+							<p><span class="font-semibold">ID:</span> { fmt.Sprintf("%d", data.ID) }</p>
+							if len(data.Background) != 0 {
+								<p><span class="font-semibold">Background:</span> { fmt.Sprintf("%s", data.Background) }</p>
+							}
+							<div>
+								<span class="font-semibold">Genres:</span>
+								@genreList(data.Genres)
+							</div>
+							<div>
+								<span class="font-semibold">Studios:</span>
+								@studioList(data.Studios)
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="p-8 bg-gray-50">
+					<h4 class="text-xl font-semibold mb-4">Synopsis</h4>
+					<p class="text-gray-700 whitespace-pre-line">{ data.Synopsis }</p>
+				</div>
+				if len(data.Pictures) != 0 {
+					<div
+						class="box-border p-4"
+						hx-trigger="intersect once"
+						hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
+					>
+						<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
+							for _, picture := range data.Pictures {
+								<img
+									original_src={ picture.Large }
+									src={ noImagePlaceholder }
+									hx-trigger="intersect once"
+									hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+									class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
+								/>
+							}
+						</div>
+					</div>
+				}
+				<div class="p-8 bg-gray-100">
+					<h4 class="text-xl font-semibold mb-4">Statistics</h4>
+					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+						<div>
+							<p class="font-semibold">Watching:</p>
+							<p>{ data.Statistics.Status.Watching }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Completed:</p>
+							<p>{ data.Statistics.Status.Completed }</p>
+						</div>
+						<div>
+							<p class="font-semibold">On Hold:</p>
+							<p>{ data.Statistics.Status.OnHold }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Dropped:</p>
+							<p>{ data.Statistics.Status.Dropped }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Plan to Watch:</p>
+							<p>{ data.Statistics.Status.PlanToWatch }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Total Users:</p>
+							<p>{ fmt.Sprintf("%d", data.Statistics.NumListUsers) }</p>
+						</div>
+					</div>
+				</div>
+				<div class="p-8 bg-gray-200">
+					<h4 class="text-xl font-semibold mb-4">Others</h4>
+					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+						<div>
+							<p class="font-semibold">Num List Users:</p>
+							<p>{ fmt.Sprintf("%d", data.NumListUsers) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Num List Users:</p>
+							<p>{ fmt.Sprintf("%d", data.NumListUsers) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Num Scoring Users:</p>
+							<p>{ fmt.Sprintf("%d", data.NumScoringUsers) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">NSFW:</p>
+							<p>{ data.NSFW }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Created At:</p>
+							<p>{ fmt.Sprintf("%v", data.CreatedAt) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Updated At:</p>
+							<p>{ fmt.Sprintf("%v", data.UpdatedAt) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Media Type:</p>
+							<p>{ data.MediaType }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Start Season:</p>
+							<p>{ fmt.Sprintf("%v", data.StartSeason) }</p>
+						</div>
+						<div>
+							<p class="font-semibold">Broadcast:</p>
+							<p>{ fmt.Sprintf("%v", data.Broadcast) }</p>
+						</div>
+					</div>
+				</div>
+				<div class="p-8 bg-gray-300">
+					<h4 class="text-xl font-semibold mb-4">My List Status</h4>
+					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+						<div><p class="font-semibold">Status</p><p>{ fmt.Sprintf("%s", data.MyListStatus.Status) }</p></div>
+						<div><p class="font-semibold">Score</p><p>{ fmt.Sprintf("%v", data.MyListStatus.Score) }</p></div>
+						<div><p class="font-semibold">NumEpisodesWatched</p><p>{ fmt.Sprintf("%v", data.MyListStatus.NumEpisodesWatched) }</p></div>
+						<div><p class="font-semibold">IsRewatching</p><p>{ fmt.Sprintf("%v", data.MyListStatus.IsRewatching) }</p></div>
+						<div><p class="font-semibold">UpdatedAt</p><p>{ fmt.Sprintf("%v", data.MyListStatus.UpdatedAt) }</p></div>
+						<div><p class="font-semibold">Priority</p><p>{ fmt.Sprintf("%v", data.MyListStatus.Priority) }</p></div>
+						<div><p class="font-semibold">NumTimesRewatched</p><p>{ fmt.Sprintf("%v", data.MyListStatus.NumTimesRewatched) }</p></div>
+						<div><p class="font-semibold">RewatchValue</p><p>{ fmt.Sprintf("%v", data.MyListStatus.RewatchValue) }</p></div>
+						<div><p class="font-semibold">Tags</p><p>{ fmt.Sprintf("%v", data.MyListStatus.Tags) }</p></div>
+						<div><p class="font-semibold">Comments</p><p>{ fmt.Sprintf("%v", data.MyListStatus.Comments) }</p></div>
+						<div><p class="font-semibold">StartDate</p><p>{ fmt.Sprintf("%v", data.MyListStatus.StartDate) }</p></div>
+						<div><p class="font-semibold">FinishDate</p><p>{ fmt.Sprintf("%v", data.MyListStatus.FinishDate) }</p></div>
+					</div>
+				</div>
+				if len(data.RelatedAnime) > 0 {
+					<div class="p-8 bg-gray-400">
+						<h4 class="text-xl font-semibold mb-4">Related Anime</h4>
+						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+							for _, a := range data.RelatedAnime {
+								<div><p class="font-semibold">Node</p><p>{ fmt.Sprintf("%v", a.Node) }</p></div>
+								<div><p class="font-semibold">Relation Type</p><p>{ fmt.Sprintf("%v", a.RelationType) }</p></div>
+								<div><p class="font-semibold">Relation Type Formatted</p><p>{ fmt.Sprintf("%v", a.RelationTypeFormatted) }</p></div>
+							}
+						</div>
+					</div>
+				}
+				if len(data.RelatedManga) > 0 {
+					<div class="p-8 bg-gray-400">
+						<h4 class="text-xl font-semibold mb-4">Related Manga</h4>
+						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+							for _, a := range data.RelatedManga {
+								<div><p class="font-semibold">Node</p><p>{ fmt.Sprintf("%v", a.Node) }</p></div>
+								<div><p class="font-semibold">Relation Type</p><p>{ fmt.Sprintf("%v", a.RelationType) }</p></div>
+								<div><p class="font-semibold">Relation Type Formatted</p><p>{ fmt.Sprintf("%v", a.RelationTypeFormatted) }</p></div>
+							}
+						</div>
+					</div>
+				}
+				if len(data.Recommendations) > 0 {
+					<div class="p-8 bg-gray-400">
+						<h4 class="text-xl font-semibold mb-4">Related Manga</h4>
+						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+							for _, a := range data.Recommendations {
+								<div><p class="font-semibold">Node</p><p>{ fmt.Sprintf("%v", a.Node) }</p></div>
+								<div><p class="font-semibold">Num Recommendations</p><p>{ fmt.Sprintf("%v", a.NumRecommendations) }</p></div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		}
+	}
+}
+
+/* type Anime struct {
+
+	RelatedAnime
+	RelatedManga
+	Recommendations
+} */

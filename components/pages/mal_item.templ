@@ -1,0 +1,124 @@
+package pages
+
+import (
+	"context"
+	"fmt"
+	"github.com/dmji/go-myanimelist/mal/maltype"
+	"github.com/dmji/gosudarevlist/components"
+	"io"
+)
+
+templ MalAnimeCard(data *maltype.Anime) {
+	@components.Layout("Home", &components.LayoutParams{}) {
+		<div class="bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto my-8">
+			<div class="md:flex">
+				<div class="md:flex-shrink-0">
+					<img class="h-64 w-full object-cover md:w-64" src={ data.MainPicture.Large } alt={ data.Title }/>
+				</div>
+				<div class="p-8">
+					<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{ data.Status }</div>
+					<h1 class="mt-2 text-3xl leading-8 font-bold text-gray-900">{ data.Title }</h1>
+					if data.AlternativeTitles.En != "" {
+						<h2 class="text-xl text-gray-600">{ data.AlternativeTitles.En }</h2>
+					}
+					if data.AlternativeTitles.Ja != "" {
+						<h3 class="text-lg text-gray-500">{ data.AlternativeTitles.Ja }</h3>
+					}
+					<div class="mt-4 space-y-2">
+						<p><span class="font-semibold">Rating:</span> { fmt.Sprintf("%.2f", data.Mean) } (Ranked #{ fmt.Sprintf("%d", data.Rank) })</p>
+						<p><span class="font-semibold">Popularity:</span> #{ fmt.Sprintf("%d", data.Popularity) }</p>
+						<p><span class="font-semibold">Episodes:</span> { fmt.Sprintf("%d", data.NumEpisodes) }</p>
+						<p><span class="font-semibold">Duration:</span> { fmt.Sprintf("%d", data.AverageEpisodeDuration/60) } minutes</p>
+						<p><span class="font-semibold">Aired:</span> { data.StartDate } to { data.EndDate }</p>
+						<p><span class="font-semibold">Source:</span> { data.Source }</p>
+						<p><span class="font-semibold">Rating:</span> { data.Rating }</p>
+						<div>
+							<span class="font-semibold">Genres:</span>
+							@genreList(data.Genres)
+						</div>
+						<div>
+							<span class="font-semibold">Studios:</span>
+							@studioList(data.Studios)
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="p-8 bg-gray-50">
+				<h4 class="text-xl font-semibold mb-4">Synopsis</h4>
+				<p class="text-gray-700 whitespace-pre-line">{ data.Synopsis }</p>
+			</div>
+			<div class="p-8">
+				<h4 class="text-xl font-semibold mb-4">Statistics</h4>
+				<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+					<div>
+						<p class="font-semibold">Watching:</p>
+						<p>{ data.Statistics.Status.Watching }</p>
+					</div>
+					<div>
+						<p class="font-semibold">Completed:</p>
+						<p>{ data.Statistics.Status.Completed }</p>
+					</div>
+					<div>
+						<p class="font-semibold">On Hold:</p>
+						<p>{ data.Statistics.Status.OnHold }</p>
+					</div>
+					<div>
+						<p class="font-semibold">Dropped:</p>
+						<p>{ data.Statistics.Status.Dropped }</p>
+					</div>
+					<div>
+						<p class="font-semibold">Plan to Watch:</p>
+						<p>{ data.Statistics.Status.PlanToWatch }</p>
+					</div>
+					<div>
+						<p class="font-semibold">Total Users:</p>
+						<p>{ fmt.Sprintf("%d", data.Statistics.NumListUsers) }</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+func truncateSynopsis(s string, max int) string {
+	if len(s) <= max {
+		return s
+	}
+	return s[:max] + "..."
+}
+
+func genreList(genres []maltype.Genre) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		for i, genre := range genres {
+			if i > 0 {
+				_, err = w.Write([]byte(", "))
+				if err != nil {
+					return err
+				}
+			}
+			_, err = w.Write([]byte(fmt.Sprintf(`<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">%s</span>`, genre.Name)))
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+func studioList(studios []maltype.Studio) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		for i, studio := range studios {
+			if i > 0 {
+				_, err = w.Write([]byte(", "))
+				if err != nil {
+					return err
+				}
+			}
+			_, err = w.Write([]byte(studio.Name))
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
