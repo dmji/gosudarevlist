@@ -38,8 +38,9 @@ func init() {
 	_, bGoose := os.LookupEnv("GOOSE_DBSTRING")
 	_, bLogin := os.LookupEnv("ANIMELAYER_LOGIN")
 	_, bPassword := os.LookupEnv("ANIMELAYER_PASSWORD")
+	_, bMalClientID := os.LookupEnv("MAL_CLIENT_ID")
 
-	if !bGoose || !bLogin || !bPassword {
+	if !bGoose || !bLogin || !bPassword || !bMalClientID {
 		env.LoadEnv(10, true)
 	}
 }
