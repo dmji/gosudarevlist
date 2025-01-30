@@ -1,7 +1,7 @@
 package cards
 
 import (
-	"github.com/dmji/gosudarevlist/components/navigation"
+	"github.com/dmji/gosudarevlist/components/svg"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 )
 
@@ -9,12 +9,26 @@ templ CategoriesLine(availableCategories []model.CategoryButton) {
 	<div class="grid gap-1 m-auto grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
 		for _, cat := range availableCategories {
 			@gradientBorder(cat.IsActive()) {
-				<div class="group inline-flex w-full overflow-hidden rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50">
-					<a href={ templ.URL(cat.FormatUrlToCards()) } class="px-4 py-3 w-full text-gray-700 text-center font-medium text-sm transition-colors hover:bg-gray-100">
+				<div
+					class="group inline-flex w-full overflow-hidden rounded-lg border   transition-colors
+						border-gray-300 dark:border-gray-500
+						text-gray-700 dark:text-white
+						bg-white dark:bg-gray-700
+						"
+				>
+					<a
+						href={ templ.URL(cat.FormatUrlToCards()) }
+						class="px-4 py-3 w-full text-center font-medium text-sm transition-colors 
+							hover:bg-gray-100 dark:hover:bg-gray-950"
+					>
 						{ cat.Text(ctx) }
 					</a>
-					<a href={ templ.URL(cat.FormatUrlToUpdates()) } class="flex items-center gap-2 px-4 py-2.5 text-gray-700 font-medium text-sm transition-colors hover:bg-gray-100">
-						@navigation.SvgHistoryIcon()
+					<a
+						href={ templ.URL(cat.FormatUrlToUpdates()) }
+						class="flex items-center gap-2 px-4 py-2.5 font-medium text-sm transition-colors 
+							hover:bg-gray-100 dark:hover:bg-gray-950"
+					>
+						@svg.SvgHistoryIcon()
 					</a>
 				</div>
 			}

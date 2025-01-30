@@ -1,0 +1,35 @@
+package tooltip
+
+templ TextTooptipAbove(text string) {
+	<div class="relative -translate-y-11">
+		<div
+			class="absolute center-absolute
+			text-nowrap
+		 top-0 px-3 h-8 py-1
+		 text-sm font-medium 
+		 rounded-lg shadow-sm
+		 transition-opacity duration-300 
+		 opacity-0 group-hover:opacity-100
+		 invisible group-hover:visible
+		 select-none
+		 text-white
+		 bg-gray-900
+		 dark:bg-gray-700"
+		>
+			{ text }
+		</div>
+		<svg
+			viewBox="0 0 18 18"
+			class="absolute center-absolute
+		top-5 w-8 h-7
+		transition-opacity duration-300 
+		opacity-0 group-hover:opacity-100
+		invisible group-hover:visible"
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="#000000"
+		>
+			<path d="M4,7 L9,13 L14,7 L4,7 L4,7 Z" id="path" fill="#000000"></path>
+		</svg>
+	</div>
+}

@@ -1,5 +1,7 @@
 package navigation
 
+import "github.com/dmji/gosudarevlist/components/svg"
+
 script navbarVisibleToggler() {
 	var prevScrollpos = window.pageYOffset;
 	var scrollCapacity = 0;
@@ -32,99 +34,38 @@ script navbarVisibleToggler() {
 }
 
 templ Navbar() {
-	<div id="navbar" class="fixed z-50 bottom-0 center-absolute bg-opacity-85 bg-gray-700 p-2 rounded-t-[2rem] ease-in-out duration-1000">
-		<div class="flex flexflex-wrap-reverse h-14">
-			@navButtonItem(navButtonSingle) {
-				@clickableCollider("/")
-				@navButtonWithTooltip(svgHomeIcon(), "Home", "", standardButtonSizeStyle)
-			}
+	<div
+		id="navbar"
+		class="fixed z-50 bottom-0 w-full ease-in-out duration-1000
+			border-t-2
+			bg-white
+			dark:bg-gray-700
+			border-gray-200
+			dark:border-gray-800"
+	>
+		<div class="flex flexflex-wrap-reverse justify-center">
+			@navButtonWithTooltip(svg.HomeIcon(), "Home", "/")
 			@navSeparator()
-			<div class="flex rounded-full">
-				@navButtonItem(navButtonSingle) {
-					@clickableCollider("/animelayer/anime")
-					@navButtonWithTooltip(svgTorrentIcon(), "Torrents: AnimeLayer and etc", "", standardButtonSizeStyle)
-				}
-			</div>
+			@navButtonWithTooltip(svg.TorrentIcon(), "Torrents", "/animelayer/anime")
 			@navSeparator()
-			<div class="flex rounded-full">
-				@navButtonItem(navButtonSingle) {
-					@clickableCollider("/mal/anime")
-					@navButtonWithTooltip(svgMangaIcon(), "MyAnimeList", "", standardButtonSizeStyle)
-				}
-			</div>
+			@navButtonWithTooltip(svg.MangaIcon(), "MyAnimeList", "/mal/anime")
 			@navSeparator()
-			@navButtonItem(navButtonSingle) {
-				@clickableCollider("/profile")
-				@navButtonWithTooltip(svgProfileIcon(), "Profile", "", standardButtonSizeStyle)
-			}
+			@navButtonWithTooltip(svg.ProfileIcon(), "Profile", "/profile")
 		</div>
 	</div>
 	@navbarVisibleToggler()
 }
 
-templ clickableCollider(routeTarget string) {
-	<a href={ templ.SafeURL(routeTarget) } class="absolute w-full h-full select-none hidden group-hover:block z-50"></a>
-}
-
-const shiftedButtonSizeStyle class = "translate-x-2 pt-4 px-4"
-const standardButtonSizeStyle class = "pt-4 px-4"
-const narrowButtonSizeStyle class = "pt-4 px-2"
-
-templ navButtonWithTooltip(icon templ.Component, tooltipText string, text string, style class) {
-	@textTooptip(tooltipText)
-	<div class={ style.String() }>
-		<button type="button">
-			<div class="flex">
-				@icon
-				if len(text) > 0 {
-					<span class="px-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">{ text }</span>
-				}
-				<span class="sr-only">{ tooltipText }</span>
-			</div>
-		</button>
-	</div>
-}
-
-templ navButtonItem(btnType navButtonType) {
-	<div class={ "relative group bn-colors" + navButtonStyle(btnType).String() }>
-		{ children... }
-	</div>
+templ navButtonWithTooltip(icon templ.Component, text, routeTarget string) {
+	<a href={ templ.SafeURL(routeTarget) } class="group pt-2 px-4 flex flex-col justify-center items-center">
+		<div class="select-none pointer-events-none w-7 h-7 -translate-y-[1px] text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">
+			@icon
+		</div>
+		<span class="sr-only">{ text }</span>
+		<span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">{ text }</span>
+	</a>
 }
 
 templ navSeparator() {
 	<div class="p-1"></div>
-}
-
-templ textTooptip(text string) {
-	<div class="relative -translate-y-11">
-		<div
-			class="absolute center-absolute
-			text-nowrap
-		 top-0 px-3 h-8 py-1
-		 text-sm font-medium 
-		 rounded-lg shadow-sm
-		 transition-opacity duration-300 
-		 opacity-0 group-hover:opacity-100
-		 invisible group-hover:visible
-		 select-none
-		 text-white
-		 bg-gray-900
-		 dark:bg-gray-700"
-		>
-			{ text }
-		</div>
-		<svg
-			viewBox="0 0 18 18"
-			class="absolute center-absolute
-		top-5 w-8 h-7
-		transition-opacity duration-300 
-		opacity-0 group-hover:opacity-100
-		invisible group-hover:visible"
-			version="1.1"
-			xmlns="http://www.w3.org/2000/svg"
-			fill="#000000"
-		>
-			<path d="M4,7 L9,13 L14,7 L4,7 L4,7 Z" id="path" fill="#000000"></path>
-		</svg>
-	</div>
 }
