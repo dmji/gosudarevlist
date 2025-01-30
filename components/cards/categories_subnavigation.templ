@@ -1,0 +1,36 @@
+package cards
+
+import (
+	"fmt"
+	"github.com/dmji/gosudarevlist/components/navigation"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+)
+
+templ CategoriesLine(availableCategories []model.CategoryButton) {
+	<div class={ fmt.Sprintf("grid gap-1 m-auto grid-cols-%d max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1", len(availableCategories)) }>
+		for _, cat := range availableCategories {
+			@gradientBorder(cat.IsActive()) {
+				<div class="group inline-flex w-full overflow-hidden rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50">
+					<a href={ templ.URL(cat.FormatUrlToCards()) } class="px-4 py-3 w-full text-gray-700 text-center font-medium text-sm transition-colors hover:bg-gray-100">
+						{ cat.Text(ctx) }
+					</a>
+					<a href={ templ.URL(cat.FormatUrlToUpdates()) } class="flex items-center gap-2 px-4 py-2.5 text-gray-700 font-medium text-sm transition-colors hover:bg-gray-100">
+						@navigation.SvgHistoryIcon()
+					</a>
+				</div>
+			}
+		}
+	</div>
+}
+
+templ gradientBorder(active bool) {
+	if active {
+		<div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-lg p-[1px]">
+			{ children... }
+		</div>
+	} else {
+		<div class="rounded-lg px-[2px] py-[1]">
+			{ children... }
+		</div>
+	}
+}

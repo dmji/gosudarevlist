@@ -42,14 +42,14 @@ templ Navbar() {
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonSingle) {
 					@clickableCollider("/animelayer/anime")
-					@navButtonWithTooltip(svgTorrentIcon(), "AnimeLayer and etc", "Torrents", standardButtonSizeStyle)
+					@navButtonWithTooltip(svgTorrentIcon(), "Torrents: AnimeLayer and etc", "", standardButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()
 			<div class="flex rounded-full">
 				@navButtonItem(navButtonSingle) {
 					@clickableCollider("/mal/anime")
-					@navButtonWithTooltip(svgMangaIcon(), "MyAnimeList", "MAL", standardButtonSizeStyle)
+					@navButtonWithTooltip(svgMangaIcon(), "MyAnimeList", "", standardButtonSizeStyle)
 				}
 			</div>
 			@navSeparator()

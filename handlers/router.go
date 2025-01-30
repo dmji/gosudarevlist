@@ -66,6 +66,7 @@ func (r *router) InitMuxWithDefaultPages(HandleFunOriginal func(string, func(htt
 
 	HandleFunc("/", r.HomePageHandler)
 
+	HandleFunc("GET /animelayer/{category}/{identifier}", r.LayerItemPageHandler)
 	HandleFunc("GET /animelayer/{category}", r.CollectionListingPageHandler)
 	HandleFunc("GET /animelayer/{category}/updates", r.CollectionUpdatesPageHandler)
 

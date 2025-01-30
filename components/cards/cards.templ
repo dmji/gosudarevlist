@@ -80,78 +80,82 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 	for i, card := range cards {
 		<div class="flex flex-col bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-lg border-solid border-[#ddd]">
 			@putPageNumberResetTrigger(currentPage, i, len(cards)) {
-				// gallery with images
-				<div
-					class="box-border p-4"
-					hx-trigger="intersect once threshold:0"
-					hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
-				>
-					<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
-						@categoryBadge(card.CategoryPresentation)
-						@onAirBadge(card.ReleaseStatus)
-						{{
-							targetN := 3
-							n := len(card.AnimeLayerRefs)
-							if n > targetN {
-								targetN = n
-							}
-						}}
-						for i := 0; i < targetN;i++ {
-							<img
-								original_src={ queryPosterFromItem(card.AnimeLayerRefs[i%n]) }
-								src={ noImagePlaceholder }
-								alt={ card.Title }
-								hx-trigger="intersect once"
-								hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
-								class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
-							/>
-						}
-					</div>
-				</div>
-				// horizontal row with update datas
-				<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
-					if len(card.UpdatedDate) > 0 {
-						@optionalLineMetaData("Обновлен:", card.UpdatedDate)
-					} else {
-						@optionalLineMetaData("Добавлен:", card.CreatedDate)
-					}
-					@optionalLineMetaData("", card.TorrentWeight, true)
-				</div>
-				// title
-				<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
-					//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
-					{ card.Title }
-					//</a>
-				</div>
-				// Description
-				<div class="p-4 text-sm font-sans font-normal overflow-hidden ">
-					@templ.Raw(card.Description, nil)
-				</div>
-				// horizontal row with image and description
-				<div class="p-4 flex flex-col">
-					for _, animeLayerRef := range card.AnimeLayerRefs {
-						<a
-							href={ templ.URL(animeLayerRef.Href) }
-							rel="noopener noreferrer"
-							class="mt-2 flex flex-row"
-						>
-							<img
-								src={ animeLayerLogo }
-								alt={ card.Title }
-								class="w-[51px] h-[18px] object-scale-down object-top"
-							/>
-							<div class="flex flex-col">
-								for _, text := range animeLayerRef.Text {
-									<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
-								}
-							</div>
-						</a>
-					}
-				</div>
+				@CardItemData(&card)
 			}
 		</div>
 	}
 	if len(cards) > 0 && bAutoloadNextPage {
 		@Trigger(nextPageEndpint, nextPageParams)
 	}
+}
+
+templ CardItemData(card *model.ItemCartData) {
+	// gallery with images
+	<div
+		class="box-border p-4"
+		hx-trigger="intersect once threshold:0"
+		hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
+	>
+		<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
+			@categoryBadge(card.CategoryPresentation)
+			@onAirBadge(card.ReleaseStatus)
+			{{
+							targetN := 3
+							n := len(card.AnimeLayerRefs)
+							if n > targetN {
+								targetN = n
+							}
+			}}
+			for i := 0; i < targetN;i++ {
+				<img
+					original_src={ queryPosterFromItem(card.AnimeLayerRefs[i%n]) }
+					src={ noImagePlaceholder }
+					alt={ card.Title }
+					hx-trigger="intersect once"
+					hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+					class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
+				/>
+			}
+		</div>
+	</div>
+	// horizontal row with update datas
+	<div class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2">
+		if len(card.UpdatedDate) > 0 {
+			@optionalLineMetaData("Обновлен:", card.UpdatedDate)
+		} else {
+			@optionalLineMetaData("Добавлен:", card.CreatedDate)
+		}
+		@optionalLineMetaData("", card.TorrentWeight, true)
+	</div>
+	// title
+	<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
+		//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
+		{ card.Title }
+		//</a>
+	</div>
+	// Description
+	<div class="p-4 text-sm font-sans font-normal overflow-hidden ">
+		@templ.Raw(card.Description, nil)
+	</div>
+	// horizontal row with image and description
+	<div class="p-4 flex flex-col">
+		for _, animeLayerRef := range card.AnimeLayerRefs {
+			<a
+				href={ templ.URL(animeLayerRef.Href) }
+				rel="noopener noreferrer"
+				class="mt-2 flex flex-row"
+			>
+				<img
+					src={ animeLayerLogo }
+					alt={ card.Title }
+					class="w-[51px] h-[18px] object-scale-down object-top"
+				/>
+				<div class="flex flex-col">
+					for _, text := range animeLayerRef.Text {
+						<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
+					}
+				</div>
+			</a>
+		}
+	</div>
 }

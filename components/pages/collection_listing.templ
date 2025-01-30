@@ -4,6 +4,7 @@ import (
 	"github.com/dmji/gosudarevlist/components"
 	"github.com/dmji/gosudarevlist/components/cards"
 	"github.com/dmji/gosudarevlist/components/navigation"
+	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 )
 
 var t = navigation.PaginationOpt{
@@ -19,24 +20,25 @@ var t = navigation.PaginationOpt{
 	},
 }
 
-templ CollectionListing(filtersEndpint, nextPageEndpint string) {
+templ CollectionListing(filtersEndpint, nextPageEndpint string, availableCategories []model.CategoryButton) {
 	@components.Layout("AnimeLayer Collection", &components.LayoutParams{ImportFlickity: true}) {
-		<div class="pt-3">
-			<div class="px-4">
-				@cards.Filters(filtersEndpint)
-			</div>
-			<div class="py-1">
-				<span></span>
-			</div>
-			<div
-				id="card-container-loader"
-				hx-boost="true"
-				hx-get={ nextPageEndpint }
-				hx-include="*"
-				hx-trigger="revealed once,custom-event-refresh-pages from:body"
-				hx-target="#card-container"
-			></div>
-			<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-4 px-4 items-stretch"></div>
+		<div class="px-2 py-2">
+			@cards.CategoriesLine(availableCategories)
 		</div>
+		<div class="px-2">
+			@cards.Filters(filtersEndpint)
+		</div>
+		<div class="py-1">
+			<span></span>
+		</div>
+		<div
+			id="card-container-loader"
+			hx-boost="true"
+			hx-get={ nextPageEndpint }
+			hx-include="*"
+			hx-trigger="revealed once,custom-event-refresh-pages from:body"
+			hx-target="#card-container"
+		></div>
+		<div id="card-container" class="grid grid-cols-[repeat(auto-fill,minmax(500px,1fr))] max-sm:grid-cols-1 gap-2 px-2 items-stretch"></div>
 	}
 }

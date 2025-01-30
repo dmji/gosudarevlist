@@ -35,10 +35,20 @@ func (router *router) CollectionUpdatesPageHandler(w http.ResponseWriter, r *htt
 
 	logger.Infow(ctx, "Handler | ShelfPageHandler params", "params", nextPageParams)
 
+	categoriesLine := make([]model.CategoryButton, 0, len(categories))
+	for _, c := range categories {
+		categoriesLine = append(categoriesLine, model.NewCategoryButton(c,
+			"/animelayer/%s",
+			"/animelayer/%s/updates",
+			c == cat,
+		))
+	}
+
 	err = pages.CollectionUpdates(
 		"/api/filters/"+cat.String(),
 		"/api/updates/"+cat.String(),
 		custom_url.QueryOrEmpty(nextPageParams),
+		categoriesLine,
 	).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
