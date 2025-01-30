@@ -11,7 +11,7 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string, 
 		<div class="px-2 py-2">
 			@cards.CategoriesLine(availableCategories)
 		</div>
-		<div class="max-w-[2000px] mx-auto px-2">
+		<div class="mx-auto px-2">
 			<div class="divide-y py-4 bg-yellow-50 rounded-lg">
 				<div hx-ext="ws" ws-connect={ nextPageEndpint + "/ws" }>
 					<div class="py-4 flex items-center justify-center">

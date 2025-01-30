@@ -1,13 +1,12 @@
 package cards
 
 import (
-	"fmt"
 	"github.com/dmji/gosudarevlist/components/navigation"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 )
 
 templ CategoriesLine(availableCategories []model.CategoryButton) {
-	<div class={ fmt.Sprintf("grid gap-1 m-auto grid-cols-%d max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1", len(availableCategories)) }>
+	<div class="grid gap-1 m-auto grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
 		for _, cat := range availableCategories {
 			@gradientBorder(cat.IsActive()) {
 				<div class="group inline-flex w-full overflow-hidden rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50">
