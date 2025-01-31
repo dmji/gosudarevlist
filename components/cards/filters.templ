@@ -25,7 +25,7 @@ templ Filters(filtersEndpint string) {
 	>
 		<div class="flex items-center gap-1 relative">
 			@SearchBar(searchBarId)
-			<div class="top-1.5 right-2 absolute place-self-center fill-gray-500">
+			<div class="top-1.5 right-2 absolute place-self-center">
 				// Button Reset Value Filters
 				<button
 					type="button"
@@ -45,8 +45,13 @@ templ Filters(filtersEndpint string) {
 				</button>
 			</div>
 		</div>
-		<div id={ filtersPanelId } class="hidden rounded-b-lg border-x-2 border-b-2">
-			<div class="w-auto px-4 -z-10 bg-white shadow-md p-6 rounded-b-md">
+		<div
+			id={ filtersPanelId }
+			class="hidden rounded-b-lg border-x-2 border-b-2
+				border-gray-200 dark:border-gray-800
+				bg-gray-50 dark:bg-gray-700"
+		>
+			<div class="w-auto px-4 -z-10 shadow-md p-6 rounded-b-md">
 				@FilterFlags()
 			</div>
 		</div>
@@ -62,11 +67,16 @@ templ FilterFlags() {
 }
 
 templ FilterFlagsPopulate(filterData []model.FilterGroup) {
-	<div class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(220px,1fr))] max-sm:grid-cols-1">
+	<div
+		class="grid grid-cols-auto gap-12 px-4 w-full order-2 lg:order-2; grid-cols-[repeat(auto-fill,minmax(220px,1fr))] max-sm:grid-cols-1
+		"
+	>
 		for _, category := range filterData {
 			<div>
 				if len(category.DisplayTitle) > 0 {
-					<h3 class="font-semibold mb-2">{ category.DisplayTitle }</h3>
+					<h3
+						class="font-semibold mb-2"
+					>{ category.DisplayTitle }</h3>
 				}
 				<div class="space-y-2">
 					<input type="hidden" name={ category.Name } value=""/>
@@ -91,7 +101,9 @@ templ SearchBar(id string) {
 			hx-boost="true"
 			class="w-full p-3 pl-5 pr-4 border-gr	ay-300 
 			rounded-t-lg rounded-lg border-2
-			focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+			focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
+			 dark:bg-gray-700
+			dark:border-gray-800"
 			oninput={ scripts.InputTextboxLiveUpdate(templ.JSExpression("this")) }
 		/>
 		<i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>

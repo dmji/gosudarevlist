@@ -30,7 +30,12 @@ templ Layout(title string, params *LayoutParams) {
 			<link href={ faviconPath } rel="icon" type="image/x-icon"/>
 			@scripts.SelectTheme(templ.JSExpression("null"))
 		</head>
-		<body class="bg-[#f0f0f0] dark:bg-[#202020] m-0 p-0;  font-family: Arial, sans-serif;">
+		<body
+			class="bg-[#f0f0f0] dark:bg-[#202020] m-0 p-0
+		text-black dark:text-gray-300
+		border-gray-300 dark:border-gray-500
+		;  font-family: Arial, sans-serif;"
+		>
 			@navigation.Navbar()
 			<main class="touch-pan-y">
 				{ children... }

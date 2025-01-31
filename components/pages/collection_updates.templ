@@ -12,11 +12,17 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string, 
 			@cards.CategoriesLine(availableCategories)
 		</div>
 		<div class="mx-auto px-2">
-			<div class="divide-y py-4 bg-yellow-50 rounded-lg">
+			<div
+				class="divide-y py-4 rounded-lg
+			bg-yellow-50 dark:bg-indigo-950"
+			>
 				<div hx-ext="ws" ws-connect={ nextPageEndpint + "/ws" }>
 					<div class="py-4 flex items-center justify-center">
-						<div class="flex flex-row max-sm:flex-col">
-							<div class="bg-white p-8 rounded-lg shadow-md text-center">
+						<div
+							class="flex flex-row max-sm:flex-col
+						bg-white dark:bg-indigo-700"
+						>
+							<div class="p-8 rounded-lg shadow-md text-center">
 								<h1 id="timer_title" class="text-2xl font-bold mb-4">loading...</h1>
 								<p id="timer" class="text-4xl font-mono">loading...</p>
 								<p id="timer_creted" class="mt-4 text-sm text-gray-600">loading...</p>
@@ -24,19 +30,19 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string, 
 							</div>
 							if false {
 								<div class="p-4"></div>
-								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<div class="p-8 rounded-lg shadow-md text-center">
 									<h1 class="text-2xl font-bold mb-4">Grab Updates</h1>
 								</div>
 								<div class="p-4"></div>
-								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<div class="p-8 rounded-lg shadow-md text-center">
 									<h1 class="text-2xl font-bold mb-4">Grab All</h1>
 								</div>
 								<div class="p-4"></div>
-								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<div class="p-8 rounded-lg shadow-md text-center">
 									<h1 class="text-2xl font-bold mb-4">Update All</h1>
 								</div>
 								<div class="p-4"></div>
-								<div class="bg-white p-8 rounded-lg shadow-md text-center">
+								<div class="p-8 rounded-lg shadow-md text-center">
 									<h1 class="text-2xl font-bold mb-4">Update Target</h1>
 								</div>
 							}
@@ -55,7 +61,8 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string, 
 				<span></span>
 			</div>
 			<div
-				class="bg-white shadow-md rounded-lg overflow-hidden"
+				class="shadow-md rounded-lg overflow-hidden
+		bg-gray-50 dark:bg-gray-700"
 			>
 				<div
 					id="card-container-loader"
@@ -65,7 +72,12 @@ templ CollectionUpdates(filtersEndpint, nextPageEndpint, nextPageParams string, 
 					hx-trigger="revealed once,custom-event-refresh-pages from:body"
 					hx-target="#card-container"
 				></div>
-				<ul id="card-container" class="divide-y divide-gray-200"></ul>
+				<ul
+					id="card-container"
+					class="divide-y
+				 divide-gray-200 dark:divide-gray-800
+				 "
+				></ul>
 			</div>
 		</div>
 	}

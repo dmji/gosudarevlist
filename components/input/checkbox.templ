@@ -18,6 +18,7 @@ templ Checkbox(parameterName string, prm model.FilterItem) {
 		class="form-checkbox text-primary rounded mr-2 w-4 h-4"
 		disabled?={ prm.Count == 0 }
 		checked?={ prm.Selected }
+		class="dark:bg-gray-400"
 	/>
 	<span>{ prm.Presentation }</span>
 	<span class="px-1 text-xs text-gray-500">{ fmt.Sprintf("(%d / %d)", prm.CountFiltered, prm.Count) }</span>

@@ -21,11 +21,11 @@ templ profileInfo(name, email, bio string) {
 templ table(title string, headers []string, rows [][]string) {
 	<div class="mt-4">
 		<h3 class="text-xl font-semibold mb-4">{ title }</h3>
-		<table class="w-full border-collapse border border-gray-300">
+		<table class="w-full border-collapse border">
 			<thead>
 				<tr class="bg-gray-200">
 					for _, header := range headers {
-						<th class="border border-gray-300 p-2">{ header }</th>
+						<th class="border p-2">{ header }</th>
 					}
 				</tr>
 			</thead>
@@ -33,7 +33,7 @@ templ table(title string, headers []string, rows [][]string) {
 				for _, row := range rows {
 					<tr>
 						for _, cell := range row {
-							<td class="border border-gray-300 p-2">{ cell }</td>
+							<td class="border p-2">{ cell }</td>
 						}
 					</tr>
 				}

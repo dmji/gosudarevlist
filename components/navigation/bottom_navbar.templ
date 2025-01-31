@@ -45,11 +45,8 @@ templ Navbar() {
 	>
 		<div class="flex flexflex-wrap-reverse justify-center">
 			@navButtonWithTooltip(svg.HomeIcon(), "Home", "/")
-			@navSeparator()
 			@navButtonWithTooltip(svg.TorrentIcon(), "Torrents", "/animelayer/anime")
-			@navSeparator()
 			@navButtonWithTooltip(svg.MangaIcon(), "MyAnimeList", "/mal/anime")
-			@navSeparator()
 			@navButtonWithTooltip(svg.ProfileIcon(), "Profile", "/profile")
 		</div>
 	</div>
@@ -64,8 +61,4 @@ templ navButtonWithTooltip(icon templ.Component, text, routeTarget string) {
 		<span class="sr-only">{ text }</span>
 		<span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">{ text }</span>
 	</a>
-}
-
-templ navSeparator() {
-	<div class="p-1"></div>
 }
