@@ -91,7 +91,10 @@ templ profile() {
 templ Profile(ctx context.Context) {
 	@components.Layout("Profile", &components.LayoutParams{}) {
 		<div class="max-w-6xl mx-auto pt-3 pb-20">
-			<div class="bg-white shadow-md rounded-lg px-6 py-1 pb-6">
+			<div
+				class="shadow-md rounded-lg px-6 py-1 pb-6
+			bg-white dark:bg-gray-700"
+			>
 				if false {
 					@profile()
 				} else {
@@ -99,7 +102,11 @@ templ Profile(ctx context.Context) {
 				}
 			</div>
 			<div class="p-2"></div>
-			<div hidden class="bg-white shadow-md rounded-lg px-6 pt-1 pb-6">
+			<div
+				hidden
+				class="shadow-md rounded-lg px-6 pt-1 pb-6
+			bg-white dark:bg-gray-700"
+			>
 				@table("Recent Activity", []string{"Date", "Action", "Details"}, [][]string{
 					{"2023-05-01", "Commit", "Updated README.md"},
 					{"2023-05-02", "Pull Request", "Merged feature branch"},
@@ -117,7 +124,10 @@ templ Profile(ctx context.Context) {
 				})
 			</div>
 			<div class="p-2"></div>
-			<div class="bg-white shadow-md rounded-lg px-6 py-1 pb-6">
+			<div
+				class="shadow-md rounded-lg px-6 py-1 pb-6
+			bg-white dark:bg-gray-700"
+			>
 				@modules.Settings(ctx)
 			</div>
 		</div>

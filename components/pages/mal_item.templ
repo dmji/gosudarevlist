@@ -91,7 +91,7 @@ func genreList(genres []maltype.Genre) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		for i, genre := range genres {
 			if i > 0 {
-				_, err = w.Write([]byte(", "))
+				_, err = w.Write([]byte(" "))
 				if err != nil {
 					return err
 				}

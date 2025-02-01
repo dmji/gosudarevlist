@@ -14,23 +14,38 @@ const (
 templ MalAnimeList(datas []maltype.Anime) {
 	@components.Layout("Home", &components.LayoutParams{ImportFlickity: true}) {
 		for _, data := range datas {
-			<div class="bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto my-8">
+			<div
+				class="shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto my-8
+			bg-gray-50 dark:bg-gray-800"
+			>
 				<div class="md:flex">
 					<div class="md:flex-shrink-0">
 						<img class="w-full object-cover md:w-64" src={ data.MainPicture.Large } alt={ data.Title }/>
 					</div>
 					<div class="p-8">
 						<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{ data.Status }</div>
-						<h1 class="mt-2 text-3xl leading-8 font-bold text-gray-900">{ data.Title }</h1>
+						<h1
+							class="mt-2 text-3xl leading-8 font-bold
+						 text-gray-900 dark:text-gray-500"
+						>{ data.Title }</h1>
 						if data.AlternativeTitles.En != "" {
-							<h2 class="text-lg text-gray-600">English: { data.AlternativeTitles.En }</h2>
+							<h2
+								class="text-lg 
+							text-gray-600 dark:text-gray-400"
+							>English: { data.AlternativeTitles.En }</h2>
 						}
 						if data.AlternativeTitles.Ja != "" {
-							<h3 class="text-lg text-gray-500">Japan: { data.AlternativeTitles.Ja }</h3>
+							<h3
+								class="text-lg 
+							text-gray-500 dark:text-gray-300"
+							>Japan: { data.AlternativeTitles.Ja }</h3>
 						}
 						for i, s := range data.AlternativeTitles.Synonyms {
 							if s != "" {
-								<h2 class="text-lg text-gray-600">{ fmt.Sprintf("Alter#%d: %s", i, s) }</h2>
+								<h2
+									class="text-lg 
+								text-gray-600 dark:text-gray-300"
+								>{ fmt.Sprintf("Alter#%d: %s", i, s) }</h2>
 							}
 						}
 						<div class="mt-4 space-y-2">
@@ -43,22 +58,28 @@ templ MalAnimeList(datas []maltype.Anime) {
 							<p><span class="font-semibold">Rating:</span> { data.Rating }</p>
 							<p><span class="font-semibold">ID:</span> { fmt.Sprintf("%d", data.ID) }</p>
 							if len(data.Background) != 0 {
-								<p><span class="font-semibold">Background:</span> { fmt.Sprintf("%s", data.Background) }</p>
+								<p><span class="font-semibold">Background: </span> { fmt.Sprintf("%s", data.Background) }</p>
 							}
 							<div>
-								<span class="font-semibold">Genres:</span>
+								<span class="font-semibold">Genres: </span>
 								@genreList(data.Genres)
 							</div>
 							<div>
-								<span class="font-semibold">Studios:</span>
+								<span class="font-semibold">Studios: </span>
 								@studioList(data.Studios)
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="p-8 bg-gray-50">
+				<div
+					class="p-8 
+				bg-gray-50 dark:bg-gray-800"
+				>
 					<h4 class="text-xl font-semibold mb-4">Synopsis</h4>
-					<p class="text-gray-700 whitespace-pre-line">{ data.Synopsis }</p>
+					<p
+						class="whitespace-pre-line
+					text-gray-700 dark:text-gray-400"
+					>{ data.Synopsis }</p>
 				</div>
 				if len(data.Pictures) != 0 {
 					<div
@@ -79,7 +100,10 @@ templ MalAnimeList(datas []maltype.Anime) {
 						</div>
 					</div>
 				}
-				<div class="p-8 bg-gray-100">
+				<div
+					class="p-8 
+				bg-gray-50 dark:bg-gray-800"
+				>
 					<h4 class="text-xl font-semibold mb-4">Statistics</h4>
 					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 						<div>
@@ -108,7 +132,10 @@ templ MalAnimeList(datas []maltype.Anime) {
 						</div>
 					</div>
 				</div>
-				<div class="p-8 bg-gray-200">
+				<div
+					class="p-8 
+				bg-gray-50 dark:bg-gray-800"
+				>
 					<h4 class="text-xl font-semibold mb-4">Others</h4>
 					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 						<div>
@@ -149,7 +176,7 @@ templ MalAnimeList(datas []maltype.Anime) {
 						</div>
 					</div>
 				</div>
-				<div class="p-8 bg-gray-300">
+				<div class="p-8 bg-gray-50 dark:bg-gray-800">
 					<h4 class="text-xl font-semibold mb-4">My List Status</h4>
 					<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 						<div><p class="font-semibold">Status</p><p>{ fmt.Sprintf("%s", data.MyListStatus.Status) }</p></div>
@@ -167,7 +194,7 @@ templ MalAnimeList(datas []maltype.Anime) {
 					</div>
 				</div>
 				if len(data.RelatedAnime) > 0 {
-					<div class="p-8 bg-gray-400">
+					<div class="p-8 bg-gray-50 dark:bg-gray-800">
 						<h4 class="text-xl font-semibold mb-4">Related Anime</h4>
 						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 							for _, a := range data.RelatedAnime {
@@ -179,7 +206,7 @@ templ MalAnimeList(datas []maltype.Anime) {
 					</div>
 				}
 				if len(data.RelatedManga) > 0 {
-					<div class="p-8 bg-gray-400">
+					<div class="p-8 bg-gray-50 dark:bg-gray-800">
 						<h4 class="text-xl font-semibold mb-4">Related Manga</h4>
 						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 							for _, a := range data.RelatedManga {
@@ -191,7 +218,7 @@ templ MalAnimeList(datas []maltype.Anime) {
 					</div>
 				}
 				if len(data.Recommendations) > 0 {
-					<div class="p-8 bg-gray-400">
+					<div class="p-8 bg-gray-50 dark:bg-gray-800">
 						<h4 class="text-xl font-semibold mb-4">Related Manga</h4>
 						<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 							for _, a := range data.Recommendations {

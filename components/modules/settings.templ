@@ -20,7 +20,8 @@ templ Settings(ctx context.Context) {
 				hx-vals='javascript:{language: document.getElementById("settings-language").value}'
 				hx-swap="none"
 				hx-on:htmx:after-request="location.reload()"
-				class="w-full p-2 border rounded"
+				class="w-full p-2 border rounded
+				bg-gray-200 dark:bg-gray-800"
 			>
 				<option value="en" selected>English</option>
 				<option value="ru">Русский</option>
@@ -33,7 +34,8 @@ templ Settings(ctx context.Context) {
 				hx-put="/settings"
 				hx-vals='javascript:{theme: document.getElementById("settings-theme").value}'
 				hx-swap="none"
-				class="w-full p-2 border rounded"
+				class="w-full p-2 border rounded
+				bg-gray-200 dark:bg-gray-800"
 				onchange={ scripts.SelectTheme(templ.JSExpression("this")) }
 			>
 				<option value="light">Light</option>
