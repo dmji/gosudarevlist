@@ -103,16 +103,9 @@ templ CardItemData(card *model.ItemCartData) {
 		<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
 			@categoryBadge(card.CategoryPresentation)
 			@onAirBadge(card.ReleaseStatus)
-			{{
-							targetN := 3
-							n := len(card.AnimeLayerRefs)
-							if n > targetN {
-								targetN = n
-							}
-			}}
-			for i := 0; i < targetN;i++ {
+			for i := 0; i < len(card.AnimeLayerRefs);i++ {
 				<img
-					original_src={ queryPosterFromItem(card.AnimeLayerRefs[i%n]) }
+					original_src={ queryPosterFromItem(card.AnimeLayerRefs[i]) }
 					src={ noImagePlaceholder }
 					alt={ card.Title }
 					hx-trigger="intersect once"

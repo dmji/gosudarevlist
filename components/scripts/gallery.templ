@@ -1,16 +1,29 @@
 package scripts
 
 script LoadGallery(parentNode templ.JSExpression) {
-	new Flickity(parentNode.firstChild, {
-		initialIndex: 2,
-		contain: true,
-		wrapAround: true,
-		autoPlay: 1500,
-		selectedAttraction: 0.01,
-		friction: 0.15,
-		prevNextButtons: false,
-		pageDots: false,
-		setGallerySize: false,
-		cellSelector: ".object-top"
-	});
+	const cellSelector = ".object-top";
+	if (parentNode.querySelectorAll(cellSelector).length > 2) {
+		new Flickity(parentNode.firstChild, {
+			initialIndex: 2,
+			contain: true,
+			wrapAround: true,
+			autoPlay: 1500,
+			selectedAttraction: 0.01,
+			friction: 0.15,
+			prevNextButtons: false,
+			pageDots: false,
+			setGallerySize: false,
+			cellSelector: cellSelector
+		});
+	} else {
+		new Flickity(parentNode.firstChild, {
+			contain: true,
+			selectedAttraction: 0.01,
+			friction: 0.15,
+			prevNextButtons: false,
+			pageDots: false,
+			setGallerySize: false,
+			cellSelector: cellSelector
+		});
+	}
 }
