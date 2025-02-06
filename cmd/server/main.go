@@ -16,6 +16,7 @@ import (
 	service_mal "github.com/dmji/gosudarevlist/pkg/apps/mal/service"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
+	service_update_manager "github.com/dmji/gosudarevlist/pkg/apps/update_manager/service"
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/logger"
@@ -87,7 +88,9 @@ func main() {
 
 	repoPresenter := repository_presenter_pgx.New(connPgx)
 	repoUpdater := repository_updater_pgx.New(connPgx)
-	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser))
+	updateManagerService := service_update_manager.New(repoUpdater)
+	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser), updateManagerService)
+	_ = updaterService
 	presentService := service_presenter.New(repoPresenter)
 
 	//
@@ -107,7 +110,7 @@ func main() {
 	//
 	// Init Router
 	//
-	r := handlers.New(ctx, presentService, updaterService, malService)
+	r := handlers.New(ctx, presentService, updateManagerService, malService)
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)

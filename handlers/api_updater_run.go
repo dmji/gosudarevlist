@@ -1,14 +1,6 @@
 package handlers
 
-import (
-	"net/http"
-
-	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
-	"github.com/dmji/gosudarevlist/pkg/apps/updater/repository"
-	"github.com/dmji/gosudarevlist/pkg/enums"
-	"github.com/dmji/gosudarevlist/pkg/logger"
-)
-
+/*
 func (s *router) RunUpdaterHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	cat, err := enums.CategoryFromString(r.PathValue("category"))
@@ -62,3 +54,4 @@ func (s *router) RunItemUpdaterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logger.Infow(r.Context(), "RunItemUpdaterHandler completed", "category", cat, "identifier", identifier, "url", r.URL)
 }
+*/

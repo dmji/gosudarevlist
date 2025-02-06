@@ -78,7 +78,7 @@ func main() {
 	}
 
 	repoUpdater := repository_updater_pgx.New(connPgx)
-	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser))
+	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser), &fakeUpdaterManagerNotifier{})
 
 	// cat := enums.CategoryAnime
 	// cat := enums.CategoryManga
@@ -87,3 +87,7 @@ func main() {
 	cat := enums.CategoryAll
 	updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeAll)
 }
+
+type fakeUpdaterManagerNotifier struct{}
+
+func (f *fakeUpdaterManagerNotifier) UpdateTrigger(ctx context.Context, cat enums.Category) {}

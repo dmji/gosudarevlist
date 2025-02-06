@@ -22,7 +22,8 @@ func (s *service) UpdateItemsFromCategory(ctx context.Context, category enums.Ca
 	defer data.mx.Unlock()
 
 	data.lastUpdateTimer = time.Now()
-	data.ws.PublishTempl(data.publishUpdate())
+	_ = data.category
+	go s.managerNotifier.UpdateTrigger(ctx, category)
 	logger.Infow(ctx, "Update Target Category | Pipe started", "category", category, "mode", mode)
 
 	updatedIdentifiers := make(map[string]interface{})

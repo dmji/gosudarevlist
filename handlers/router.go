@@ -7,7 +7,6 @@ import (
 	"github.com/dmji/go-myanimelist/mal/maltype"
 	"github.com/dmji/gosudarevlist/lang"
 	model_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
-	model_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/middleware"
@@ -22,9 +21,6 @@ type router struct {
 }
 
 type updaterService interface {
-	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model_updater.CategoryUpdateMode) error
-	UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error
-
 	SubscribeHandler(ctx context.Context, category enums.Category) func(w http.ResponseWriter, r *http.Request)
 }
 
@@ -99,8 +95,8 @@ func (r *router) InitMuxWithDefaultApi(HandleFunOriginal func(string, func(http.
 	)
 
 	HandleFunc("GET /api/updates/{category}", r.ApiUpdates)
-	HandleFunc("POST /api/updater/{category}", r.RunUpdaterHandler)
-	HandleFunc("POST /api/updater/{category}/{identifier}", r.RunItemUpdaterHandler)
+	// HandleFunc("POST /api/updater/{category}", r.RunUpdaterHandler)
+	// HandleFunc("POST /api/updater/{category}/{identifier}", r.RunItemUpdaterHandler)
 	HandleFunc("GET /api/updates/{category}/ws", r.WsUpdaterHandler)
 
 	HandleFunc("/api/login/{service}", func(w http.ResponseWriter, r *http.Request) {
