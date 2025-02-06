@@ -17,10 +17,14 @@ import (
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
 	service_update_manager "github.com/dmji/gosudarevlist/pkg/apps/update_manager/service"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	"github.com/dmji/gosudarevlist/pkg/apps/updater/repository"
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
+	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
+	"github.com/go-co-op/gocron/v2"
 
 	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -90,7 +94,8 @@ func main() {
 	repoUpdater := repository_updater_pgx.New(connPgx)
 	updateManagerService := service_update_manager.New(repoUpdater)
 	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser), updateManagerService)
-	_ = updaterService
+	go runScheduler(ctx, updaterService)
+
 	presentService := service_presenter.New(repoPresenter)
 
 	//
@@ -149,4 +154,58 @@ func (c *clientIDTransport) RoundTrip(req *http.Request) (*http.Response, error)
 	}
 	req.Header.Add("X-MAL-CLIENT-ID", c.ClientID)
 	return c.Transport.RoundTrip(req)
+}
+
+type updaterServiceClient interface {
+	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error
+}
+
+func runScheduler(ctx context.Context, updaterService updaterServiceClient) {
+	s, err := gocron.NewScheduler()
+	if err != nil {
+		logger.Panicw(ctx, "Scheduler creation failed", "error", err)
+	}
+
+	fnUpdate := func(ctx context.Context, cat enums.Category) {
+		err = updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeWhileNew)
+		if _, ok := repository.IsErrorItemNotChanged(err); ok {
+			logger.Errorw(ctx, "RunUpdaterHandler failed", "error", err)
+			return
+		}
+		logger.Infow(ctx, "RunUpdaterHandler completed", "category", cat)
+	}
+
+	plan := []struct {
+		cron string
+		cat  enums.Category
+	}{
+		{"0 * * * *", enums.CategoryAnime},
+		{"0 */8 * * *", enums.CategoryManga},
+		{"0 */8 * * *", enums.CategoryDorama},
+		{"0 */8 * * *", enums.CategoryMusic},
+	}
+
+	for _, p := range plan {
+		_, err = s.NewJob(
+			gocron.CronJob(
+				p.cron,
+				false,
+			),
+			gocron.NewTask(
+				fnUpdate,
+				ctx,
+				p.cat,
+			),
+		)
+		if err != nil {
+			logger.Panicw(ctx, "Scheduler Job creation failed", "error", err)
+		}
+	}
+
+	s.Start()
+
+	// TODO: add context cancel exit
+	select {}
+
+	// s.Shutdown()
 }
