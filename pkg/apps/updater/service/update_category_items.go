@@ -46,7 +46,8 @@ loop_pages:
 		logger.Infow(ctx, "Update Target Category | Pipe in-progress", "category", category, "mode", mode, "page", iPage)
 
 		nItemWasSame := 0
-		for _, item := range items {
+		for i := range items {
+			item := items[len(items)-i-1]
 
 			if _, ok := updatedIdentifiers[item.Identifier]; ok {
 				break loop_pages
