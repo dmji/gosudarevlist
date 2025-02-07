@@ -4,6 +4,7 @@ import (
 	"github.com/dmji/gosudarevlist/components/scripts"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
+	"strings"
 )
 
 const (
@@ -134,8 +135,41 @@ templ CardItemData(card *model.ItemCartData) {
 		//</a>
 	</div>
 	// Description
-	<div class="p-4 text-sm font-sans font-normal overflow-hidden ">
-		@templ.Raw(card.Description, nil)
+	<div class="flex flex-col px-4 pb-2 pt-2 text-sm font-sans font-normal">
+		{{ descr := card.AnimeLayerRefs[0].Description }}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Тип: </b><span>{ descr.Type }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Жанр: </b><span>{ strings.Join(descr.Genres, ", ") }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Год выпуска: </b><span>{ descr.Year }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Кол-во серий: </b><span>{ descr.EpisodeCount }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Продолжительность: </b><span>{ descr.EpisodeDuration }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<br/>
+			<div>
+				<b>Торрент был обновлен</b>
+				<br/>
+				<span>{ descr.UpdateReaseon }</span>
+			</div>
+		}
 	</div>
 	// horizontal row with image and description
 	<div class="p-4 flex flex-col">

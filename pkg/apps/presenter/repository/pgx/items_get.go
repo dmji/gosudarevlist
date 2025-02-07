@@ -55,15 +55,15 @@ func (r *repository) GetItems(ctx context.Context, opt model.OptionsGetItems) ([
 
 		cardItems = append(cardItems, model.ItemCartData{
 			Title:         item.Title,
-			Description:   item.Notes,
 			CreatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.CreatedDate)),
 			UpdatedDate:   time_formater.Format(ctx, pgx_utils.TimeFromPgTimestamp(item.UpdatedDate)),
 			TorrentWeight: item.TorrentFilesSize,
 			AnimeLayerRefs: []*model.ItemCartHrefData{
 				{
-					Href:  fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
-					Text:  itemNotesToHrefText(1, &item),
-					Image: item.RefImageCover,
+					Href:        fmt.Sprintf("https://animelayer.ru/torrent/%s/", item.Identifier),
+					Text:        itemNotesToHrefText(1, &item),
+					Image:       item.RefImageCover,
+					Description: itemNotesToDescriptions(&item),
 				},
 			},
 			CategoryPresentation: categoryPresentation(ctx, pgxCategoriesToCategory(item.Category), len(opt.Categories) != 1),
@@ -93,6 +93,18 @@ func itemNotesToHrefText(i int, item *pgx_sqlc.AnimelayerItem) []string {
 	return []string{baseText, "Субтитры: " + subs}
 }
 
+func itemNotesToDescriptions(item *pgx_sqlc.AnimelayerItem) model.ItemCartDescriptions {
+	m := animelayer.TryGetSomthingSemantizedFromNotes(item.Notes)
+	return model.ItemCartDescriptions{
+		Type:            traverseMapNotesSemantized("Тип", m),
+		Genres:          splitGenres(traverseMapNotesSemantized("Жанр", m)),
+		Year:            traverseMapNotesSemantized("Год выхода", m),
+		EpisodeCount:    traverseMapNotesSemantized("Кол серий", m),
+		EpisodeDuration: traverseMapNotesSemantized("Продолжительность", m),
+		UpdateReaseon:   traverseMapNotesSemantized("Торрент был обновлен", m),
+	}
+}
+
 func traverseMapNotesSemantized(tag string, m *animelayer.NotesSematizied) string {
 	for _, t := range m.Taged {
 		if t.Tag == tag && len(t.Text) != 0 {
@@ -106,4 +118,27 @@ func traverseMapNotesSemantized(tag string, m *animelayer.NotesSematizied) strin
 		}
 	}
 	return ""
+}
+
+func splitGenres(genreString string) []string {
+	genres := strings.Split(genreString, ",")
+	for gi := range genres {
+		for {
+			if len(genres[gi]) == 0 {
+				break
+			}
+			if genres[gi][0] == ' ' || genres[gi][0] == ':' {
+				genres[gi] = genres[gi][1:]
+				continue
+			}
+
+			l := len(genres[gi]) - 1
+			if genres[gi][l] == ' ' || genres[gi][l] == ':' {
+				genres[gi] = genres[gi][:l-1]
+				continue
+			}
+			break
+		}
+	}
+	return slices.DeleteFunc(genres, func(e string) bool { return len(e) == 0 })
 }

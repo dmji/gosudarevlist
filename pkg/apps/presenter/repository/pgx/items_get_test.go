@@ -3,9 +3,7 @@ package repository_pgx_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/dmji/go-animelayer-parser"
@@ -16,7 +14,7 @@ import (
 func TestGetITemsByCategory(t *testing.T) {
 	repo, ctx := InitRepo(context.Background())
 
-	items, err := repo.GetItems(ctx, model.OptionsGetItems{
+	_, err := repo.GetItems(ctx, model.OptionsGetItems{
 		PageIndex:       1,
 		CountForOnePage: 20000,
 
@@ -30,37 +28,25 @@ func TestGetITemsByCategory(t *testing.T) {
 		t.Fatal(err)
 	}
 	identifiers := make(map[string]string)
-	for _, item := range items {
-		m := animelayer.TryGetSomthingSemantizedFromNotes(item.Description)
-		/* 		s := traverseMapNotesSemantized("Разрешение", m)
-		   		if s == "" {
-		   			s = traverseMapNotesSemantized("Видео", m)
-		   		} */
-		s := traverseMapNotesSemantized("Субтитры", m)
-		if s == "" {
-			identifiers[item.Title] = item.CategoryPresentation
+	/*
+		for _, item := range items {
+			m := animelayer.TryGetSomthingSemantizedFromNotes(item.Description)
+			 		s := traverseMapNotesSemantized("Разрешение", m)
+			   		if s == "" {
+			   			s = traverseMapNotesSemantized("Видео", m)
+			   		}
+			s := traverseMapNotesSemantized("Субтитры", m)
+			if s == "" {
+				identifiers[item.Title] = item.CategoryPresentation
+			}
 		}
-	}
+	*/
 
 	s, err := json.Marshal(&identifiers)
 	if err != nil {
 		t.Fatal(err)
 	}
 	os.WriteFile("result.json", s, 0o644)
-}
-
-func itemNotesToHrefText(i int, item *model.ItemCartData) string {
-	baseText := fmt.Sprintf("Torrent №%d", i)
-
-	m := animelayer.TryGetSomthingSemantizedFromNotes(item.Description)
-
-	resolution := traverseMapNotesSemantized("Разрешение", m)
-	if resolution == "" {
-		resolution = traverseMapNotesSemantized("Видео", m)
-	}
-	subs := traverseMapNotesSemantized("Субтитры", m)
-
-	return strings.Join([]string{baseText, resolution, subs}, ": ")
 }
 
 func traverseMapNotesSemantized(tag string, m *animelayer.NotesSematizied) string {

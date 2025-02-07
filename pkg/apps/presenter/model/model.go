@@ -18,14 +18,23 @@ type ItemCartData struct {
 	CreatedDate          string
 	UpdatedDate          string
 	TorrentWeight        string
-	Description          string
 	AnimeLayerRefs       []*ItemCartHrefData
 	CategoryPresentation string
 	ReleaseStatus        enums.ReleaseStatus
 }
 
+type ItemCartDescriptions struct {
+	Type            string   //"Тип:"
+	Genres          []string // "Жанр"
+	Year            string   //"Год выхода"
+	EpisodeCount    string   //"Кол серий"
+	EpisodeDuration string   //"Продолжительность"
+	UpdateReaseon   string   //"Торрент был обновлен"
+}
+
 type ItemCartHrefData struct {
-	Href  string
-	Text  []string
-	Image string
+	Href        string
+	Text        []string
+	Image       string
+	Description ItemCartDescriptions
 }
