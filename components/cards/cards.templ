@@ -95,103 +95,101 @@ templ CollectionListingBatch(cards []model.ItemCartData, nextPageEndpint, nextPa
 }
 
 templ CardItemData(card *model.ItemCartData) {
-	<div class="flex flex-col h-full">
-		// gallery with images
-		<div
-			class="box-border p-4"
-			hx-trigger="intersect once threshold:0"
-			hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
-		>
-			<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
-				@categoryBadge(card.CategoryPresentation)
-				@onAirBadge(card.ReleaseStatus)
-				for i := 0; i < len(card.AnimeLayerRefs);i++ {
-					<img
-						original_src={ queryPosterFromItem(card.AnimeLayerRefs[i]) }
-						src={ noImagePlaceholder }
-						alt={ card.Title }
-						hx-trigger="intersect once"
-						hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
-						class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
-					/>
-				}
-			</div>
+	// gallery with images
+	<div
+		class="box-border p-4"
+		hx-trigger="intersect once threshold:0"
+		hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
+	>
+		<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
+			@categoryBadge(card.CategoryPresentation)
+			@onAirBadge(card.ReleaseStatus)
+			for i := 0; i < len(card.AnimeLayerRefs);i++ {
+				<img
+					original_src={ queryPosterFromItem(card.AnimeLayerRefs[i]) }
+					src={ noImagePlaceholder }
+					alt={ card.Title }
+					hx-trigger="intersect once"
+					hx-on:htmx:trigger={ scripts.LazyLoadImage(templ.JSExpression("this")) }
+					class="object-scale-down box-border w-[240px] h-[360px] object-top mr-2"
+				/>
+			}
 		</div>
-		// horizontal row with update datas
-		<div
-			class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2
+	</div>
+	// horizontal row with update datas
+	<div
+		class="grid grid-flow-col auto-cols-max p-px px-4 border-t-2 border-b-2
 	border-gray-300 dark:border-gray-800"
-		>
-			if len(card.UpdatedDate) > 0 {
-				@optionalLineMetaData("Обновлен:", card.UpdatedDate)
-			} else {
-				@optionalLineMetaData("Добавлен:", card.CreatedDate)
-			}
-			@optionalLineMetaData("", card.TorrentWeight, true)
-		</div>
-		// title
-		<div class="basis-40 px-4 pb-2 pt-3 text-lg font-semibold">
-			//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
-			{ card.Title }
-			//</a>
-		</div>
-		// Description
-		<div class="flex flex-col px-4 pb-2 pt-2 text-sm font-sans font-normal">
-			{{ descr := card.AnimeLayerRefs[0].Description }}
-			if len(descr.Type) > 0 {
-				<div>
-					<b>Тип: </b><span>{ descr.Type }</span>
-				</div>
-			}
-			if len(descr.Type) > 0 {
-				<div>
-					<b>Жанр: </b><span>{ strings.Join(descr.Genres, ", ") }</span>
-				</div>
-			}
-			if len(descr.Type) > 0 {
-				<div>
-					<b>Год выпуска: </b><span>{ descr.Year }</span>
-				</div>
-			}
-			if len(descr.Type) > 0 {
-				<div>
-					<b>Кол-во серий: </b><span>{ descr.EpisodeCount }</span>
-				</div>
-			}
-			if len(descr.Type) > 0 {
-				<div>
-					<b>Продолжительность: </b><span>{ descr.EpisodeDuration }</span>
-				</div>
-			}
-			if len(descr.Type) > 0 {
+	>
+		if len(card.UpdatedDate) > 0 {
+			@optionalLineMetaData("Обновлен:", card.UpdatedDate)
+		} else {
+			@optionalLineMetaData("Добавлен:", card.CreatedDate)
+		}
+		@optionalLineMetaData("", card.TorrentWeight, true)
+	</div>
+	// title
+	<div class="flex px-4 pb-2 pt-3 text-lg font-semibold place-self-stretch select-none">
+		//<a href={ templ.URL(card.AnimeLayerRef) } rel="noopener noreferrer">
+		{ card.Title }
+		//</a>
+	</div>
+	// Description
+	<div class="flex flex-col px-4 pb-2 pt-2 text-sm font-sans font-normal">
+		{{ descr := card.AnimeLayerRefs[0].Description }}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Тип: </b><span>{ descr.Type }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Жанр: </b><span>{ strings.Join(descr.Genres, ", ") }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Год выпуска: </b><span>{ descr.Year }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Кол-во серий: </b><span>{ descr.EpisodeCount }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<div>
+				<b>Продолжительность: </b><span>{ descr.EpisodeDuration }</span>
+			</div>
+		}
+		if len(descr.Type) > 0 {
+			<br/>
+			<div>
+				<b>Торрент был обновлен</b>
 				<br/>
-				<div>
-					<b>Торрент был обновлен</b>
-					<br/>
-					<span>{ descr.UpdateReaseon }</span>
+				<span>{ descr.UpdateReaseon }</span>
+			</div>
+		}
+	</div>
+	// horizontal row with image and description
+	<div class="p-4 flex flex-col">
+		for _, animeLayerRef := range card.AnimeLayerRefs {
+			<a
+				href={ templ.URL(animeLayerRef.Href) }
+				rel="noopener noreferrer"
+				class="mt-2 flex flex-row"
+			>
+				<img
+					src={ animeLayerLogo }
+					alt={ card.Title }
+					class="w-[51px] h-[18px] object-scale-down object-top"
+				/>
+				<div class="flex flex-col">
+					for _, text := range animeLayerRef.Text {
+						<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
+					}
 				</div>
-			}
-		</div>
-		// horizontal row with image and description
-		<div class="p-4 flex flex-col h-full place-content-end">
-			for _, animeLayerRef := range card.AnimeLayerRefs {
-				<a
-					href={ templ.URL(animeLayerRef.Href) }
-					rel="noopener noreferrer"
-					class="mt-2 flex flex-row"
-				>
-					<img
-						src={ animeLayerLogo }
-						alt={ card.Title }
-						class="w-[51px] h-[18px] object-scale-down object-top"
-					/>
-					<div class="flex flex-col">
-						for _, text := range animeLayerRef.Text {
-							<span class="text-blue-600 -translate-y-1 translate-x-2 text-pretty text-xs">{ text }</span>
-						}
-					</div>
-				</a>
-			}
-		</div>
+			</a>
+		}
 	</div>
 }

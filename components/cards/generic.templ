@@ -14,7 +14,7 @@ templ Trigger(nextPageEndpint, nextPageParams string) {
 
 templ putPageNumberResetTrigger(currentPage, i, n int) {
 	<div
-		class="group h-full"
+		class="group"
 		if i == int(float64(n)*0.25) {
 			hx-trigger="intersect"
 			hx-on:htmx:trigger={ scripts.QueryUpdatePage(currentPage) }
