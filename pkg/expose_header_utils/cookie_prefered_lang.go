@@ -19,7 +19,7 @@ func SetCookiePreferedLanguage(ctx context.Context, w http.ResponseWriter, value
 		MaxAge: 3600,
 		// HttpOnly: true,
 		// Secure:   true,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteStrictMode,
 	}
 	http.SetCookie(w, cookie)
 	return cookie
