@@ -17,9 +17,9 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up Go
-      uses: actions/setup-go@v5.2.0
+      uses: actions/setup-go@v5.3.0
       with:
-        go-version: '1.23.1'
+        go-version: '1.24.0'
 
     - name: Install Taskfile
       run: sudo snap install task --classic
@@ -55,4 +55,4 @@ jobs:
           mv server repo/gosudarevlist/server
           cd repo/gosudarevlist
           chmod 777 server
-          nohup ./server -port=54320 > nohup.out 2> nohup.err < /dev/null &
+          nohup ./server -port=54320 > output.out 2> output.err < /dev/null &
