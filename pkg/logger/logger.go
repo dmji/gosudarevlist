@@ -24,8 +24,9 @@ var globalLogger *loggerZap
 func New() (*loggerZap, error) {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.Level.SetLevel(zapcore.DebugLevel)
-	loggerConfig.ErrorOutputPaths = []string{"stdout"}
-	//loggerConfig.EncoderConfig.MessageKey = zapcore.OmitKey
+	loggerConfig.ErrorOutputPaths = []string{"stderr"}
+	loggerConfig.OutputPaths = []string{"stdout"}
+	loggerConfig.EncoderConfig.EncodeTime = zapcore.EpochTimeEncoder
 
 	logger, err := loggerConfig.Build(
 		zap.AddCallerSkip(1),
