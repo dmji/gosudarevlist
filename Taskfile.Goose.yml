@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  goose: g1ithub.com/dmji/go-i18n/goi18n@1f1416ba51b312f0b357a4119963aa48e8042c83
+  goose: github.com/pressly/goose/v3/cmd/goose@latest
 
 tasks:
   do: go run {{.goose}} -dir ./migrations {{.CLI_ARGS}}
