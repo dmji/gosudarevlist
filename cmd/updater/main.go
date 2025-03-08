@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/dmji/gosudarevlist/internal/animelayer_client"
-	"github.com/dmji/gosudarevlist/internal/env"
 	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/enums"
+	"github.com/dmji/gosudarevlist/pkg/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 
@@ -33,7 +33,10 @@ func init() {
 	_, bPassword := os.LookupEnv("ANIMELAYER_PASSWORD")
 
 	if !bGoose || !bLogin || !bPassword {
-		env.LoadEnv(10, true)
+		err := env.LoadEnv(".env", 10)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 

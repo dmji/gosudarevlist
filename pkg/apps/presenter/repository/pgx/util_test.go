@@ -4,10 +4,10 @@ import (
 	"context"
 	"os"
 
-	"github.com/dmji/gosudarevlist/internal/env"
 	"github.com/dmji/gosudarevlist/lang"
 	"github.com/dmji/gosudarevlist/pkg/apps/presenter/repository"
 	repository_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
+	"github.com/dmji/gosudarevlist/pkg/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 
@@ -22,7 +22,10 @@ func InitRepo(ctx context.Context) (repository.AnimeLayerRepositoryDriver, conte
 
 	ctx = logger.ToContext(ctx, sugaredLogger)
 
-	env.LoadEnv(10, true)
+	err = env.LoadEnv(".env", 10)
+	if err != nil {
+		panic(err)
+	}
 	dbConfig, err := pgxpool.ParseConfig(os.Getenv("GOOSE_DBSTRING"))
 	if err != nil {
 		logger.Panicw(ctx, "unable to parse connString", "error", err)

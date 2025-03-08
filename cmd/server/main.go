@@ -12,7 +12,6 @@ import (
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/handlers"
 	"github.com/dmji/gosudarevlist/internal/animelayer_client"
-	"github.com/dmji/gosudarevlist/internal/env"
 	service_mal "github.com/dmji/gosudarevlist/pkg/apps/mal/service"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/pkg/apps/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/service"
@@ -22,6 +21,7 @@ import (
 	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
 	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/enums"
+	"github.com/dmji/gosudarevlist/pkg/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 	"github.com/go-co-op/gocron/v2"
@@ -46,7 +46,10 @@ func init() {
 	_, bMalClientID := os.LookupEnv("MAL_CLIENT_ID")
 
 	if !bGoose || !bLogin || !bPassword || !bMalClientID {
-		env.LoadEnv(10, true)
+		err := env.LoadEnv(".env", 10)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
