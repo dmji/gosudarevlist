@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dmji/go-animelayer-parser"
-	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
+	"github.com/dmji/gosudarevlist/internal/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 )
 
