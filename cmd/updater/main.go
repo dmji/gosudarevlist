@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/dmji/gosudarevlist/internal/animelayer_client"
-	"github.com/dmji/gosudarevlist/pkg/apps/updater/model"
-	repository_updater_pgx "github.com/dmji/gosudarevlist/pkg/apps/updater/repository/pgx"
-	service_updater "github.com/dmji/gosudarevlist/pkg/apps/updater/service"
+	"github.com/dmji/gosudarevlist/internal/updater/model"
+	repository_updater_pgx "github.com/dmji/gosudarevlist/internal/updater/repository/pgx"
+	service_updater "github.com/dmji/gosudarevlist/internal/updater/service"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"

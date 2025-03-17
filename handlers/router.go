@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/dmji/go-myanimelist/mal/maltype"
+	model_presenter "github.com/dmji/gosudarevlist/internal/presenter/model"
 	"github.com/dmji/gosudarevlist/lang"
-	model_presenter "github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/middleware"

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/dmji/gosudarevlist/components/pages"
-	"github.com/dmji/gosudarevlist/pkg/apps/presenter/model"
+	"github.com/dmji/gosudarevlist/internal/presenter/model"
 	"github.com/dmji/gosudarevlist/pkg/custom_url"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/logger"
