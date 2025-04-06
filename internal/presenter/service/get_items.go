@@ -26,24 +26,6 @@ func (s *service) GetItems(ctx context.Context, opt *model.ApiCardsParams, cat e
 	return items
 }
 
-func (s *service) GetUpdates(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.UpdateItem {
-	items, err := s.AnimeLayerRepositoryDriver.GetUpdates(ctx, model.OptionsGetItems{
-		CountForOnePage:     20,
-		PageIndex:           int64(opt.Page),
-		SimilarityThreshold: 0.05,
-
-		SearchQuery: opt.SearchQuery,
-		Categories:  []enums.Category{cat},
-		Statuses:    opt.Statuses,
-	})
-	if err != nil {
-		logger.Errorw(ctx, "Service | GetUpdates failed", "error", err)
-		return nil
-	}
-
-	return items
-}
-
 func (s *service) GetFilters(ctx context.Context, opt *model.ApiCardsParams, cat enums.Category) []model.FilterGroup {
 	items, err := s.AnimeLayerRepositoryDriver.GetFilters(ctx, model.OptionsGetItems{
 		CountForOnePage:     20,

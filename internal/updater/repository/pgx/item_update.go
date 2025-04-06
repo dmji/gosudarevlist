@@ -14,7 +14,6 @@ import (
 )
 
 func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerItem) error {
-	now := time.Now()
 	oldItem, err := repo.GetItemByIdentifier(ctx, item.Identifier)
 	if err != nil {
 		return err
@@ -27,6 +26,7 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	if arg == nil {
 		return r.NewErrorItemNotChanged(item.Identifier)
 	}
+	_ = notes
 
 	//
 	// Start transaction
@@ -38,25 +38,9 @@ func (repo *repository) UpdateItem(ctx context.Context, item *model.AnimelayerIt
 	defer tx.Rollback(ctx)
 	r := repo.query.WithTx(tx)
 
-	itemId, err := r.UpdateItem(ctx, *arg)
+	err = r.UpdateItem(ctx, *arg)
 	if err != nil {
 		return err
-	}
-
-	//
-	// Push updated notes
-	//
-	if len(notes) > 0 {
-		err = repo.InsertUpdateNote(ctx, model.UpdateItem{
-			Date:         &now,
-			UpdateStatus: enums.UpdateStatusUpdated,
-			Notes:        notes,
-			ItemId:       itemId,
-			// Identifier:   item.Identifier,
-		})
-		if err != nil {
-			return err
-		}
 	}
 
 	//

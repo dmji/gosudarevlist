@@ -1,4 +1,4 @@
--- name: UpdateItem :one
+-- name: UpdateItem :exec
 UPDATE animelayer_items
 SET title = coalesce(sqlc.narg('title'), title),
     release_status = coalesce(sqlc.narg('release_status'), release_status),
@@ -23,5 +23,4 @@ SET title = coalesce(sqlc.narg('title'), title),
         torrent_files_size
     ),
     notes = coalesce(sqlc.narg('notes'), notes)
-WHERE animelayer_items.identifier = @identifier
-RETURNING id;
+WHERE animelayer_items.identifier = @identifier;

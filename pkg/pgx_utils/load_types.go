@@ -28,12 +28,7 @@ func loadType(ctx context.Context, conn *pgx.Conn, typeName string, bArray bool)
 
 func AnimelayerPostgresAfterConnectFunction() func(ctx context.Context, conn *pgx.Conn) error {
 	return func(ctx context.Context, conn *pgx.Conn) error {
-		err := loadType(ctx, conn, "CATEGORY_ANIMELAYER", true)
-		if err != nil {
-			return err
-		}
-
-		err = loadType(ctx, conn, "RELEASE_STATUS_ANIMELAYER", true)
+		err := loadType(ctx, conn, "RELEASE_STATUS_ANIMELAYER", true)
 		if err != nil {
 			return err
 		}

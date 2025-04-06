@@ -2,13 +2,13 @@ version: "2"
 sql:
   - name: "presenter-driver"
     engine: "postgresql"
-    queries: "../pkg/apps/presenter/repository/pgx"
-    schema: "../migrations"
+    queries: "../internal/presenter/repository/pgx"
+    schema: "../migrations/animelayer"
     gen:
       go:
         sql_package: "pgx/v5"
         package: "pgx_sqlc"
-        out: "../pkg/apps/presenter/repository/pgx/sqlc"
+        out: "../internal/presenter/repository/pgx/sqlc"
         output_db_file_name: "db.sqlc_gen.go"
         output_batch_file_name: "batch.sqlc_gen.go"
         output_models_file_name: "models.sqlc_gen.go"
@@ -17,13 +17,13 @@ sql:
         output_files_suffix: "c_gen"
   - name: "updater-driver"
     engine: "postgresql"
-    queries: "../pkg/apps/updater/repository/pgx"
-    schema: "../migrations"
+    queries: "../internal/updater/repository/pgx"
+    schema: "../migrations/animelayer"
     gen:
       go:
         sql_package: "pgx/v5"
         package: "pgx_sqlc"
-        out: "../pkg/apps/updater/repository/pgx/sqlc"
+        out: "../internal/updater/repository/pgx/sqlc"
         output_db_file_name: "db.sqlc_gen.go"
         output_batch_file_name: "batch.sqlc_gen.go"
         output_models_file_name: "models.sqlc_gen.go"

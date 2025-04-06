@@ -1,14 +1,5 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TYPE CATEGORY_ANIMELAYER AS ENUM (
-     'anime',
-     'manga',
-     'music',
-     'dorama',
-     'anime_hentai',
-     'manga_hentai'
-);
-
 CREATE TYPE RELEASE_STATUS_ANIMELAYER AS ENUM (
      'on_air',
      'incompleted',
@@ -16,7 +7,6 @@ CREATE TYPE RELEASE_STATUS_ANIMELAYER AS ENUM (
 );
 
 CREATE TABLE IF NOT EXISTS animelayer_items (
-     id BIGSERIAL NOT NULL,
      -- animelater id to form urls
      identifier TEXT NOT NULL,
      -- descriptions 
@@ -37,19 +27,11 @@ CREATE TABLE IF NOT EXISTS animelayer_items (
      -- torrent meta data
      torrent_files_size TEXT NOT NULL,
      -- notes
-     notes TEXT NOT NULL,
-     -- category
-     category CATEGORY_ANIMELAYER NOT NULL
+     notes TEXT NOT NULL
 );
 
 ALTER TABLE animelayer_items
-ADD PRIMARY KEY (id);
-
-ALTER TABLE animelayer_items
-ADD UNIQUE (identifier);
-
-ALTER TABLE animelayer_updates
-ADD CONSTRAINT animelayer_updates_item_foreign FOREIGN KEY (item_id) REFERENCES animelayer_items (id);
+ADD PRIMARY KEY (identifier);
 
 ALTER TABLE animelayer_items
 ADD CONSTRAINT animelayer_items_identifier_not_empty CHECK (identifier <> '');
@@ -58,8 +40,6 @@ ADD CONSTRAINT animelayer_items_identifier_not_empty CHECK (identifier <> '');
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS animelayer_items CASCADE;
-
-DROP TYPE CATEGORY_ANIMELAYER;
 
 DROP TYPE RELEASE_STATUS_ANIMELAYER;
 

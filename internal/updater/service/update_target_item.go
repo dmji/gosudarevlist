@@ -2,49 +2,52 @@ package service
 
 import (
 	"context"
-	"database/sql"
-	"errors"
+	"fmt"
 
-	"github.com/dmji/gosudarevlist/pkg/enums"
+	"github.com/dmji/gosudarevlist/internal/updater/repository"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 )
 
-func (s *service) UpdateTargetItem(ctx context.Context, identifier string, category enums.Category) error {
-	data := s.updaterDataByCategory(ctx, category)
-	bOk := data.mx.TryLock()
-	if !bOk {
-		return newErrorInProcess(category, data.lastUpdateTimer)
+func (s *service) UpdateTargetItem(ctx context.Context, identifier string) error {
+	err := s.checkMx()
+	if err != nil {
+		return err
 	}
-	defer data.mx.Unlock()
+	defer s.mx.Unlock()
 
+	// Get new item data from AnimeLayer
 	item, err := s.animelayerApi.GetItemByIdentifier(ctx, identifier)
 	if err != nil {
-		logger.Infow(ctx, "Update Target Item | Item getting failed", "category", category, "identifier", identifier, "error", err)
+		logger.Infow(ctx, "update target item | item getting failed", "category", s.category, "identifier", identifier, "error", err)
 		return err
 	}
+	if item.Category != s.category {
+		logger.Warnw(ctx, "update target item | item category not match updater")
+		return fmt.Errorf("item category='%s', but expected for updater is '%d'", item.Category, s.category)
+	}
 
+	// Get current item data from DB
 	_, err = s.repo.GetItemByIdentifier(ctx, identifier)
-	bInsert := errors.Is(err, sql.ErrNoRows)
-	if bInsert {
-		err = s.repo.InsertItem(ctx, item, category)
-	} else {
-		err = s.repo.UpdateItem(ctx, item)
+	method := getMethod(err)
+	err = updateItem(ctx, method, s.repo, item, s.category)
+
+	if _, ok := repository.IsErrorItemNotChanged(err); ok {
+		return nil
 	}
 
 	if err != nil {
-		if bInsert {
-			logger.Infow(ctx, "Update Target Item | Item insertion failed", "identifier", item.Identifier, "error", err)
-		} else {
-			logger.Infow(ctx, "Update Target Item | Item updating failed", "identifier", item.Identifier, "error", err)
-		}
+		logger.Errorw(ctx, "update target item | item processing failed",
+			"method", method.String(),
+			"identifier", item.Identifier,
+			"error", err,
+		)
 		return err
 	}
 
-	if bInsert {
-		logger.Infow(ctx, "Update Target Item | Item inserted as new", "identifier", identifier)
-	} else {
-		logger.Infow(ctx, "Update Target Item | Item has being updated", "identifier", identifier)
-	}
+	logger.Infow(ctx, "update target item | item processing finished",
+		"method", method.String(),
+		"identifier", item.Identifier,
+	)
 
 	return nil
 }

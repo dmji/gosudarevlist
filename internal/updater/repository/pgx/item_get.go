@@ -22,7 +22,6 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 	}
 
 	return &model.AnimelayerItem{
-		Id:               item.ID,
 		Identifier:       identifier,
 		Title:            item.Title,
 		ReleaseStatus:    pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
@@ -36,6 +35,5 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 		BlobImagePreview: item.BlobImagePreview,
 		TorrentFilesSize: item.TorrentFilesSize,
 		Notes:            item.Notes,
-		Category:         pgxCategoriesToCategory(item.Category),
 	}, nil
 }

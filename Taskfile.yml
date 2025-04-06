@@ -27,7 +27,9 @@ tasks:
 
   templ: go run {{.templ}} generate --watch --open-browser=false -v
   air: go run {{.air}}
-    
+
+  up-pg: docker compose -f deploy/storage/compose.yml --env-file .env up --force-recreate -d
+
   update-refactoring-tools:
       - go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
       - go install github.com/davidrjenni/reftools/cmd/fillswitch@latest

@@ -1,15 +1,10 @@
 -- name: GetItems :many
-WITH selected_categories AS (
-    SELECT unnest(
-            ARRAY [@category_array::CATEGORY_ANIMELAYER[]] 
-    ) as cat
-), selected_release_status as (
+WITH selected_release_status as (
      SELECT unnest(
             ARRAY [@status_array::RELEASE_STATUS_ANIMELAYER[]] 
     ) as rs
 )
-SELECT id,
- identifier,
+SELECT identifier,
  title,
  release_status,
  last_checked_date,
@@ -21,11 +16,9 @@ SELECT id,
  blob_image_cover,
  blob_image_preview,
  torrent_files_size,
- notes,
- category
+ notes
 FROM animelayer_items
-WHERE category IN (SELECT cat FROM selected_categories)
-    AND release_status IN (SELECT rs FROM selected_release_status)
+WHERE release_status IN (SELECT rs FROM selected_release_status)
     AND (
         @search_query::text = ''
         OR SIMILARITY(title, @search_query) > @similarity_threshold::float

@@ -15,7 +15,7 @@ func (s *router) RunUpdaterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = s.updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeWhileNew)
+	err = s.updaterService.UpdateItems(ctx, cat, model.CategoryUpdateModeWhileNew)
 	if _, ok := repository.IsErrorItemNotChanged(err); ok {
 		logger.Errorw(ctx, "RunUpdaterHandler attempt to second run", "error", err)
 		http.Error(w, err.Error(), http.StatusNotAcceptable)

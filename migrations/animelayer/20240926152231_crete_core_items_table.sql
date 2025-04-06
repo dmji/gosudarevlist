@@ -1,9 +1,9 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE core_items (
-     id BIGSERIAL NOT NULL,
-     -- optional, can't auto-search now
-     mal_item_id INT NOT NULL DEFAULT -1
+     -- key from mal, unique and persistent
+     id BIGINT NOT NULL
+     -- last update, for sorting
 );
 
 ALTER TABLE core_items

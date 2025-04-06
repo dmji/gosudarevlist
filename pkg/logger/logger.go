@@ -70,3 +70,7 @@ func Panicw(ctx context.Context, msg string, keysAndValues ...interface{}) {
 func Fatalw(ctx context.Context, msg string, keysAndValues ...interface{}) {
 	FromContext(ctx).logger.Panicw(msg, keysAndValues...)
 }
+
+func Warnw(ctx context.Context, msg string, keysAndValues ...interface{}) {
+	FromContext(ctx).logger.Warnw(msg, keysAndValues...)
+}

@@ -19,7 +19,6 @@ type ItemCartData struct {
 	UpdatedDate          string
 	TorrentWeight        string
 	AnimeLayerRefs       []*ItemCartHrefData
-	CategoryPresentation string
 	ReleaseStatus        enums.ReleaseStatus
 }
 

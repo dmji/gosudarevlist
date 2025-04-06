@@ -15,52 +15,32 @@ type ItemProvider interface {
 	GetItemsFromCategoryPages(ctx context.Context, category enums.Category, iPage int) ([]*model.AnimelayerItem, error)
 }
 
-type UpdaterManagerNotifier interface {
-	UpdateTrigger(ctx context.Context, cat enums.Category)
-}
-
 type service struct {
-	repo            repository.AnimeLayerRepositoryDriver
-	animelayerApi   ItemProvider
-	managerNotifier UpdaterManagerNotifier
+	repo          repository.AnimeLayerRepositoryDriver
+	animelayerApi ItemProvider
 
-	data sync.Map // map[enums.Category]*categoryUpdaterData
+	mx              sync.Mutex
+	lastUpdateTimer time.Time
+	category        enums.Category
 }
 
-func New(repo repository.AnimeLayerRepositoryDriver, animelayerApi ItemProvider, managerNotifier UpdaterManagerNotifier) *service {
+func New(repo repository.AnimeLayerRepositoryDriver, animelayerApi ItemProvider, category enums.Category) *service {
 	s := &service{
-		repo:            repo,
-		animelayerApi:   animelayerApi,
-		managerNotifier: managerNotifier,
+		repo:          repo,
+		animelayerApi: animelayerApi,
+
+		category: category,
 	}
 
 	return s
 }
 
-type categoryUpdaterData struct {
-	lastUpdateTimer time.Time
-	mx              sync.Mutex
-	category        enums.Category
-}
-
-func (s *service) updaterDataByCategory(ctx context.Context, category enums.Category) *categoryUpdaterData {
-	dataPtr, ok := s.data.Load(category)
-	if !ok {
-
-		timeLastUpdate, err := s.repo.GetLastCategoryUpdateItem(ctx, category)
-		if err != nil {
-			t := time.Now().Add(-10 * time.Second)
-			timeLastUpdate = &t
-		}
-
-		data := &categoryUpdaterData{
-			lastUpdateTimer: *timeLastUpdate,
-			category:        category,
-		}
-
-		s.data.Store(category, data)
-		return data
+func (s *service) checkMx() error {
+	bOk := s.mx.TryLock()
+	if !bOk {
+		return newErrorInProcess(s.category, s.lastUpdateTimer)
 	}
 
-	return dataPtr.(*categoryUpdaterData)
+	s.lastUpdateTimer = time.Now()
+	return nil
 }

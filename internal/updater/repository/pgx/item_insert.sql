@@ -1,4 +1,4 @@
--- name: InsertItem :one
+-- name: InsertItem :exec
 INSERT INTO animelayer_items (
         identifier,
         title,
@@ -12,8 +12,7 @@ INSERT INTO animelayer_items (
         blob_image_cover,
         blob_image_preview,
         torrent_files_size,
-        notes,
-        category
+        notes
     )
 VALUES (
         @identifier,
@@ -28,7 +27,5 @@ VALUES (
         @blob_image_cover,
         @blob_image_preview,
         @torrent_files_size,
-        @notes,
-        @category
-    )
-RETURNING id;
+        @notes
+    );

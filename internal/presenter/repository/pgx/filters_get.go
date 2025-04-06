@@ -12,7 +12,6 @@ import (
 func (r *repository) GetFilters(ctx context.Context, opt model.OptionsGetItems) ([]model.FilterGroup, error) {
 	items, err := r.query.GetFilters(ctx, pgx_sqlc.GetFiltersParams{
 		CheckedStatusArray:    releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, false),
-		SelectedCategoryArray: categoriesToAnimelayerCategories(opt.Categories, true),
 		SelectedStatusArray:   releaseStatusAnimelayerArrToPgxReleaseStatusAnimelayerArr(ctx, opt.Statuses, true),
 
 		SearchQuery:         opt.SearchQuery,

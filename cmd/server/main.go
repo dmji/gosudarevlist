@@ -8,26 +8,21 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dmji/go-myanimelist/mal"
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/handlers"
-	"github.com/dmji/gosudarevlist/internal/animelayer_client"
-	service_mal "github.com/dmji/gosudarevlist/internal/mal/service"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/internal/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/internal/presenter/service"
-	service_update_manager "github.com/dmji/gosudarevlist/internal/update_manager/service"
 	"github.com/dmji/gosudarevlist/internal/updater/model"
 	"github.com/dmji/gosudarevlist/internal/updater/repository"
-	repository_updater_pgx "github.com/dmji/gosudarevlist/internal/updater/repository/pgx"
-	service_updater "github.com/dmji/gosudarevlist/internal/updater/service"
+	"github.com/dmji/gosudarevlist/migrations"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/env"
 	"github.com/dmji/gosudarevlist/pkg/logger"
 	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 	"github.com/go-co-op/gocron/v2"
 
-	"github.com/dmji/go-animelayer-parser"
 	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 var parameter = struct {
@@ -65,20 +60,6 @@ func main() {
 	ctx := logger.ToContext(context.Background(), sugaredLogger)
 
 	//
-	// Init Animelayer Parser
-	//
-	animelayer_credentials := animelayer.Credentials{
-		Login:    os.Getenv("ANIMELAYER_LOGIN"),
-		Password: os.Getenv("ANIMELAYER_PASSWORD"),
-	}
-	animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
-	if err != nil {
-		logger.Panicw(ctx, "Initialization AnimeLayer Parser", "error", err)
-	}
-
-	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
-
-	//
 	// Init Service
 	//
 	dbConfig, err := pgxpool.ParseConfig(os.Getenv("GOOSE_DBSTRING"))
@@ -93,32 +74,60 @@ func main() {
 		logger.Panicw(ctx, "Initialization Postgres Pool Config", "error", err)
 	}
 
+	err = migrations.Up(context.Background(), "postgres", os.Getenv("GOOSE_DBSTRING"), "pgx", "animelayer")
+	if err != nil {
+		logger.Fatalw(ctx, "pgx migrations up failed", "error", err)
+	}
+
+	err = connPgx.Ping(ctx)
+	if err != nil {
+		logger.Fatalw(ctx, "pgx ping failed", "error", err)
+	}
+
 	repoPresenter := repository_presenter_pgx.New(connPgx)
-	repoUpdater := repository_updater_pgx.New(connPgx)
-	updateManagerService := service_update_manager.New(repoUpdater)
-	updaterService := service_updater.New(repoUpdater, animelayer_client.New(animelayer_parser), updateManagerService)
-	go runScheduler(ctx, updaterService)
+
+	//
+	// Init Animelayer Parser
+	//
+	//animelayer_credentials := animelayer.Credentials{
+	//	Login:    os.Getenv("ANIMELAYER_LOGIN"),
+	//	Password: os.Getenv("ANIMELAYER_PASSWORD"),
+	//}
+	//animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
+	//if err != nil {
+	//	logger.Panicw(ctx, "Initialization AnimeLayer Parser", "error", err)
+	//}
+	//
+	//animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
+	//
+	//repoUpdater := repository_updater_pgx.New(connPgx)
+	//updaterService := service_updater.New(
+	//	repoUpdater,
+	//	animelayer_client.New(animelayer_parser),
+	//	enums.CategoryAnime,
+	//)
+	//go runScheduler(ctx, updaterService)
 
 	presentService := service_presenter.New(repoPresenter)
 
 	//
 	// Init MAL Api Client
 	//
-	publicInfoClient := &http.Client{
-		// Create client ID from https://myanimelist.net/apiconfig.
-		Transport: &clientIDTransport{ClientID: os.Getenv("MAL_CLIENT_ID")},
-	}
-	malApiClient, err := mal.NewSite(publicInfoClient, nil)
-	if err != nil {
-		logger.Panicw(ctx, "Initialization MAL Api Client", "error", err)
-	}
-
-	malService := service_mal.New(malApiClient)
+	//publicInfoClient := &http.Client{
+	//	// Create client ID from https://myanimelist.net/apiconfig.
+	//	Transport: &clientIDTransport{ClientID: os.Getenv("MAL_CLIENT_ID")},
+	//}
+	//malApiClient, err := mal.NewSite(publicInfoClient, nil)
+	//if err != nil {
+	//	logger.Panicw(ctx, "Initialization MAL Api Client", "error", err)
+	//}
+	//
+	//malService := service_mal.New(malApiClient)
 
 	//
 	// Init Router
 	//
-	r := handlers.New(ctx, presentService, updateManagerService, malService)
+	r := handlers.New(ctx, presentService)
 	mux := http.NewServeMux()
 
 	r.InitMuxWithDefaultPages(mux.HandleFunc)
@@ -160,7 +169,7 @@ func (c *clientIDTransport) RoundTrip(req *http.Request) (*http.Response, error)
 }
 
 type updaterServiceClient interface {
-	UpdateItemsFromCategory(ctx context.Context, category enums.Category, mode model.CategoryUpdateMode) error
+	UpdateItems(ctx context.Context, mode model.CategoryUpdateMode, nPageLimit int) error
 }
 
 func runScheduler(ctx context.Context, updaterService updaterServiceClient) {
@@ -170,7 +179,7 @@ func runScheduler(ctx context.Context, updaterService updaterServiceClient) {
 	}
 
 	fnUpdate := func(ctx context.Context, cat enums.Category) {
-		err = updaterService.UpdateItemsFromCategory(ctx, cat, model.CategoryUpdateModeWhileNew)
+		err = updaterService.UpdateItems(ctx, model.CategoryUpdateModeWhileNew, 0)
 		if _, ok := repository.IsErrorItemNotChanged(err); ok {
 			logger.Errorw(ctx, "RunUpdaterHandler failed", "error", err)
 			return

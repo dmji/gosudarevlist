@@ -60,20 +60,6 @@ templ onAirBadge(s enums.ReleaseStatus) {
 	*/
 }
 
-templ categoryBadge(category string) {
-	if len(category) > 0 {
-		<label
-			class="absolute
-			top-0 left-[5%] px-[5%] 
-			text-white font-bold text-xs max-sm:text-xxs
-			bg-[#3c36dd] shadow-[0_2px_4px_rgba(0,0,0,0.1)] 
-			rounded-b-lg border-solid border-2 border-[#423cf1]"
-		>
-			{ category }
-		</label>
-	}
-}
-
 // Recursive template
 // Child of templ:  storage.templ
 // Render from Api: /api/cards
@@ -102,7 +88,6 @@ templ CardItemData(card *model.ItemCartData) {
 		hx-on:htmx:trigger={ scripts.LoadGallery(templ.JSExpression("this")) }
 	>
 		<div class="relative box-border h-[360px] m-auto max-w-[650px] overflow-hidden">
-			@categoryBadge(card.CategoryPresentation)
 			@onAirBadge(card.ReleaseStatus)
 			for i := 0; i < len(card.AnimeLayerRefs);i++ {
 				<img
@@ -136,38 +121,37 @@ templ CardItemData(card *model.ItemCartData) {
 	</div>
 	// Description
 	<div class="flex flex-col px-4 pb-2 pt-2 text-sm font-sans font-normal">
-		{{ descr := card.AnimeLayerRefs[0].Description }}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<div>
-				<b>Тип: </b><span>{ descr.Type }</span>
+				<b>Тип: </b><span>{ card.AnimeLayerRefs[0].Description.Type }</span>
 			</div>
 		}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<div>
-				<b>Жанр: </b><span>{ strings.Join(descr.Genres, ", ") }</span>
+				<b>Жанр: </b><span>{ strings.Join(card.AnimeLayerRefs[0].Description.Genres, ", ") }</span>
 			</div>
 		}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<div>
-				<b>Год выпуска: </b><span>{ descr.Year }</span>
+				<b>Год выпуска: </b><span>{ card.AnimeLayerRefs[0].Description.Year }</span>
 			</div>
 		}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<div>
-				<b>Кол-во серий: </b><span>{ descr.EpisodeCount }</span>
+				<b>Кол-во серий: </b><span>{ card.AnimeLayerRefs[0].Description.EpisodeCount }</span>
 			</div>
 		}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<div>
-				<b>Продолжительность: </b><span>{ descr.EpisodeDuration }</span>
+				<b>Продолжительность: </b><span>{ card.AnimeLayerRefs[0].Description.EpisodeDuration }</span>
 			</div>
 		}
-		if len(descr.Type) > 0 {
+		if len(card.AnimeLayerRefs[0].Description.Type) > 0 {
 			<br/>
 			<div>
 				<b>Торрент был обновлен</b>
 				<br/>
-				<span>{ descr.UpdateReaseon }</span>
+				<span>{ card.AnimeLayerRefs[0].Description.UpdateReaseon }</span>
 			</div>
 		}
 	</div>

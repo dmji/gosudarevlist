@@ -41,7 +41,7 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 	defer tx.Rollback(ctx)
 	r := repo.query.WithTx(tx)
 
-	itemId, err := r.InsertItem(ctx,
+	err = r.InsertItem(ctx,
 		pgx_sqlc.InsertItemParams{
 			Identifier:       item.Identifier,
 			Title:            item.Title,
@@ -55,24 +55,12 @@ func (repo *repository) InsertItem(ctx context.Context, item *model.AnimelayerIt
 			BlobImagePreview: "",
 			TorrentFilesSize: item.TorrentFilesSize,
 			Notes:            item.Notes,
-			Category:         categoriesToAnimelayerCategory(category),
 		},
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil
 	}
-	if err != nil {
-		return err
-	}
-
-	err = repo.InsertUpdateNote(ctx, model.UpdateItem{
-		Date:         &now,
-		UpdateStatus: enums.UpdateStatusNew,
-		Notes:        []model.UpdateItemNote{},
-		ItemId:       itemId,
-		// Identifier:   item.Identifier,
-	})
 	if err != nil {
 		return err
 	}
