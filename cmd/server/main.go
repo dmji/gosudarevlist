@@ -8,12 +8,16 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/dmji/go-animelayer-parser"
 	"github.com/dmji/gosudarevlist/assets"
 	"github.com/dmji/gosudarevlist/handlers"
+	"github.com/dmji/gosudarevlist/internal/animelayer_client"
 	repository_presenter_pgx "github.com/dmji/gosudarevlist/internal/presenter/repository/pgx"
 	service_presenter "github.com/dmji/gosudarevlist/internal/presenter/service"
 	"github.com/dmji/gosudarevlist/internal/updater/model"
 	"github.com/dmji/gosudarevlist/internal/updater/repository"
+	repository_updater_pgx "github.com/dmji/gosudarevlist/internal/updater/repository/pgx"
+	service_updater "github.com/dmji/gosudarevlist/internal/updater/service"
 	"github.com/dmji/gosudarevlist/migrations"
 	"github.com/dmji/gosudarevlist/pkg/enums"
 	"github.com/dmji/gosudarevlist/pkg/env"
@@ -89,24 +93,24 @@ func main() {
 	//
 	// Init Animelayer Parser
 	//
-	//animelayer_credentials := animelayer.Credentials{
-	//	Login:    os.Getenv("ANIMELAYER_LOGIN"),
-	//	Password: os.Getenv("ANIMELAYER_PASSWORD"),
-	//}
-	//animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
-	//if err != nil {
-	//	logger.Panicw(ctx, "Initialization AnimeLayer Parser", "error", err)
-	//}
-	//
-	//animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
-	//
-	//repoUpdater := repository_updater_pgx.New(connPgx)
-	//updaterService := service_updater.New(
-	//	repoUpdater,
-	//	animelayer_client.New(animelayer_parser),
-	//	enums.CategoryAnime,
-	//)
-	//go runScheduler(ctx, updaterService)
+	animelayer_credentials := animelayer.Credentials{
+		Login:    os.Getenv("ANIMELAYER_LOGIN"),
+		Password: os.Getenv("ANIMELAYER_PASSWORD"),
+	}
+	animelayerClient, err := animelayer.DefaultClientWithAuth(animelayer_credentials)
+	if err != nil {
+		logger.Panicw(ctx, "Initialization AnimeLayer Parser", "error", err)
+	}
+
+	animelayer_parser := animelayer.New(animelayer.NewClientWrapper(animelayerClient))
+
+	repoUpdater := repository_updater_pgx.New(connPgx)
+	updaterService := service_updater.New(
+		repoUpdater,
+		animelayer_client.New(animelayer_parser),
+		enums.CategoryAnime,
+	)
+	go runScheduler(ctx, updaterService)
 
 	presentService := service_presenter.New(repoPresenter)
 
