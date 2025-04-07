@@ -7,7 +7,6 @@ import (
 
 	"github.com/dmji/gosudarevlist/internal/updater/model"
 	"github.com/dmji/gosudarevlist/pkg/logger"
-	"github.com/dmji/gosudarevlist/pkg/pgx_utils"
 )
 
 func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string) (*model.AnimelayerItem, error) {
@@ -21,19 +20,5 @@ func (r *repository) GetItemByIdentifier(ctx context.Context, identifier string)
 		return nil, err
 	}
 
-	return &model.AnimelayerItem{
-		Identifier:       identifier,
-		Title:            item.Title,
-		ReleaseStatus:    pgxReleaseStatusAnimelayerToReleaseStatusAnimelayer(ctx, item.ReleaseStatus),
-		LastCheckedDate:  pgx_utils.TimeFromPgTimestamp(item.LastCheckedDate),
-		FirstCheckedDate: pgx_utils.TimeFromPgTimestamp(item.FirstCheckedDate),
-		CreatedDate:      pgx_utils.TimeFromPgTimestamp(item.CreatedDate),
-		UpdatedDate:      pgx_utils.TimeFromPgTimestamp(item.UpdatedDate),
-		RefImageCover:    item.RefImageCover,
-		RefImagePreview:  item.RefImagePreview,
-		BlobImageCover:   item.BlobImageCover,
-		BlobImagePreview: item.BlobImagePreview,
-		TorrentFilesSize: item.TorrentFilesSize,
-		Notes:            item.Notes,
-	}, nil
+	return pgItemFromItem(ctx, item), nil
 }
