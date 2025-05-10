@@ -31,12 +31,12 @@ import (
 
 var parameter = struct {
 	ListenPortTcp int64
-}{
-	ListenPortTcp: 8080,
-}
+	ListenHostTcp string
+}{}
 
 func init() {
 	flag.Int64Var(&parameter.ListenPortTcp, "port", 8080, "Port for tcp connection")
+	flag.StringVar(&parameter.ListenHostTcp, "host", "0.0.0.0", "Host for tcp connection")
 	flag.Parse()
 
 	_, bGoose := os.LookupEnv("GOOSE_DBSTRING")
@@ -145,7 +145,7 @@ func main() {
 	//
 	logger.Infow(ctx, "Server starting", "port", parameter.ListenPortTcp)
 
-	conn, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", parameter.ListenPortTcp))
+	conn, err := net.Listen("tcp", fmt.Sprintf("%s:%d", parameter.ListenHostTcp, parameter.ListenPortTcp))
 	if err != nil {
 		logger.Fatalw(ctx, "announces listen", "error", err)
 	}
