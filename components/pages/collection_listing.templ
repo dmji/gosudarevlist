@@ -22,10 +22,12 @@ var t = navigation.PaginationOpt{
 
 templ CollectionListing(filtersEndpint, nextPageEndpint string, availableCategories []model.CategoryButton) {
 	@components.Layout("AnimeLayer Collection", &components.LayoutParams{ImportFlickity: true}) {
-		<div class="px-2 py-2">
-			@cards.CategoriesLine(availableCategories)
-		</div>
-		<div class="px-2">
+		if len(availableCategories) != 0 {
+			<div class="px-2 pt-2">
+				@cards.CategoriesLine(availableCategories)
+			</div>
+		}
+		<div class="px-2 pt-2">
 			@cards.Filters(filtersEndpint)
 		</div>
 		<div class="py-1">
