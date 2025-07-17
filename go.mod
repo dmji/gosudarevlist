@@ -3,7 +3,7 @@ module github.com/dmji/gosudarevlist
 go 1.24.1
 
 require (
-	github.com/a-h/templ v0.3.898
+	github.com/a-h/templ v0.3.906
 	github.com/coder/websocket v1.8.13
 	github.com/dmji/go-animelayer-parser v0.1.4-0.20250206212239-b78579090429
 	github.com/dmji/go-jikan v0.0.0-20250407003350-fa4b297ee383
@@ -17,7 +17,7 @@ require (
 	github.com/pressly/goose/v3 v3.24.3
 	go.uber.org/ratelimit v0.3.1
 	go.uber.org/zap v1.27.0
-	golang.org/x/text v0.26.0
+	golang.org/x/text v0.27.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -69,13 +69,13 @@ require (
 	github.com/wasilibs/wazero-helpers v0.0.0-20240620070341-3dff1577cd52 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
+	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
 	golang.org/x/mod v0.25.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
+	golang.org/x/net v0.41.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/tools v0.33.0 // indirect
+	golang.org/x/tools v0.34.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
 	google.golang.org/grpc v1.71.1 // indirect
